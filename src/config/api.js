@@ -1,7 +1,7 @@
 // API Configuration for Knowva Application
 // Centralized endpoint management
 
-const API_BASE_URL = 'https://nandinisingh18.app.n8n.cloud/webhook';
+const API_BASE_URL = 'https://a6tzysf4.rpcld.app/webhook';
 
 // API Endpoints
 export const API_ENDPOINTS = {
