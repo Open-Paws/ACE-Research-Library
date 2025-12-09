@@ -90,7 +90,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
 
       <main className="flex flex-1 overflow-hidden">
         {/* History toggle above the Selected Paper column */}
@@ -142,7 +142,7 @@ const Chat = () => {
 
         <section className="flex flex-1 flex-col">
           {/* Chat Toolbar (tools) */}
-          <div className="border-b border-white/10 bg-panel px-6 py-3">
+          <div className="border-b px-6 py-3" style={{ borderBottomColor: 'var(--ace-navy-10)', backgroundColor: 'var(--ace-white)' }}>
             <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <select
@@ -176,18 +176,49 @@ const Chat = () => {
           <div className="flex-1 overflow-y-auto p-6">
             <div className="mx-auto max-w-4xl">
               <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Chat with Research Data</h1>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">Interact with your research data using AI-powered analysis. Ask questions, summarize findings, and generate insights.</p>
+                <h1 style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: '1.875rem',
+                  fontWeight: 600,
+                  letterSpacing: '-0.01em',
+                  color: 'var(--ace-navy)',
+                  marginBottom: '8px'
+                }}>
+                  Chat with Research Data
+                </h1>
+                <p style={{ 
+                  color: 'var(--ace-navy-60)',
+                  fontSize: '1rem',
+                  fontFamily: "'Inter', sans-serif"
+                }}>
+                  Interact with your research data using AI-powered analysis. Ask questions, summarize findings, and generate insights.
+                </p>
               </div>
               
               <div className="mb-8">
-                <h3 className="mb-3 text-lg font-bold text-gray-900 dark:text-white">Pre-built Prompts</h3>
+                <h3 style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: '1.125rem',
+                  fontWeight: 600,
+                  letterSpacing: '-0.01em',
+                  color: 'var(--ace-navy)',
+                  marginBottom: '12px'
+                }}>
+                  Pre-built Prompts
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {preBuiltPrompts.map((prompt, index) => (
                     <button
                       key={index}
                       onClick={() => handleSendMessage(prompt)}
-                      className="rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary/20 dark:bg-primary/20 dark:hover:bg-primary/30 transition-colors"
+                      className="rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
+                      style={{
+                        backgroundColor: 'var(--primary-10)',
+                        color: 'var(--ace-teal)',
+                        fontFamily: "'Inter', sans-serif"
+                      }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--primary-20)'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--primary-10)'}
                     >
                       {prompt}
                     </button>
@@ -246,20 +277,30 @@ const Chat = () => {
             </div>
           </div>
 
-          <div className="sticky bottom-0 border-t border-black/10 bg-background-dark/80 backdrop-blur-sm p-4 dark:border-white/10">
+          <div className="sticky bottom-0 border-t p-4 backdrop-blur-sm" style={{ borderTopColor: 'var(--ace-navy-10)', backgroundColor: 'rgba(250, 250, 251, 0.9)' }}>
             <div className="mx-auto max-w-4xl">
               <div className="relative">
                 <textarea
-                  className="w-full resize-none rounded-lg border-white/10 bg-panel p-4 pr-16 text-white placeholder:text-white/50 focus:border-primary focus:ring-primary"
+                  className="w-full resize-none rounded-lg border p-4 pr-16 focus:border-primary focus:ring-primary"
                   placeholder="Ask a question about the research..."
                   rows="1"
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
+                  style={{
+                    borderColor: 'var(--ace-navy-10)',
+                    backgroundColor: 'var(--ace-white)',
+                    color: 'var(--ace-navy)',
+                    fontFamily: "'Inter', sans-serif"
+                  }}
                 />
                 <button
                   onClick={handleSendMessage}
-                  className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-black transition-colors hover:bg-primary/90"
+                  className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
+                  style={{
+                    backgroundColor: 'var(--ace-teal)',
+                    color: 'var(--ace-white)'
+                  }}
                 >
                   <span className="material-symbols-outlined">send</span>
                 </button>

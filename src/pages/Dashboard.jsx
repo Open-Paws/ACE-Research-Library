@@ -115,15 +115,15 @@ const Dashboard = () => {
 
   const getStatusData = () => {
     const statusData = [
-      { name: 'Approved', count: dashboardData.stats.approvedPapers, color: '#22c55e' },
-      { name: 'Pending', count: dashboardData.stats.pendingPapers, color: '#f59e0b' },
-      { name: 'Rejected', count: dashboardData.stats.rejectedPapers, color: '#ef4444' }
+      { name: 'Approved', count: dashboardData.stats.approvedPapers, color: '#00A6A1' },
+      { name: 'Pending', count: dashboardData.stats.pendingPapers, color: '#A5AF1B' },
+      { name: 'Rejected', count: dashboardData.stats.rejectedPapers, color: '#843468' }
     ].filter(item => item.count > 0);
     
     return statusData.length > 0 ? statusData : [
-      { name: 'Approved', count: 45, color: '#22c55e' },
-      { name: 'Pending', count: 12, color: '#f59e0b' },
-      { name: 'Rejected', count: 3, color: '#ef4444' }
+      { name: 'Approved', count: 45, color: '#00A6A1' },
+      { name: 'Pending', count: 12, color: '#A5AF1B' },
+      { name: 'Rejected', count: 3, color: '#843468' }
     ];
   };
 
@@ -160,23 +160,72 @@ const Dashboard = () => {
 
   // Chart components
   const StatCard = ({ title, value, subtitle, icon, color = "primary" }) => (
-    <div className="bg-panel border border-white/10 rounded-xl p-6 transition-all hover:bg-white/5">
-      <div className="flex items-center justify-between">
+    <div 
+      className="glass-panel rounded-2xl p-6 transition-all duration-500 animate-scale-in hover-lift group relative overflow-hidden" 
+      style={{
+        animationDelay: '0.1s'
+      }}
+    >
+      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/20 to-transparent rounded-full -mr-16 -mt-16 transition-transform duration-700 group-hover:scale-150"></div>
+      
+      <div className="flex items-center justify-between relative z-10">
         <div>
-          <p className="text-white/70 text-sm font-medium">{title}</p>
-          <p className={`text-3xl font-bold text-${color} mt-1`}>{value}</p>
-          {subtitle && <p className="text-white/50 text-xs mt-1">{subtitle}</p>}
+          <p style={{ 
+            color: 'var(--ace-navy-60)',
+            fontSize: '0.875rem',
+            fontWeight: 600,
+            fontFamily: "'Inter', sans-serif",
+            letterSpacing: '0.02em',
+            textTransform: 'uppercase',
+            marginBottom: '8px'
+          }}>
+            {title}
+          </p>
+          <p className="text-gradient-ace" style={{ 
+            fontSize: '2.5rem',
+            fontWeight: 800,
+            marginTop: '4px',
+            fontFamily: "'Montserrat', sans-serif",
+            lineHeight: 1
+          }}>
+            {value}
+          </p>
+          {subtitle && (
+            <p style={{ 
+              color: 'var(--ace-navy-60)',
+              fontSize: '0.8rem',
+              marginTop: '8px',
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 500
+            }}>
+              {subtitle}
+            </p>
+          )}
         </div>
         {icon && (
-          <div className={`w-12 h-12 bg-${color}/20 rounded-lg flex items-center justify-center`}>
-            <span className={`material-symbols-outlined text-${color} text-xl`}>{icon}</span>
+          <div className="transition-transform duration-500 group-hover:rotate-12" style={{
+            width: '64px',
+            height: '64px',
+            background: 'linear-gradient(135deg, var(--ace-navy-5) 0%, var(--ace-white) 100%)',
+            borderRadius: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+          }}>
+            <span className="material-symbols-outlined" style={{ 
+              color: 'var(--ace-teal)',
+              fontSize: '32px'
+            }}>
+              {icon}
+            </span>
           </div>
         )}
       </div>
     </div>
   );
 
-  const BarChart = ({ data, title, color = "#22c55e" }) => {
+  const BarChart = ({ data, title, color = "#00A6A1" }) => {
     const [animated, setAnimated] = useState(false);
     const maxValue = Math.max(...data.map(d => d.count), 1);
     
@@ -186,9 +235,12 @@ const Dashboard = () => {
     }, []);
     
     return (
-      <div className="bg-panel border border-white/10 rounded-xl p-6">
-        <h3 className="text-lg font-semibold text-white mb-6">{title}</h3>
-        <div className="space-y-5">
+      <div className="glass-panel rounded-2xl p-8 hover-lift">
+        <h3 className="text-xl font-bold mb-8 flex items-center gap-3" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>
+          <span className="material-symbols-outlined text-primary">bar_chart</span>
+          {title}
+        </h3>
+        <div className="space-y-6">
           {data.map((item, index) => (
             <div 
               key={index} 
@@ -199,10 +251,19 @@ const Dashboard = () => {
                 transitionDelay: `${index * 0.1}s`
               }}
             >
-              <div className="w-32 text-white/70 text-sm font-medium truncate" title={item.name}>
+              <div style={{
+                width: '128px',
+                color: 'var(--ace-navy-60)',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                fontFamily: "'Inter', sans-serif",
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }} title={item.name}>
                 {item.name.length > 18 ? item.name.substring(0, 18) + '...' : item.name}
               </div>
-              <div className="flex-1 bg-white/10 rounded-full h-4 relative overflow-hidden shadow-inner">
+              <div className="flex-1 rounded-full h-4 relative overflow-hidden" style={{ backgroundColor: 'var(--ace-navy-10)' }}>
                 <div 
                   className="h-full rounded-full relative overflow-hidden"
                   style={{ 
@@ -223,10 +284,26 @@ const Dashboard = () => {
                   ></div>
                 </div>
               </div>
-              <div className="w-12 text-white/90 text-sm font-bold text-right bg-white/5 px-2 py-1 rounded">
+              <div style={{
+                width: '48px',
+                color: 'var(--ace-navy)',
+                fontSize: '0.875rem',
+                fontWeight: 700,
+                textAlign: 'right',
+                backgroundColor: 'var(--ace-navy-5)',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                fontFamily: "'Inter', sans-serif"
+              }}>
                 {animated ? item.count : 0}
               </div>
-              <div className="w-12 text-white/50 text-xs text-right">
+              <div style={{
+                width: '48px',
+                color: 'var(--ace-navy-60)',
+                fontSize: '0.75rem',
+                textAlign: 'right',
+                fontFamily: "'Inter', sans-serif"
+              }}>
                 {animated && maxValue > 0 ? Math.round((item.count / maxValue) * 100) : 0}%
               </div>
             </div>
@@ -257,14 +334,29 @@ const Dashboard = () => {
     }).join(' ');
 
     return (
-      <div className="bg-panel border border-white/10 rounded-xl p-6">
-        <h3 className="text-lg font-semibold text-white mb-6">{title}</h3>
-        <div className="h-64 relative bg-gray-900/30 rounded-lg p-4">
+      <div 
+        className="glass-panel rounded-2xl p-8 hover-lift"
+      >
+        <h3 style={{
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: '1.25rem',
+          fontWeight: 700,
+          letterSpacing: '-0.01em',
+          color: 'var(--ace-navy)',
+          marginBottom: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px'
+        }}>
+          <span className="material-symbols-outlined text-primary">show_chart</span>
+          {title}
+        </h3>
+        <div className="h-64 relative rounded-xl p-4 overflow-hidden" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 100%)' }}>
           <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             <defs>
               <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#22c55e" stopOpacity="0.4"/>
-                <stop offset="100%" stopColor="#22c55e" stopOpacity="0.1"/>
+                <stop offset="0%" stopColor="#00A6A1" stopOpacity="0.4"/>
+                <stop offset="100%" stopColor="#00A6A1" stopOpacity="0.1"/>
               </linearGradient>
               <filter id="glow">
                 <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -277,7 +369,7 @@ const Dashboard = () => {
             
             {/* Grid lines */}
             {[20, 40, 60, 80].map(y => (
-              <line key={y} x1="5" y1={y} x2="95" y2={y} stroke="#ffffff10" strokeWidth="0.5"/>
+              <line key={y} x1="5" y1={y} x2="95" y2={y} stroke="rgba(4, 28, 48, 0.1)" strokeWidth="0.5"/>
             ))}
             
             {/* Area under curve */}
@@ -290,7 +382,7 @@ const Dashboard = () => {
             {/* Main line */}
             <polyline
               fill="none"
-              stroke="#22c55e"
+              stroke="#00A6A1"
               strokeWidth="3"
               points={animatedPoints}
               filter="url(#glow)"
@@ -311,8 +403,8 @@ const Dashboard = () => {
                     cx={x}
                     cy={y}
                     r="2"
-                    fill="#22c55e"
-                    stroke="#ffffff"
+                    fill="#00A6A1"
+                    stroke="#FFFFFF"
                     strokeWidth="1"
                     style={{ 
                       transition: `all ${1.5 + index * 0.1}s ease-out`,
@@ -323,7 +415,7 @@ const Dashboard = () => {
                     cx={x}
                     cy={y}
                     r="6"
-                    fill="#22c55e"
+                    fill="#00A6A1"
                     fillOpacity="0.3"
                     style={{ 
                       transition: `all ${1.5 + index * 0.1}s ease-out`,
@@ -342,12 +434,15 @@ const Dashboard = () => {
             return (
               <div
                 key={index}
-                className="absolute text-xs font-medium text-primary bg-gray-900/80 px-2 py-1 rounded backdrop-blur-sm"
+                className="absolute text-xs font-medium px-2 py-1 rounded backdrop-blur-sm"
                 style={{
                   left: `${x}%`,
                   top: `${y - 10}%`,
                   transform: 'translate(-50%, -100%)',
-                  animation: `fadeIn 0.5s ease-out ${1.5 + index * 0.1}s both`
+                  animation: `fadeIn 0.5s ease-out ${1.5 + index * 0.1}s both`,
+                  color: 'var(--ace-teal)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  fontFamily: "'Inter', sans-serif"
                 }}
               >
                 {item.count}
@@ -355,9 +450,15 @@ const Dashboard = () => {
             );
           })}
         </div>
-        <div className="flex justify-between mt-4 text-sm text-white/70 font-medium">
+        <div className="flex justify-between mt-6 text-sm font-semibold" style={{ color: 'var(--ace-navy-60)' }}>
           {data.map((item, index) => (
-            <span key={index} className="px-2 py-1 bg-white/5 rounded text-center min-w-12">
+            <span 
+              key={index} 
+              className="px-3 py-1.5 rounded-lg text-center min-w-12 transition-colors hover:bg-primary/10 hover:text-primary cursor-default"
+              style={{
+                fontFamily: "'Inter', sans-serif"
+              }}
+            >
               {item.year}
             </span>
           ))}
@@ -376,11 +477,14 @@ const Dashboard = () => {
       return () => clearTimeout(timer);
     }, []);
 
-    const colors = customColors || ['#22c55e', '#3b82f6', '#f59e0b', '#ef4444'];
+    const colors = customColors || ['#00A6A1', '#0C6DAB', '#A5AF1B', '#843468'];
 
     return (
-      <div className="bg-panel border border-white/10 rounded-xl p-6">
-        <h3 className="text-lg font-semibold text-white mb-6">{title}</h3>
+      <div className="glass-panel rounded-2xl p-8 hover-lift">
+        <h3 className="text-xl font-bold mb-8 flex items-center gap-3" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>
+          <span className="material-symbols-outlined text-primary">pie_chart</span>
+          {title}
+        </h3>
         <div className="flex items-center justify-center">
           <div className="relative w-40 h-40">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 42 42">
@@ -412,8 +516,11 @@ const Dashboard = () => {
               })}
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-white/50 text-xs">Total</span>
-              <span className={`text-white font-bold text-2xl transition-all duration-1000 ${animated ? 'scale-100' : 'scale-0'}`}>
+              <span style={{ color: 'var(--ace-navy-60)', fontSize: '0.75rem', fontFamily: "'Inter', sans-serif" }}>Total</span>
+              <span 
+                className={`font-bold text-2xl transition-all duration-1000 ${animated ? 'scale-100' : 'scale-0'}`}
+                style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}
+              >
                 {animated ? total : 0}
               </span>
             </div>
@@ -436,11 +543,11 @@ const Dashboard = () => {
                     boxShadow: `0 0 8px ${item.color || colors[index % colors.length]}40`
                   }}
                 ></div>
-                <span className="text-white/70 text-sm font-medium min-w-16">{item.name}</span>
-                <span className="text-white/90 text-sm font-bold bg-white/5 px-2 py-1 rounded">
+                <span style={{ color: 'var(--ace-navy-60)', fontSize: '0.875rem', fontWeight: 500, minWidth: '64px', fontFamily: "'Inter', sans-serif" }}>{item.name}</span>
+                <span style={{ color: 'var(--ace-navy)', fontSize: '0.875rem', fontWeight: 700, backgroundColor: 'var(--ace-navy-5)', padding: '4px 8px', borderRadius: '4px', fontFamily: "'Inter', sans-serif" }}>
                   {item.count}
                 </span>
-                <span className="text-white/50 text-xs">
+                <span style={{ color: 'var(--ace-navy-60)', fontSize: '0.75rem', fontFamily: "'Inter', sans-serif" }}>
                   ({total > 0 ? Math.round((item.count / total) * 100) : 0}%)
                 </span>
               </div>
@@ -452,29 +559,68 @@ const Dashboard = () => {
   };
 
   const ActivityFeed = ({ activities }) => (
-    <div className="bg-panel border border-white/10 rounded-xl p-6">
-      <h3 className="text-lg font-semibold text-white mb-6">Recent Activity</h3>
+    <div 
+      className="glass-panel rounded-2xl p-8 hover-lift"
+    >
+      <h3 style={{
+        fontFamily: "'Montserrat', sans-serif",
+        fontSize: '1.25rem',
+        fontWeight: 700,
+        letterSpacing: '-0.01em',
+        color: 'var(--ace-navy)',
+        marginBottom: '24px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px'
+      }}>
+        <span className="material-symbols-outlined text-primary">history</span>
+        Recent Activity
+      </h3>
       <div className="space-y-4">
         {activities.map((activity, index) => (
-          <div key={index} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-              activity.type === 'paper' ? 'bg-blue-500/20' : 'bg-green-500/20'
-            }`}>
-              <span className={`material-symbols-outlined text-sm ${
-                activity.type === 'paper' ? 'text-blue-400' : 'text-green-400'
-              }`}>
+          <div 
+            key={index} 
+            className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 hover:bg-white/50 group"
+            style={{ 
+              border: '1px solid transparent',
+              animationDelay: `${index * 0.1}s`
+            }}
+          >
+            <div 
+              className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
+              style={{
+                background: activity.type === 'paper' ? 'linear-gradient(135deg, rgba(12, 109, 171, 0.1), rgba(12, 109, 171, 0.2))' : 'linear-gradient(135deg, rgba(0, 166, 161, 0.1), rgba(0, 166, 161, 0.2))',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.05)'
+              }}
+            >
+              <span 
+                className="material-symbols-outlined text-sm"
+                style={{ color: activity.type === 'paper' ? 'var(--ace-ocean)' : 'var(--ace-teal)' }}
+              >
                 {activity.type === 'paper' ? 'article' : 'label'}
               </span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white/90 text-sm font-medium truncate">
+              <p style={{ 
+                color: 'var(--ace-navy)',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                fontFamily: "'Inter', sans-serif",
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}>
                 {activity.title}
               </p>
-              <p className="text-white/50 text-xs">
+              <p style={{ 
+                color: 'var(--ace-navy-60)',
+                fontSize: '0.75rem',
+                fontFamily: "'Inter', sans-serif"
+              }}>
                 {activity.type === 'paper' ? 'Paper' : 'Keyword'} • {activity.status}
               </p>
             </div>
-            <div className="text-white/50 text-xs">
+            <div style={{ color: 'var(--ace-navy-60)', fontSize: '0.75rem', fontFamily: "'Inter', sans-serif" }}>
               {activity.date.toLocaleDateString()}
             </div>
           </div>
@@ -485,67 +631,53 @@ const Dashboard = () => {
 
   if (isLoading) {
     return (
-      <main className="flex-1 p-4 sm:p-6 lg:p-10">
+      <main className="flex-1 p-4 sm:p-6 lg:p-10" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center min-h-screen">
             <div className="relative flex flex-col items-center gap-8">
-              {/* Overwhelming loading animation */}
+              {/* ACE-branded loading animation */}
               <div className="relative">
-                {/* Outer ring */}
-                <div className="w-32 h-32 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-                {/* Middle ring */}
-                <div className="absolute inset-2 w-28 h-28 border-4 border-blue-400/20 border-r-blue-400 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
-                {/* Inner ring */}
-                <div className="absolute inset-4 w-24 h-24 border-4 border-yellow-400/20 border-b-yellow-400 rounded-full animate-spin" style={{ animationDuration: '2s' }}></div>
-                {/* Core */}
-                <div className="absolute inset-8 w-16 h-16 border-4 border-red-400/20 border-l-red-400 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
-                {/* Center pulse */}
-                <div className="absolute inset-12 w-8 h-8 bg-primary rounded-full animate-pulse"></div>
-              </div>
-              
-              {/* Floating particles */}
-              <div className="absolute inset-0 overflow-hidden">
-                {[...Array(12)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-2 h-2 bg-primary/60 rounded-full animate-bounce"
+                {/* Elegant spinner */}
+                <div className="relative">
+                  <div 
+                    className="w-16 h-16 border-4 rounded-full animate-spin"
                     style={{
-                      left: `${20 + (i * 10)}%`,
-                      top: `${30 + (i % 3) * 20}%`,
-                      animationDelay: `${i * 0.2}s`,
-                      animationDuration: `${1 + (i % 3) * 0.5}s`
+                      borderColor: 'var(--ace-navy-10)',
+                      borderTopColor: 'var(--ace-teal)',
+                      animationDuration: '1s'
                     }}
                   ></div>
-                ))}
+                  <div 
+                    className="absolute inset-0 w-16 h-16 border-4 rounded-full animate-spin"
+                    style={{
+                      borderColor: 'transparent',
+                      borderRightColor: 'var(--ace-teal)',
+                      opacity: 0.5,
+                      animationDuration: '1.5s',
+                      animationDirection: 'reverse'
+                    }}
+                  ></div>
+                </div>
               </div>
               
-              {/* Text with typing animation */}
-              <div className="text-center space-y-2">
-                <h2 className="text-2xl font-bold text-white animate-pulse">Loading Dashboard</h2>
-                <div className="flex items-center gap-1">
-                  <p className="text-white/70 text-lg">Analyzing data</p>
-                  <div className="flex gap-1">
-                    <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-                    <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                  </div>
-                </div>
-                
-                {/* Progress indicators */}
-                <div className="mt-6 space-y-3">
-                  <div className="flex items-center gap-3 text-white/60">
-                    <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                    <span>Fetching papers data...</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-white/60">
-                    <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" style={{ animationDelay: '0.5s' }}></div>
-                    <span>Loading keywords...</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-white/60">
-                    <div className="w-4 h-4 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin" style={{ animationDelay: '1s' }}></div>
-                    <span>Generating analytics...</span>
-                  </div>
-                </div>
+              {/* Text */}
+              <div className="text-center space-y-3 animate-fade-in">
+                <h2 style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: '1.75rem',
+                  fontWeight: 700,
+                  letterSpacing: '-0.01em',
+                  color: 'var(--ace-navy)'
+                }}>
+                  Loading Dashboard
+                </h2>
+                <p style={{
+                  color: 'var(--ace-navy-60)',
+                  fontSize: '1rem',
+                  fontFamily: "'Inter', sans-serif"
+                }}>
+                  Analyzing data...
+                </p>
               </div>
             </div>
           </div>
@@ -555,22 +687,62 @@ const Dashboard = () => {
   }
 
   return (
-    <main className="flex-1 p-4 sm:p-6 lg:p-10">
+    <main className="flex-1 p-4 sm:p-6 lg:p-10" style={{ minHeight: '100vh', background: 'transparent' }}>
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white">Dashboard</h1>
-          <p className="text-white/70 mt-1 text-base">Overview of your research management system</p>
+        <div className="mb-12 animate-fade-in-up">
+          <div className="relative inline-block">
+            <h1 style={{ 
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: '3.5rem',
+              fontWeight: 800,
+              letterSpacing: '-0.02em',
+              color: 'var(--ace-navy)',
+              marginBottom: '12px',
+              lineHeight: '1.1',
+              position: 'relative',
+              zIndex: 1
+            }}>
+              Dashboard
+            </h1>
+            <div className="absolute -bottom-2 -right-4 w-32 h-32 bg-primary/10 rounded-full blur-2xl -z-10 animate-pulse"></div>
+          </div>
+          <p style={{ 
+            color: 'var(--ace-navy-60)',
+            marginTop: '8px',
+            fontSize: '1.25rem',
+            fontFamily: "'Inter', sans-serif",
+            lineHeight: '1.6',
+            maxWidth: '600px'
+          }}>
+            Welcome back to your research command center.
+          </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400">
+          <div 
+            className="mb-6 p-4 border rounded-lg" 
+            style={{
+              backgroundColor: 'rgba(239, 68, 68, 0.1)',
+              borderColor: 'rgba(239, 68, 68, 0.2)',
+              color: '#ef4444'
+            }}
+          >
             {error}
           </div>
         )}
 
         {/* Key Metrics */}
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-6">Key Metrics</h2>
+        <section className="mb-12">
+          <h2 className="animate-fade-in-up" style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '2rem',
+            fontWeight: 700,
+            letterSpacing: '-0.01em',
+            color: 'var(--ace-navy)',
+            marginBottom: '32px'
+          }}>
+            Key Metrics
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <StatCard
               title="Total Papers"
@@ -584,35 +756,44 @@ const Dashboard = () => {
               value={dashboardData.stats.approvedPapers}
               subtitle="Ready for library"
               icon="check_circle"
-              color="green-400"
+              color="teal"
             />
             <StatCard
               title="Pending Reviews"
               value={dashboardData.stats.pendingPapers}
               subtitle="Awaiting approval"
               icon="schedule"
-              color="yellow-400"
+              color="teal"
             />
             <StatCard
               title="Active Keywords"
               value={dashboardData.stats.activeKeywords}
               subtitle={`of ${dashboardData.stats.totalKeywords} total`}
               icon="label"
-              color="blue-400"
+              color="teal"
             />
           </div>
         </section>
 
         {/* Charts Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-6">Analytics & Insights</h2>
+        <section className="mb-12">
+          <h2 className="animate-fade-in-up" style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '2rem',
+            fontWeight: 700,
+            letterSpacing: '-0.01em',
+            color: 'var(--ace-navy)',
+            marginBottom: '32px'
+          }}>
+            Analytics & Insights
+          </h2>
 
           {/* Main Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <DonutChart
               data={getStatusData()}
               title="Paper Review Status Distribution"
-              customColors={['#22c55e', '#f59e0b', '#ef4444']}
+              customColors={['#00A6A1', '#A5AF1B', '#843468']}
             />
           </div>
           
@@ -625,7 +806,7 @@ const Dashboard = () => {
             <BarChart
               data={getInterventionData()}
               title="Research Intervention Types"
-              color="#3b82f6"
+              color="#0C6DAB"
             />
           </div>
           
@@ -634,53 +815,79 @@ const Dashboard = () => {
             <BarChart
               data={getOutcomeData()}
               title="Expected Research Outcomes"
-              color="#f59e0b"
+              color="#A5AF1B"
             />
           </div>
         </section>
 
         {/* Recent Activity */}
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-6">Recent Activity</h2>
+        <section className="mb-12">
+          <h2 className="animate-fade-in-up" style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '2rem',
+            fontWeight: 700,
+            letterSpacing: '-0.01em',
+            color: 'var(--ace-navy)',
+            marginBottom: '32px'
+          }}>
+            Recent Activity
+          </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ActivityFeed activities={getRecentActivity()} />
             
             {/* Quick Stats */}
-            <div className="bg-panel border border-white/10 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-6">Quick Statistics</h3>
+            <div 
+              className="glass-panel rounded-2xl p-8 hover-lift"
+            >
+              <h3 style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '1.25rem',
+                fontWeight: 700,
+                letterSpacing: '-0.01em',
+                color: 'var(--ace-navy)',
+                marginBottom: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <span className="material-symbols-outlined text-primary">bolt</span>
+                Quick Statistics
+              </h3>
               <div className="space-y-4">
-                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                  <span className="text-white/70">Approval Rate</span>
-                  <span className="text-primary font-semibold">
+                <div 
+                  className="flex justify-between items-center p-5 rounded-xl transition-all duration-300 hover:bg-white/60 hover:shadow-sm"
+                  style={{ 
+                    backgroundColor: 'rgba(255,255,255,0.4)',
+                    border: '1px solid rgba(255,255,255,0.6)'
+                  }}
+                >
+                  <span style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontSize: '0.9375rem' }}>Approval Rate</span>
+                  <span style={{ color: 'var(--ace-teal)', fontWeight: 700, fontFamily: "'Inter', sans-serif", fontSize: '1.125rem' }}>
                     {dashboardData.stats.totalPapers > 0 
                       ? Math.round((dashboardData.stats.approvedPapers / dashboardData.stats.totalPapers) * 100)
                       : 0}%
                   </span>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                  <span className="text-white/70">Keywords Active</span>
-                  <span className="text-green-400 font-semibold">
-                    {dashboardData.stats.totalKeywords > 0 
-                      ? Math.round((dashboardData.stats.activeKeywords / dashboardData.stats.totalKeywords) * 100)
-                      : 0}%
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                  <span className="text-white/70">Rejection Rate</span>
-                  <span className="text-red-400 font-semibold">
-                    {dashboardData.stats.totalPapers > 0 
-                      ? Math.round((dashboardData.stats.rejectedPapers / dashboardData.stats.totalPapers) * 100)
-                      : 0}%
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
-                  <span className="text-white/70">Avg. Papers/Keyword</span>
-                  <span className="text-blue-400 font-semibold">
-                    {dashboardData.stats.totalKeywords > 0 
-                      ? Math.round(dashboardData.stats.totalPapers / dashboardData.stats.totalKeywords * 10) / 10
-                      : 0}
-                  </span>
-                </div>
+                {[
+                  { label: 'Keywords Active', value: dashboardData.stats.totalKeywords > 0 ? Math.round((dashboardData.stats.activeKeywords / dashboardData.stats.totalKeywords) * 100) : 0, suffix: '%', color: 'var(--ace-teal)' },
+                  { label: 'Rejection Rate', value: dashboardData.stats.totalPapers > 0 ? Math.round((dashboardData.stats.rejectedPapers / dashboardData.stats.totalPapers) * 100) : 0, suffix: '%', color: 'var(--ace-berry)' },
+                  { label: 'Avg. Papers/Keyword', value: dashboardData.stats.totalKeywords > 0 ? Math.round(dashboardData.stats.totalPapers / dashboardData.stats.totalKeywords * 10) / 10 : 0, suffix: '', color: 'var(--ace-ocean)' }
+                ].map((stat, idx) => (
+                  <div 
+                    key={stat.label}
+                    className="flex justify-between items-center p-5 rounded-xl transition-all duration-300 hover:bg-white/60 hover:shadow-sm"
+                    style={{ 
+                      backgroundColor: 'rgba(255,255,255,0.4)',
+                      border: '1px solid rgba(255,255,255,0.6)',
+                      animationDelay: `${(idx + 1) * 0.1}s`
+                    }}
+                  >
+                    <span style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontSize: '0.9375rem' }}>{stat.label}</span>
+                    <span style={{ color: stat.color, fontWeight: 700, fontFamily: "'Inter', sans-serif", fontSize: '1.125rem' }}>
+                      {stat.value}{stat.suffix}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

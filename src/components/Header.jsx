@@ -9,89 +9,170 @@ const Header = () => {
   };
 
   return (
-    <header className="flex items-center justify-between whitespace-nowrap border-b px-10 py-3">
+    <header 
+      className="flex items-center justify-between whitespace-nowrap px-10 py-4 sticky top-0 z-50 backdrop-blur-md"
+      style={{ 
+        backgroundColor: 'rgba(4, 28, 48, 0.95)',
+        borderBottom: '1px solid rgba(0, 166, 161, 0.2)',
+        boxShadow: '0 2px 10px rgba(4, 28, 48, 0.1)',
+        transition: 'all 0.3s ease'
+      }}
+    >
       <div className="flex items-center gap-8">
-        <div className="flex items-center gap-3 text-white">
-          <div className="size-6 text-primary">
-            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-              <path clipRule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fillRule="evenodd"></path>
-            </svg>
+        <Link to="/" className="flex items-center gap-3" style={{ textDecoration: 'none' }}>
+          {/* ACE Logo - Using actual logo from ACE website */}
+          <div className="flex items-center gap-3 animate-fade-in">
+            <img 
+              src="https://animalcharityevaluators.org/wp-content/uploads/2023/11/ACE_Logo_Crest_FullColorDark.png"
+              alt="Animal Charity Evaluators Logo"
+              style={{ 
+                height: '40px',
+                width: 'auto',
+                transition: 'transform 0.3s ease'
+              }}
+              onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+              onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+            />
+            <h2 style={{ 
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: '16px',
+              fontWeight: 700,
+              letterSpacing: '0.05em',
+              color: 'var(--ace-white)',
+              margin: 0,
+              textTransform: 'uppercase'
+            }}>
+              Animal Charity Evaluators
+            </h2>
           </div>
-          <h2 className="text-lg font-bold">Knowva</h2>
-        </div>
-            <nav className="flex items-center gap-6">
+        </Link>
+            <nav className="flex items-center gap-8">
               <Link 
-                className={`text-sm font-medium transition-colors ${
-                  isActive('/home') ? 'text-primary' : 'text-gray-300 hover:text-primary'
-                }`} 
+                className="text-sm font-medium transition-all duration-300 relative"
+                style={{
+                  color: isActive('/home') ? 'var(--ace-teal)' : 'rgba(255, 255, 255, 0.9)',
+                  textDecoration: 'none',
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 500,
+                  paddingBottom: '4px'
+                }}
                 to="/home"
+                onMouseEnter={(e) => {
+                  if (!isActive('/home')) {
+                    e.target.style.color = 'var(--ace-teal)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive('/home')) {
+                    e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                  }
+                }}
               >
+                {isActive('/home') && (
+                  <span style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '2px',
+                    backgroundColor: 'var(--ace-teal)',
+                    animation: 'slideInRight 0.3s ease-out'
+                  }}></span>
+                )}
                 Home
               </Link>
-              <Link 
-                className={`text-sm font-medium transition-colors ${
-                  isActive('/') ? 'text-primary' : 'text-gray-300 hover:text-primary'
-                }`} 
-                to="/"
-              >
-                Dashboard
-              </Link>
-              <Link 
-                className={`text-sm font-medium transition-colors ${
-                  isActive('/keywords') ? 'text-primary' : 'text-gray-300 hover:text-primary'
-                }`} 
-                to="/keywords"
-              >
-                Keywords
-              </Link>
-              <Link 
-                className={`text-sm font-medium transition-colors ${
-                  isActive('/research-feed') ? 'text-primary' : 'text-gray-300 hover:text-primary'
-                }`} 
-                to="/research-feed"
-              >
-                Research Feed
-              </Link>
-              <Link 
-                className={`text-sm font-medium transition-colors ${
-                  isActive('/collections') ? 'text-primary' : 'text-gray-300 hover:text-primary'
-                }`} 
-                to="/collections"
-              >
-                Collections
-              </Link>
-              <Link 
-                className={`text-sm font-medium transition-colors ${
-                  isActive('/chat') ? 'text-primary' : 'text-gray-300 hover:text-primary'
-                }`} 
-                to="/chat"
-              >
-                Chat
-              </Link>
-              <Link 
-                className={`text-sm font-medium transition-colors ${
-                  isActive('/approved-papers') ? 'text-primary' : 'text-gray-300 hover:text-primary'
-                }`} 
-                to="/approved-papers"
-              >
-                Library
-              </Link>
-              <Link 
-                className={`text-sm font-medium transition-colors ${
-                  isActive('/user-management') ? 'text-primary' : 'text-gray-300 hover:text-primary'
-                }`} 
-                to="/user-management"
-              >
-                Users
-              </Link>
+              {[
+                { path: '/', label: 'Dashboard' },
+                { path: '/keywords', label: 'Keywords' },
+                { path: '/research-feed', label: 'Research Feed' },
+                // { path: '/collections', label: 'Collections' },
+                // { path: '/chat', label: 'Chat' },
+                { path: '/approved-papers', label: 'Library' },
+                { path: '/user-management', label: 'Users' }
+              ].map((item, index) => (
+                <Link 
+                  key={item.path}
+                  className="text-sm font-medium transition-all duration-300 relative"
+                  style={{
+                    color: isActive(item.path) ? 'var(--ace-teal)' : 'rgba(255, 255, 255, 0.9)',
+                    textDecoration: 'none',
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: 500,
+                    paddingBottom: '4px',
+                    animationDelay: `${index * 0.05}s`
+                  }}
+                  to={item.path}
+                  onMouseEnter={(e) => {
+                    if (!isActive(item.path)) {
+                      e.target.style.color = 'var(--ace-teal)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive(item.path)) {
+                      e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                    }
+                  }}
+                >
+                  {isActive(item.path) && (
+                    <span style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: '2px',
+                      backgroundColor: 'var(--ace-teal)',
+                      animation: 'slideInRight 0.3s ease-out'
+                    }}></span>
+                  )}
+                  {item.label}
+                </Link>
+              ))}
             </nav>
       </div>
       <div className="flex items-center gap-4">
-        <div className="relative w-64">
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">search</span>
-          <input className="form-input w-full rounded-lg border-gray-700 bg-background-dark focus:ring-primary focus:border-primary pl-10 text-sm" placeholder="Search" value=""/>
+        <div className="relative w-64 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '20px' }}>search</span>
+          <input 
+            className="form-input w-full rounded-lg border pl-10 text-sm transition-all duration-300" 
+            style={{
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              color: 'var(--ace-white)',
+              padding: '10px 12px 10px 40px',
+              fontFamily: "'Inter', sans-serif"
+            }}
+            placeholder="Search" 
+            value=""
+            onFocus={(e) => {
+              e.target.style.borderColor = 'var(--ace-teal)';
+              e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+              e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            }}
+          />
         </div>
-        {/* Removed notifications and profile avatar */}
+        <button
+          className="px-6 py-2 rounded-lg font-semibold text-sm transition-all duration-300 hover:scale-105 animate-fade-in"
+          style={{
+            backgroundColor: 'var(--ace-teal)',
+            color: 'var(--ace-white)',
+            fontFamily: "'Inter', sans-serif",
+            animationDelay: '0.3s',
+            boxShadow: '0 4px 12px rgba(0, 166, 161, 0.3)'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.boxShadow = '0 6px 16px rgba(0, 166, 161, 0.4)';
+            e.target.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.boxShadow = '0 4px 12px rgba(0, 166, 161, 0.3)';
+            e.target.style.transform = 'translateY(0)';
+          }}
+        >
+          Donate
+        </button>
       </div>
     </header>
   );

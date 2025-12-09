@@ -83,16 +83,25 @@ const PaperDetails = () => {
       case 'abstract':
         return (
           <div className="space-y-4">
-            <div className="bg-panel border border-white/10 rounded-lg p-6">
-              <h4 className="text-lg font-semibold text-white mb-3">Abstract</h4>
-              <p className="text-white/80 leading-relaxed">
+            <div className="border rounded-lg p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
+              <h4 style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '1.25rem',
+                fontWeight: 600,
+                letterSpacing: '-0.01em',
+                color: 'var(--ace-navy)',
+                marginBottom: '16px'
+              }}>
+                Abstract
+              </h4>
+              <p style={{ color: 'var(--ace-navy-60)', lineHeight: '1.75', fontFamily: "'Inter', sans-serif" }}>
                 {paper.Abstract || 'No abstract available for this paper.'}
               </p>
             </div>
             {paper['Source Keyword'] && (
-              <div className="bg-panel border border-white/10 rounded-lg p-4">
-                <h5 className="text-base font-medium text-white/90 mb-2">Source Keyword</h5>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/20 text-primary border border-primary/30">
+              <div className="border rounded-lg p-4" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
+                <h5 className="text-base font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>Source Keyword</h5>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border" style={{ backgroundColor: 'var(--primary-10)', color: 'var(--ace-teal)', borderColor: 'var(--border-teal)', fontFamily: "'Inter', sans-serif" }}>
                   {paper['Source Keyword']}
                 </span>
               </div>
@@ -101,9 +110,19 @@ const PaperDetails = () => {
         );
       case 'ai-summary':
         return (
-          <div className="bg-var(--surface-dark) border border-white/10 rounded-lg p-6">
-            <h4 className="text-lg font-semibold text-white mb-3">AI-Generated Summary</h4>
-            <p className="text-white/80 leading-relaxed">
+          <div className="border rounded-lg p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
+            <h4 style={{
+              fontFamily: "'Oswald', sans-serif",
+              fontSize: '1.125rem',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              color: 'var(--ace-navy)',
+              marginBottom: '12px'
+            }}>
+              AI-Generated Summary
+            </h4>
+            <p style={{ color: 'var(--ace-navy-60)', lineHeight: '1.75', fontFamily: "'Inter', sans-serif" }}>
               {paper['AI-Generated Summary'] || 'No AI summary available for this paper.'}
             </p>
           </div>
@@ -111,25 +130,34 @@ const PaperDetails = () => {
       case 'ai-categorization':
         return (
           <div className="space-y-4">
-            <div className="bg-panel border border-white/10 rounded-lg p-6">
-              <h4 className="text-lg font-semibold text-white mb-4">AI Categorization</h4>
+            <div className="border rounded-lg p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
+              <h4 style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '1.125rem',
+                fontWeight: 600,
+                letterSpacing: '-0.01em',
+                color: 'var(--ace-navy)',
+                marginBottom: '16px'
+              }}>
+                AI Categorization
+              </h4>
               <div className="space-y-3">
                 {paper['AI-Categorization'] && (
                   <div>
-                    <span className="text-white/70 text-sm font-medium">Category:</span>
-                    <p className="text-white/90 mt-1">{paper['AI-Categorization']}</p>
+                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Category:</span>
+                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['AI-Categorization']}</p>
                   </div>
                 )}
                 {paper['AI Filtering Score'] && (
                   <div>
-                    <span className="text-white/70 text-sm font-medium">AI Filtering Score:</span>
-                    <p className="text-white/90 mt-1">{paper['AI Filtering Score']}</p>
+                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>AI Filtering Score:</span>
+                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['AI Filtering Score']}</p>
                   </div>
                 )}
                 {paper['Date Retrieved'] && (
                   <div>
-                    <span className="text-white/70 text-sm font-medium">Date Retrieved:</span>
-                    <p className="text-white/90 mt-1">{paper['Date Retrieved']}</p>
+                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Date Retrieved:</span>
+                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['Date Retrieved']}</p>
                   </div>
                 )}
               </div>
@@ -139,31 +167,40 @@ const PaperDetails = () => {
       case 'ai-intervention':
         return (
           <div className="space-y-4">
-            <div className="bg-panel border border-white/10 rounded-lg p-6">
-              <h4 className="text-lg font-semibold text-white mb-4">AI Intervention Analysis</h4>
+            <div className="border rounded-lg p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
+              <h4 style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '1.125rem',
+                fontWeight: 600,
+                letterSpacing: '-0.01em',
+                color: 'var(--ace-navy)',
+                marginBottom: '16px'
+              }}>
+                AI Intervention Analysis
+              </h4>
               <div className="space-y-4">
                 {paper['AI-Intervention'] && (
                   <div>
-                    <span className="text-white/70 text-sm font-medium">Intervention Type:</span>
-                    <p className="text-white/90 mt-1">{paper['AI-Intervention']}</p>
+                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Intervention Type:</span>
+                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['AI-Intervention']}</p>
                   </div>
                 )}
                 {paper['AI-Outcomes'] && (
                   <div>
-                    <span className="text-white/70 text-sm font-medium">Expected Outcomes:</span>
-                    <p className="text-white/90 mt-1">{paper['AI-Outcomes']}</p>
+                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Expected Outcomes:</span>
+                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['AI-Outcomes']}</p>
                   </div>
                 )}
                 {paper['Reviewer Comments'] && (
                   <div>
-                    <span className="text-white/70 text-sm font-medium">Reviewer Comments:</span>
-                    <p className="text-white/90 mt-1">{paper['Reviewer Comments']}</p>
+                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Reviewer Comments:</span>
+                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['Reviewer Comments']}</p>
                   </div>
                 )}
                 {paper['Notes (if Any)'] && (
                   <div>
-                    <span className="text-white/70 text-sm font-medium">Notes:</span>
-                    <p className="text-white/90 mt-1">{paper['Notes (if Any)']}</p>
+                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Notes:</span>
+                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['Notes (if Any)']}</p>
                   </div>
                 )}
               </div>
@@ -176,14 +213,20 @@ const PaperDetails = () => {
   };
 
   const getStatusBadge = (status) => {
-    const styles = {
-      Approved: 'bg-green-500/20 text-green-400 border-green-500/30',
-      Rejected: 'bg-red-500/20 text-red-400 border-red-500/30',
-      Pending: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+    const styleMap = {
+      Approved: { bg: 'rgba(0, 166, 161, 0.1)', text: 'var(--ace-teal)', border: 'rgba(0, 166, 161, 0.3)' },
+      Rejected: { bg: 'rgba(132, 52, 104, 0.1)', text: 'var(--ace-berry)', border: 'rgba(132, 52, 104, 0.3)' },
+      Pending: { bg: 'rgba(165, 175, 27, 0.1)', text: 'var(--ace-apple)', border: 'rgba(165, 175, 27, 0.3)' }
     };
+    const style = styleMap[status] || styleMap.Pending;
     
     return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${styles[status] || styles.Pending}`}>
+      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border" style={{ 
+        backgroundColor: style.bg,
+        color: style.text,
+        borderColor: style.border,
+        fontFamily: "'Inter', sans-serif"
+      }}>
         {status}
       </span>
     );
@@ -191,14 +234,13 @@ const PaperDetails = () => {
 
   if (!paper) {
     return (
-      <main className="flex-grow container mx-auto px-6 py-12">
+      <main className="flex-grow container mx-auto px-6 py-12" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex flex-col items-center justify-center gap-4">
             <div className="relative">
-              <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-              <div className="absolute inset-0 w-8 h-8 border-3 border-transparent border-t-primary/60 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
+              <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: 'var(--ace-navy-10)', borderTopColor: 'var(--ace-teal)' }}></div>
             </div>
-            <p className="text-base font-medium text-white/70">Loading paper details...</p>
+            <p className="text-base font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Loading paper details...</p>
           </div>
         </div>
       </main>
@@ -206,25 +248,42 @@ const PaperDetails = () => {
   }
 
   return (
-    <main className="flex-grow container mx-auto px-6 py-12">
+    <main className="flex-grow container mx-auto px-6 py-12" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => navigate('/research-feed')}
-            className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-4"
+            className="flex items-center gap-2 transition-colors mb-4"
+            style={{ 
+              color: 'var(--ace-teal)',
+              fontFamily: "'Inter', sans-serif",
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => e.target.style.opacity = '0.8'}
+            onMouseLeave={(e) => e.target.style.opacity = '1'}
           >
             <span className="material-symbols-outlined">arrow_back</span>
             Back to Research Feed
           </button>
           
-          <div className="bg-panel border border-white/10 p-8 rounded-xl">
+          <div className="border p-8 rounded-xl" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
             <div className="flex items-start justify-between gap-4 mb-4">
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-white/90 mb-3">
+                <h1 style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: '1.875rem',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: 'var(--ace-navy)',
+                  marginBottom: '12px'
+                }}>
                   {paper.Title || 'Untitled Paper'}
                 </h1>
-                <div className="space-y-2 text-white/70">
+                <div className="space-y-2" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                   <p className="text-base">
                     <span className="font-medium">Authors:</span> {paper.Authors || 'Unknown'}
                   </p>
@@ -238,7 +297,12 @@ const PaperDetails = () => {
                         href={paper['DOI / URL']} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-primary hover:underline"
+                        style={{ 
+                          color: 'var(--ace-teal)',
+                          textDecoration: 'none'
+                        }}
+                        onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
+                        onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
                       >
                         View Paper
                       </a>
@@ -250,8 +314,8 @@ const PaperDetails = () => {
                 {getStatusBadge(paper.Status)}
                 {paper['AI Filtering Score'] && (
                   <div className="text-right">
-                    <span className="text-white/70 text-sm">AI Score</span>
-                    <p className="text-2xl font-bold text-primary">{paper['AI Filtering Score']}</p>
+                    <span style={{ color: 'var(--ace-navy-60)', fontSize: '0.875rem', fontFamily: "'Inter', sans-serif" }}>AI Score</span>
+                    <p style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--ace-teal)', fontFamily: "'Inter', sans-serif" }}>{paper['AI Filtering Score']}</p>
                   </div>
                 )}
               </div>
@@ -267,17 +331,30 @@ const PaperDetails = () => {
 
         {/* Tab Navigation */}
         <div className="mb-8">
-          <div className="border-b border-white/10">
+          <div className="border-b" style={{ borderBottomColor: 'var(--ace-navy-10)' }}>
             <nav aria-label="Tabs" className="-mb-px flex space-x-8">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`whitespace-nowrap py-3 px-4 border-b-2 font-medium text-base transition-colors bg-transparent border-0 rounded-lg shadow-none focus:outline-none ${
-                    activeTab === tab.id
-                      ? 'border-primary text-primary'
-                      : 'border-transparent text-white/50 hover:text-white/75 hover:border-white/30'
-                  }`}
+                  className="whitespace-nowrap py-3 px-4 border-b-2 font-medium text-base transition-colors bg-transparent border-0 rounded-lg shadow-none focus:outline-none"
+                  style={{
+                    borderBottomColor: activeTab === tab.id ? 'var(--ace-teal)' : 'transparent',
+                    color: activeTab === tab.id ? 'var(--ace-teal)' : 'var(--ace-navy-60)',
+                    fontFamily: "'Inter', sans-serif"
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== tab.id) {
+                      e.target.style.color = 'var(--ace-navy)';
+                      e.target.style.borderBottomColor = 'var(--ace-navy-30)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== tab.id) {
+                      e.target.style.color = 'var(--ace-navy-60)';
+                      e.target.style.borderBottomColor = 'transparent';
+                    }
+                  }}
                 >
                   {tab.label}
                 </button>
@@ -290,18 +367,39 @@ const PaperDetails = () => {
         </div>
 
         {/* Actions */}
-        <div className="bg-panel border border-white/10 rounded-xl p-6">
-          <h3 className="text-xl font-bold text-white/90 mb-4">Actions</h3>
+        <div className="border rounded-xl p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
+          <h3 style={{
+            fontFamily: "'Oswald', sans-serif",
+            fontSize: '1.25rem',
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            color: 'var(--ace-navy)',
+            marginBottom: '16px'
+          }}>
+            Actions
+          </h3>
           <div className="flex flex-wrap gap-4">
             <button 
               onClick={() => handleApprovalClick('Approved')}
-              className="flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-base font-bold text-black hover:bg-primary/90 transition-colors"
+              className="flex items-center justify-center rounded-lg px-6 py-3 text-base font-bold transition-colors"
+              style={{
+                backgroundColor: 'var(--ace-teal)',
+                color: 'var(--ace-white)',
+                fontFamily: "'Inter', sans-serif"
+              }}
             >
               Approve Paper
             </button>
             <button 
               onClick={() => handleApprovalClick('Rejected')}
-              className="flex items-center justify-center rounded-lg bg-red-500/20 border border-red-500/30 px-6 py-3 text-base font-semibold text-red-400 hover:bg-red-500/30 transition-colors"
+              className="flex items-center justify-center rounded-lg border px-6 py-3 text-base font-semibold transition-colors"
+              style={{
+                backgroundColor: 'rgba(132, 52, 104, 0.1)',
+                borderColor: 'rgba(132, 52, 104, 0.3)',
+                color: 'var(--ace-berry)',
+                fontFamily: "'Inter', sans-serif"
+              }}
             >
               Reject Paper
             </button>
@@ -310,29 +408,42 @@ const PaperDetails = () => {
 
         {/* Approval Dialog */}
         {showApprovalDialog && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 rounded-xl border border-gray-700 max-w-md w-full p-6">
-              <h3 className="text-xl font-bold text-white mb-4">
+          <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(4, 28, 48, 0.5)' }}>
+            <div className="rounded-xl border max-w-md w-full p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)' }}>
+              <h3 style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '1.25rem',
+                fontWeight: 600,
+                letterSpacing: '-0.01em',
+                color: 'var(--ace-navy)',
+                marginBottom: '16px'
+              }}>
                 {approvalData.status} Paper
               </h3>
               <div className="mb-4">
-                <p className="text-white/70 text-sm font-medium truncate">
+                <p className="text-sm font-medium truncate" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                   {paper.Title}
                 </p>
-                <p className="text-white/50 text-xs mt-1">
+                <p className="text-xs mt-1" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                   {paper.Authors}
                 </p>
               </div>
               
               <form onSubmit={handleApprovalSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-white/90 text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Status
                   </label>
                   <select
                     value={approvalData.status}
                     onChange={(e) => setApprovalData(prev => ({ ...prev, status: e.target.value }))}
-                    className="w-full bg-gray-800 border border-gray-600 rounded-lg p-3 text-white focus:ring-primary focus:border-primary"
+                    className="w-full border rounded-lg p-3"
+                    style={{
+                      backgroundColor: 'var(--ace-white)',
+                      borderColor: 'var(--ace-navy-10)',
+                      color: 'var(--ace-navy)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
                   >
                     {PAPER_CONSTANTS.STATUSES.map(status => (
                       <option key={status} value={status}>{status}</option>
@@ -341,7 +452,7 @@ const PaperDetails = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-white/90 text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Comments *
                   </label>
                   <textarea
@@ -350,12 +461,18 @@ const PaperDetails = () => {
                     placeholder="Enter your review comments..."
                     rows={3}
                     required
-                    className="w-full bg-gray-800 border border-gray-600 rounded-lg p-3 text-white focus:ring-primary focus:border-primary resize-none"
+                    className="w-full border rounded-lg p-3 resize-none"
+                    style={{
+                      backgroundColor: 'var(--ace-white)',
+                      borderColor: 'var(--ace-navy-10)',
+                      color: 'var(--ace-navy)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-white/90 text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Notes (Optional)
                   </label>
                   <textarea
@@ -363,7 +480,13 @@ const PaperDetails = () => {
                     onChange={(e) => setApprovalData(prev => ({ ...prev, notes: e.target.value }))}
                     placeholder="Additional notes..."
                     rows={2}
-                    className="w-full bg-gray-800 border border-gray-600 rounded-lg p-3 text-white focus:ring-primary focus:border-primary resize-none"
+                    className="w-full border rounded-lg p-3 resize-none"
+                    style={{
+                      backgroundColor: 'var(--ace-white)',
+                      borderColor: 'var(--ace-navy-10)',
+                      color: 'var(--ace-navy)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
                   />
                 </div>
                 
@@ -371,14 +494,24 @@ const PaperDetails = () => {
                   <button
                     type="submit"
                     disabled={isSubmittingApproval || !approvalData.comments.trim()}
-                    className="flex-1 bg-primary text-black font-bold py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 font-bold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      backgroundColor: 'var(--ace-teal)',
+                      color: 'var(--ace-white)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
                   >
                     {isSubmittingApproval ? 'Submitting...' : 'Submit'}
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowApprovalDialog(false)}
-                    className="flex-1 bg-gray-700 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-600 transition-colors"
+                    className="flex-1 font-bold py-3 px-4 rounded-lg transition-colors"
+                    style={{
+                      backgroundColor: 'var(--ace-navy-60)',
+                      color: 'var(--ace-white)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
                   >
                     Cancel
                   </button>

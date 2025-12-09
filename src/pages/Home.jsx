@@ -34,24 +34,27 @@ const FollowUpPrompt = ({ prompt, onSelect }) => (
     className="followup-prompt"
     onClick={() => onSelect(prompt)}
     style={{
-      background: 'var(--surface-dark)',
-      border: '1px solid var(--border-primary)',
+      background: 'var(--ace-navy-5)',
+      border: '1px solid var(--ace-navy-10)',
       borderRadius: '8px',
       padding: '8px 12px',
-      color: 'var(--text-secondary)',
+      color: 'var(--ace-navy-60)',
       fontSize: '14px',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
       margin: '4px',
-      textAlign: 'left'
+      textAlign: 'left',
+      fontFamily: "'Inter', sans-serif"
     }}
     onMouseEnter={(e) => {
       e.target.style.background = 'var(--primary-10)';
-      e.target.style.color = 'var(--text-primary)';
+      e.target.style.color = 'var(--ace-teal)';
+      e.target.style.borderColor = 'var(--ace-teal)';
     }}
     onMouseLeave={(e) => {
-      e.target.style.background = 'var(--surface-dark)';
-      e.target.style.color = 'var(--text-secondary)';
+      e.target.style.background = 'var(--ace-navy-5)';
+      e.target.style.color = 'var(--ace-navy-60)';
+      e.target.style.borderColor = 'var(--ace-navy-10)';
     }}
   >
     {prompt}
@@ -66,13 +69,14 @@ const MessageBubble = ({ message, isUser, onCitationClick, onFollowUpSelect }) =
         <div
           className="message-bubble"
           style={{
-            background: 'var(--primary)',
-            color: 'var(--background-dark)',
+            background: 'var(--ace-teal)',
+            color: 'var(--ace-white)',
             padding: '12px 16px',
             borderRadius: '16px 16px 4px 16px',
             maxWidth: '70%',
             fontSize: '14px',
-            lineHeight: '1.5'
+            lineHeight: '1.5',
+            fontFamily: "'Inter', sans-serif"
           }}
         >
           {message}
@@ -114,14 +118,16 @@ const MessageBubble = ({ message, isUser, onCitationClick, onFollowUpSelect }) =
       <div
         className="message-bubble"
         style={{
-          background: 'var(--surface-dark)',
-          border: '1px solid var(--border-primary)',
-          color: 'var(--text-primary)',
+          background: 'var(--ace-white)',
+          border: '1px solid var(--ace-navy-10)',
+          color: 'var(--ace-navy)',
           padding: '12px 16px',
           borderRadius: '16px 16px 16px 4px',
           maxWidth: '85%',
           fontSize: '14px',
-          lineHeight: '1.6'
+          lineHeight: '1.6',
+          fontFamily: "'Inter', sans-serif",
+          boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)'
         }}
       >
         <div style={{ marginBottom: followups.length > 0 ? '12px' : '0' }}>
@@ -130,7 +136,12 @@ const MessageBubble = ({ message, isUser, onCitationClick, onFollowUpSelect }) =
         
         {followups.length > 0 && (
           <div style={{ marginTop: '12px' }}>
-            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+            <div style={{ 
+              fontSize: '12px', 
+              color: 'var(--ace-navy-60)', 
+              marginBottom: '8px',
+              fontFamily: "'Inter', sans-serif"
+            }}>
               Follow-up questions:
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
@@ -257,47 +268,72 @@ const Home = () => {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '0 16px',
-          color: 'var(--text-primary)',
-          background: 'var(--background-dark)',
+          color: 'var(--ace-navy)',
+          background: 'var(--ace-navy-2)',
         }}
       >
         <div style={{ width: '100%', maxWidth: 720, textAlign: 'center' }}>
-          <h1
-            style={{
-              fontSize: '48px',
-              lineHeight: 1.1,
-              margin: 0,
-              fontWeight: 800,
-              letterSpacing: '-0.02em',
-            }}
-          >
-            Knowva
-          </h1>
-          <p
-            style={{
-              marginTop: 12,
-              marginBottom: 0,
-              color: 'var(--text-secondary)',
-              fontSize: '16px',
-              lineHeight: 1.6,
-            }}
-          >
-            AI-powered research and knowledge management for smarter insights and
-            seamless collaboration.
-          </p>
+          <div className="animate-fade-in-up relative">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 animate-pulse"></div>
+            <h1
+              className="text-gradient-ace"
+              style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '4.5rem',
+                lineHeight: 1.1,
+                margin: 0,
+                fontWeight: 800,
+                letterSpacing: '-0.03em',
+                marginBottom: '24px',
+                textAlign: 'center'
+              }}
+            >
+              Animal Charity Evaluators
+            </h1>
+            <p
+              style={{
+                marginTop: 0,
+                marginBottom: 0,
+                color: 'var(--ace-navy-60)',
+                fontSize: '1.5rem',
+                lineHeight: 1.6,
+                fontFamily: "'Inter', sans-serif",
+                maxWidth: '700px',
+                margin: '0 auto',
+                textAlign: 'center',
+                fontWeight: 500
+              }}
+            >
+              Finding and promoting the most effective ways to help animals.
+            </p>
+          </div>
 
           <form
             onSubmit={handleSubmit}
             role="search"
+            className="animate-fade-in-up glass-panel"
             style={{
-              marginTop: 28,
+              marginTop: 48,
               display: 'flex',
               alignItems: 'center',
-              gap: 12,
-              padding: 6,
-              borderRadius: 12,
-              background: 'var(--surface-dark)',
-              border: '1px solid var(--border-primary)',
+              gap: 16,
+              padding: 12,
+              borderRadius: 24,
+              transition: 'all 0.3s ease',
+              animationDelay: '0.2s',
+              maxWidth: '800px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--ace-teal)';
+              e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 166, 161, 0.15)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)';
+              e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
             <input
@@ -314,22 +350,36 @@ const Home = () => {
                 background: 'transparent',
                 border: 'none',
                 outline: 'none',
-                color: 'var(--text-primary)',
+                color: 'var(--ace-navy)',
                 fontSize: 16,
+                fontFamily: "'Inter', sans-serif",
               }}
             />
             <button
               type="submit"
               disabled={isLoading || !inputValue.trim()}
+              className="transition-all duration-300"
               style={{
-                background: isLoading || !inputValue.trim() ? 'var(--text-secondary)' : 'var(--primary)',
-                color: 'var(--text-primary)',
+                background: isLoading || !inputValue.trim() ? 'var(--ace-navy-60)' : 'var(--ace-teal)',
+                color: 'var(--ace-white)',
                 border: 'none',
-                borderRadius: 8,
-                padding: '10px 16px',
-                fontWeight: 700,
+                borderRadius: 10,
+                padding: '12px 24px',
+                fontWeight: 600,
                 cursor: isLoading || !inputValue.trim() ? 'not-allowed' : 'pointer',
-                opacity: isLoading || !inputValue.trim() ? 0.6 : 1
+                opacity: isLoading || !inputValue.trim() ? 0.6 : 1,
+                fontFamily: "'Inter', sans-serif",
+                boxShadow: '0 4px 12px rgba(0, 166, 161, 0.3)'
+              }}
+              onMouseEnter={(e) => {
+                if (!isLoading && inputValue.trim()) {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(0, 166, 161, 0.4)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 12px rgba(0, 166, 161, 0.3)';
               }}
             >
               {isLoading ? 'Thinking...' : 'Ask'}
@@ -349,17 +399,20 @@ const Home = () => {
         >
           <h2
             id="what-knowva-does"
+            className="animate-fade-in-up"
             style={{
+              fontFamily: "'Montserrat', sans-serif",
               textAlign: 'center',
-              color: '#ffffff',
-              fontSize: 28,
-              fontWeight: 800,
+              color: 'var(--ace-navy)',
+              fontSize: '2.5rem',
+              fontWeight: 700,
               letterSpacing: '-0.01em',
               margin: 0,
-              marginBottom: 18,
+              marginBottom: 24,
+              lineHeight: '1.2'
             }}
           >
-            What Knowva Does
+            What ACE Does
           </h2>
 
           <div
@@ -418,12 +471,25 @@ const Home = () => {
             ].map((item) => (
               <div
                 key={item.title}
+                className="animate-scale-in transition-all duration-300 hover:shadow-xl"
                 style={{
-                  background: 'var(--surface-dark)',
-                  border: '1px solid var(--border-primary)',
-                  borderRadius: 12,
-                  padding: 16,
-                  color: 'var(--text-primary)',
+                  background: 'var(--ace-white)',
+                  border: '1px solid var(--ace-navy-10)',
+                  borderRadius: 16,
+                  padding: 24,
+                  color: 'var(--ace-navy)',
+                  boxShadow: '0 2px 8px rgba(4, 28, 48, 0.08)',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-6px)';
+                  e.currentTarget.style.borderColor = 'var(--ace-teal)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(4, 28, 48, 0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'var(--ace-navy-10)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(4, 28, 48, 0.08)';
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -441,15 +507,23 @@ const Home = () => {
                   >
                     {item.icon}
                   </span>
-                  <strong style={{ fontSize: 14 }}>{item.title}</strong>
+                  <strong style={{ 
+                    fontSize: 16,
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontWeight: 600,
+                    color: 'var(--ace-navy)'
+                  }}>
+                    {item.title}
+                  </strong>
                 </div>
                 <p
                   style={{
                     marginTop: 10,
                     marginBottom: 0,
-                    color: 'var(--text-secondary)',
+                    color: 'var(--ace-navy-60)',
                     fontSize: 13,
                     lineHeight: 1.6,
+                    fontFamily: "'Inter', sans-serif",
                   }}
                 >
                   {item.desc}
@@ -472,24 +546,40 @@ const Home = () => {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        background: 'var(--background-dark)',
-        color: 'var(--text-primary)'
+        background: 'var(--ace-navy-2)',
+        color: 'var(--ace-navy)'
       }}
     >
       {/* Chat Header */}
       <div
         style={{
           padding: '16px 20px',
-          borderBottom: '1px solid var(--border-primary)',
-          background: 'var(--surface-dark)',
+          borderBottom: '1px solid var(--ace-navy-10)',
+          background: 'var(--ace-white)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)',
         }}
       >
-        <div>
-          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: 700 }}>Knowva Chat</h1>
-          <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '14px' }}>
+        <div className="animate-fade-in">
+          <h1 style={{ 
+            margin: 0, 
+            fontSize: '1.75rem', 
+            fontWeight: 700,
+            fontFamily: "'Montserrat', sans-serif",
+            letterSpacing: '-0.01em',
+            color: 'var(--ace-navy)',
+            lineHeight: '1.2'
+          }}>
+            ACE Chat
+          </h1>
+          <p style={{ 
+            margin: '4px 0 0 0', 
+            color: 'var(--ace-navy-60)', 
+            fontSize: '15px',
+            fontFamily: "'Inter', sans-serif"
+          }}>
             AI-powered research assistant
           </p>
         </div>
@@ -497,12 +587,22 @@ const Home = () => {
           onClick={clearHistory}
           style={{
             background: 'transparent',
-            border: '1px solid var(--border-primary)',
+            border: '1px solid var(--ace-navy-10)',
             borderRadius: '6px',
             padding: '8px 12px',
-            color: 'var(--text-secondary)',
+            color: 'var(--ace-navy-60)',
             fontSize: '14px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            fontFamily: "'Inter', sans-serif",
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.borderColor = 'var(--ace-teal)';
+            e.target.style.color = 'var(--ace-teal)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.borderColor = 'var(--ace-navy-10)';
+            e.target.style.color = 'var(--ace-navy-60)';
           }}
         >
           Clear History
@@ -535,12 +635,14 @@ const Home = () => {
           <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '16px' }}>
             <div
               style={{
-                background: 'var(--surface-dark)',
-                border: '1px solid var(--border-primary)',
-                color: 'var(--text-secondary)',
+                background: 'var(--ace-white)',
+                border: '1px solid var(--ace-navy-10)',
+                color: 'var(--ace-navy-60)',
                 padding: '12px 16px',
                 borderRadius: '16px 16px 16px 4px',
-                fontSize: '14px'
+                fontSize: '14px',
+                fontFamily: "'Inter', sans-serif",
+                boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -584,8 +686,9 @@ const Home = () => {
       <div
         style={{
           padding: '20px',
-          borderTop: '1px solid var(--border-primary)',
-          background: 'var(--surface-dark)'
+          borderTop: '1px solid var(--ace-navy-10)',
+          background: 'var(--ace-white)',
+          boxShadow: '0 -1px 3px rgba(4, 28, 48, 0.1)'
         }}
       >
         <form
@@ -618,14 +721,14 @@ const Home = () => {
                 minHeight: '44px',
                 maxHeight: '120px',
                 padding: '12px 16px',
-                background: 'var(--background-dark)',
-                border: '1px solid var(--border-primary)',
+                background: 'var(--ace-navy-2)',
+                border: '1px solid var(--ace-navy-10)',
                 borderRadius: '12px',
-                color: 'var(--text-primary)',
+                color: 'var(--ace-navy)',
                 fontSize: '14px',
                 resize: 'none',
                 outline: 'none',
-                fontFamily: 'inherit'
+                fontFamily: "'Inter', sans-serif"
               }}
             />
           </div>
@@ -634,8 +737,8 @@ const Home = () => {
             className="chat-button"
             disabled={isLoading || !inputValue.trim()}
             style={{
-              background: isLoading || !inputValue.trim() ? 'var(--text-secondary)' : 'var(--primary)',
-              color: isLoading || !inputValue.trim() ? 'var(--background-dark)' : 'var(--background-dark)',
+              background: isLoading || !inputValue.trim() ? 'var(--ace-navy-60)' : 'var(--ace-teal)',
+              color: 'var(--ace-white)',
               border: 'none',
               borderRadius: '12px',
               padding: '12px 20px',
@@ -643,7 +746,8 @@ const Home = () => {
               cursor: isLoading || !inputValue.trim() ? 'not-allowed' : 'pointer',
               opacity: isLoading || !inputValue.trim() ? 0.6 : 1,
               fontSize: '14px',
-              minWidth: '80px'
+              minWidth: '80px',
+              fontFamily: "'Inter', sans-serif"
             }}
           >
             {isLoading ? 'Sending...' : 'Send'}

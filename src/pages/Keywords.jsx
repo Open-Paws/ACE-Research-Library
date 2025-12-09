@@ -113,11 +113,29 @@ const Keywords = () => {
   const inactiveKeywords = totalKeywords - activeKeywords;
 
   return (
-    <main className="flex-1 w-full px-4 sm:px-6 lg:px-14 py-8">
+    <main className="flex-1 w-full px-4 sm:px-6 lg:px-14 py-8" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
         <div className="mx-auto max-w-[1360px]">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold">Keywords</h1>
-            <p className="text-white/70 mt-1 text-base">Manage your keywords to track relevant research papers.</p>
+          <div className="mb-10 animate-fade-in-up">
+            <h1 style={{
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: '3rem',
+              fontWeight: 800,
+              letterSpacing: '-0.02em',
+              color: 'var(--ace-navy)',
+              marginBottom: '12px',
+              lineHeight: '1.1'
+            }}>
+              Keywords
+            </h1>
+            <p style={{ 
+              color: 'var(--ace-navy-60)',
+              marginTop: '8px',
+              fontSize: '1.125rem',
+              fontFamily: "'Inter', sans-serif",
+              lineHeight: '1.6'
+            }}>
+              Manage your keywords to track relevant research papers.
+            </p>
           </div>
 
           {error && (
@@ -127,36 +145,79 @@ const Keywords = () => {
           )}
 
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-            <div className="bg-primary/10 dark:bg-primary/20 p-4 rounded-xl border border-white/10 min-h-24">
-              <p className="text-base font-medium text-white/80">Total Keywords</p>
-              <p className="text-3xl font-bold mt-2">{isLoading ? '...' : totalKeywords}</p>
-            </div>
-            <div className="bg-primary/10 dark:bg-primary/20 p-4 rounded-xl border border-white/10 min-h-24">
-              <p className="text-base font-medium text-white/80">Active Keywords</p>
-              <p className="text-3xl font-bold mt-2">{isLoading ? '...' : activeKeywords}</p>
-            </div>
-            <div className="bg-primary/10 dark:bg-primary/20 p-4 rounded-xl border border-white/10 min-h-24">
-              <p className="text-base font-medium text-white/80">Inactive Keywords</p>
-              <p className="text-3xl font-bold mt-2">{isLoading ? '...' : inactiveKeywords}</p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+            {[
+              { label: 'Total Keywords', value: totalKeywords },
+              { label: 'Active Keywords', value: activeKeywords },
+              { label: 'Inactive Keywords', value: inactiveKeywords }
+            ].map((stat, index) => (
+              <div 
+                key={stat.label}
+                className="p-6 rounded-xl border min-h-24 animate-scale-in transition-all duration-300 hover:shadow-xl"
+                style={{ 
+                  backgroundColor: 'var(--ace-white)', 
+                  borderColor: 'var(--ace-navy-10)', 
+                  boxShadow: '0 2px 8px rgba(4, 28, 48, 0.08)',
+                  animationDelay: `${index * 0.1}s`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.borderColor = 'var(--ace-teal)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(4, 28, 48, 0.12)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'var(--ace-navy-10)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(4, 28, 48, 0.08)';
+                }}
+              >
+                <p style={{ fontSize: '0.9375rem', fontWeight: 500, color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", marginBottom: '12px' }}>{stat.label}</p>
+                <p style={{ fontSize: '2.25rem', fontWeight: 800, color: 'var(--ace-teal)', fontFamily: "'Montserrat', sans-serif", lineHeight: '1' }}>{isLoading ? '...' : stat.value}</p>
+              </div>
+            ))}
           </div>
 
           {/* Keyword Management Table */}
-          <div className="bg-panel rounded-xl border border-white/10 overflow-hidden">
-            <div className="px-6 py-4 border-b border-white/10 flex justify-between items-center">
-              <h3 className="text-xl font-bold">Keyword Management</h3>
+          <div className="bg-panel rounded-xl border overflow-hidden animate-fade-in-up" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 2px 8px rgba(4, 28, 48, 0.08)' }}>
+            <div className="px-6 py-5 border-b flex justify-between items-center" style={{ borderBottomColor: 'var(--ace-navy-10)' }}>
+              <h3 style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '1.5rem',
+                fontWeight: 700,
+                letterSpacing: '-0.01em',
+                color: 'var(--ace-navy)'
+              }}>
+                Keyword Management
+              </h3>
               <div className="flex items-center gap-4">
                 <button 
                   onClick={() => setShowAddForm(!showAddForm)}
-                  className="px-4 py-2 text-sm font-bold rounded-lg bg-primary text-black hover:opacity-90 transition-opacity"
+                  className="px-5 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 hover:scale-105"
+                  style={{ 
+                    backgroundColor: 'var(--ace-teal)', 
+                    color: 'var(--ace-white)', 
+                    fontFamily: "'Inter', sans-serif",
+                    boxShadow: '0 4px 12px rgba(0, 166, 161, 0.3)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.boxShadow = '0 6px 20px rgba(0, 166, 161, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.boxShadow = '0 4px 12px rgba(0, 166, 161, 0.3)';
+                  }}
                 >
                   {showAddForm ? 'Cancel' : 'Add Keyword'}
                 </button>
                 <button 
                   onClick={loadKeywords}
                   disabled={isLoading}
-                  className="px-4 py-2 text-sm font-bold rounded-lg bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors disabled:opacity-50"
+                  className="px-5 py-2.5 text-sm font-semibold rounded-lg border transition-all duration-300 disabled:opacity-50 hover:scale-105"
+                  style={{ 
+                    backgroundColor: 'var(--ace-navy-5)',
+                    borderColor: 'var(--ace-navy-10)',
+                    color: 'var(--ace-navy)',
+                    fontFamily: "'Inter', sans-serif"
+                  }}
                 >
                   {isLoading ? 'Loading...' : 'Refresh'}
                 </button>
@@ -165,14 +226,14 @@ const Keywords = () => {
             
             {/* Add Keyword Form */}
             {showAddForm && (
-              <div className="px-6 py-4 border-b border-white/10 bg-white/5">
+              <div className="px-6 py-4 border-b" style={{ borderBottomColor: 'var(--ace-navy-10)', backgroundColor: 'var(--ace-navy-5)' }}>
                 <form onSubmit={handleAddKeyword} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                   <div>
-                    <label className="block text-base font-medium mb-1 text-white/90" htmlFor="add-keyword">
+                    <label className="block text-base font-medium mb-1" htmlFor="add-keyword" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                       Keyword
                     </label>
                     <input 
-                      className="w-full bg-white/5 dark:bg-black/20 border border-white/10 rounded-lg p-3 focus:ring-primary focus:border-primary text-white placeholder-white/70" 
+                      className="w-full border rounded-lg p-3 focus:ring-primary focus:border-primary" 
                       id="add-keyword" 
                       placeholder="e.g., Quantum Computing" 
                       type="text"
@@ -180,6 +241,12 @@ const Keywords = () => {
                       onChange={(e) => setFormData(prev => ({ ...prev, keyword: e.target.value }))}
                       maxLength={KEYWORD_CONSTANTS.MAX_KEYWORD_LENGTH}
                       required
+                      style={{
+                        backgroundColor: 'var(--ace-white)',
+                        borderColor: 'var(--ace-navy-10)',
+                        color: 'var(--ace-navy)',
+                        fontFamily: "'Inter', sans-serif"
+                      }}
                     />
                   </div>
                   <div>
@@ -215,7 +282,12 @@ const Keywords = () => {
                   <button 
                     type="submit" 
                     disabled={isAddingKeyword || !formData.keyword.trim()}
-                    className="bg-primary text-black font-bold px-5 py-3 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="font-bold px-5 py-3 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ 
+                      backgroundColor: 'var(--ace-teal)',
+                      color: 'var(--ace-white)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
                   >
                     {isAddingKeyword ? 'Adding...' : 'Add Keyword'}
                   </button>
@@ -225,56 +297,55 @@ const Keywords = () => {
 
             <div className="overflow-x-auto">
               <table className="w-full text-base text-left">
-                <thead className="bg-primary/10 dark:bg-primary/20 text-sm uppercase tracking-wider">
+                <thead className="text-sm uppercase tracking-wider" style={{ backgroundColor: 'var(--ace-navy-5)' }}>
                   <tr>
-                    <th className="px-6 py-3 text-white/80" scope="col">Keyword</th>
-                    <th className="px-6 py-3 text-white/80" scope="col">Priority</th>
-                    <th className="px-6 py-3 text-white/80" scope="col">Last Search</th>
-                    <th className="px-6 py-3 text-white/80" scope="col">Status</th>
-                    <th className="px-6 py-3 text-right text-white/80" scope="col">Total Results</th>
+                    <th className="px-6 py-3" scope="col" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontWeight: 600 }}>Keyword</th>
+                    <th className="px-6 py-3" scope="col" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontWeight: 600 }}>Priority</th>
+                    <th className="px-6 py-3" scope="col" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontWeight: 600 }}>Last Search</th>
+                    <th className="px-6 py-3" scope="col" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontWeight: 600 }}>Status</th>
+                    <th className="px-6 py-3 text-right" scope="col" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontWeight: 600 }}>Total Results</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y" style={{ borderColor: 'var(--ace-navy-10)' }}>
                   {isLoading ? (
                     <tr>
-                      <td colSpan="5" className="px-6 py-12 text-center text-white/70">
+                      <td colSpan="5" className="px-6 py-12 text-center" style={{ color: 'var(--ace-navy-60)' }}>
                         <div className="flex flex-col items-center justify-center gap-4">
                           <div className="relative">
-                            <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-                            <div className="absolute inset-0 w-8 h-8 border-3 border-transparent border-t-primary/60 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
+                            <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: 'var(--ace-navy-10)', borderTopColor: 'var(--ace-teal)' }}></div>
                           </div>
-                          <p className="text-base font-medium">Loading keywords...</p>
+                          <p className="text-base font-medium" style={{ fontFamily: "'Inter', sans-serif" }}>Loading keywords...</p>
                         </div>
                       </td>
                     </tr>
                   ) : keywords.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="px-6 py-12 text-center text-white/70">
+                      <td colSpan="5" className="px-6 py-12 text-center" style={{ color: 'var(--ace-navy-60)' }}>
                         <div className="flex flex-col items-center gap-4">
-                          <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center">
-                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--ace-navy-5)' }}>
+                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--ace-teal)' }}>
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
                           </div>
-                          <p className="text-base font-medium">No keywords found</p>
-                          <p className="text-sm text-white/50">Add your first keyword to get started!</p>
+                          <p className="text-base font-medium" style={{ fontFamily: "'Inter', sans-serif" }}>No keywords found</p>
+                          <p className="text-sm" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Add your first keyword to get started!</p>
                         </div>
                       </td>
                     </tr>
                   ) : (
                     keywords.map((keyword) => (
-                      <tr key={keyword.row_number} className="hover:bg-white/5 transition-colors">
-                        <td className="px-6 py-4 font-medium text-base">{keyword.Keyword}</td>
+                      <tr key={keyword.row_number} className="transition-colors" style={{ borderBottomColor: 'var(--ace-navy-10)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--ace-navy-5)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
+                        <td className="px-6 py-4 font-medium text-base" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{keyword.Keyword}</td>
                         <td className="px-6 py-4">
                           {getPriorityBadge(keyword.Priority)}
                         </td>
-                        <td className="px-6 py-4 text-white/70 text-base">
+                        <td className="px-6 py-4 text-base" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                           {formatDate(keyword['Last Search Date'])}
                         </td>
                         <td className="px-6 py-4">
                           {getStatusBadge(keyword.Status)}
                         </td>
-                        <td className="px-6 py-4 text-right text-base font-medium">
+                        <td className="px-6 py-4 text-right text-base font-medium" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                           {keyword['Total Results (via API)'] || 0}
                         </td>
                       </tr>

@@ -1,0 +1,279 @@
+{
+  "brand": {
+    "name": "Animal Charity Evaluators",
+    "personality_keywords": [
+      "Animal", "Approachable", "Collaborative", "Compassionate", "Credible",
+      "Diverse", "Ethical", "Factual", "Future-Thinking", "Global", "Inclusive",
+      "Kind", "Leading", "Mindful", "Personable", "Reliable", "Rigorous",
+      "Scientific", "Serious", "Trustworthy"
+    ],
+    "mission": "To find and promote the most effective ways to help animals.",
+    "vision": "A world in which no individual is given less than full moral consideration on the basis of any morally irrelevant feature of their identity, including species membership."
+  },
+
+  "identity_behaviors": {
+    "anti_speciesist": true,
+    "logic_evidence_based": true,
+    "welcomes_diverse_perspectives": true,
+    "prioritizes_maximum_good": true,
+    "transparent_processes": true,
+    "compassionate_interaction": true
+  },
+
+  "audiences": {
+    "primary": [
+      "Effective Altruism Community",
+      "Animal Advocacy Movement",
+      "Global Animal Protection Community",
+      "People Who Care About Animals"
+    ],
+    "notes": [
+      "ACE aims to expand impact by including people who care about animals but are not yet animal advocates.",
+      "Goal: broaden moral circle to include farmed and wild animals."
+    ]
+  },
+
+  "logo_system": {
+    "meaning": {
+      "geometry": "Radial, geometric unity representing many people helping animals.",
+      "animals_represented": ["Bird", "Crab", "Pig", "Fish"],
+      "lodestar_symbolism": [
+        "Guidance", "Trust", "Reliability", "Unity", "Hope", "Purpose",
+        "Collective global mission"
+      ]
+    },
+    "variations": {
+      "crest": "Primary logo; usable center/left/right aligned.",
+      "horizontal": "For narrow horizontal regions.",
+      "abbreviated": "For very small areas where full name appears elsewhere."
+    },
+    "spacing_rules": {
+      "min_clear_space": "Equal to height of the logotype text.",
+      "recommendation": "Use more white space whenever possible."
+    },
+    "colors": {
+      "full_color_dark": true,
+      "full_color_light": true,
+      "single_color_navy": true,
+      "single_color_white": true,
+      "usage_notes": "Full color preferred unless restricted by context."
+    },
+    "misuses": [
+      "Do not distort.",
+      "Do not recolor.",
+      "Do not rotate.",
+      "Do not stretch or warp.",
+      "Do not place on low-contrast backgrounds.",
+      "Do not crowd the logo."
+    ]
+  },
+
+  "colors": {
+    "primary": {
+      "teal": { "hex": "#00A6A1", "rgb": "0,166,161", "cmyk": "79,11,42,0" },
+      "navy": { "hex": "#041C30", "rgb": "4,28,48", "cmyk": "93,78,52,65" },
+      "white": { "hex": "#FFFFFF", "rgb": "255,255,255", "cmyk": "0,0,0,0" }
+    },
+    "secondary": {
+      "apple": { "hex": "#A5AF1B", "rgb": "165,175,27", "cmyk": "40,18,100,1" },
+      "ocean": { "hex": "#0C6DAB", "rgb": "12,109,171", "cmyk": "90,55,8,0" },
+      "berry": { "hex": "#843468", "rgb": "132,52,104", "cmyk": "49,92,32,13" }
+    },
+    "neutrals_from_navy": {
+      "tints": {
+        "80": "#36485A",
+        "60": "#687683",
+        "10": "#E6E8EA",
+        "5": "#F3F4F5",
+        "2": "#FAFAFB"
+      },
+      "usage_rules": "Avoid 50–20% tints; use 80–60% for text and 10–2% for light backgrounds."
+    },
+    "proportion_rules": {
+      "primary_color_dominance": "Primary palette must always be the majority.",
+      "secondary_accents": "Small amounts only; if too playful, replace with neutrals."
+    }
+  },
+
+  "typography": {
+    "fonts": {
+      "headline_font": {
+        "name": "Adrianna",
+        "weights": ["Bold", "DemiBold", "Regular", "Italic variants"],
+        "headline_style": {
+          "case": "ALL CAPS",
+          "tracking": "+20"
+        }
+      },
+      "body_font": {
+        "name": "Proxima Nova",
+        "weights": ["Regular", "Light", "SemiBold"],
+        "usage": "Body copy only. Do not use for large headings."
+      }
+    },
+    "type_as_art": {
+      "approved_taglines": [
+        "Compassionate Giving, Effective Change",
+        "Maximizing Impact for Animals",
+        "Smart Giving for Animal Welfare"
+      ],
+      "rules": [
+        "Use Adrianna in bold applications.",
+        "May use white or full-color versions.",
+        "Used for posters, covers, social media, merch, ads."
+      ]
+    }
+  },
+
+  "borders": {
+    "style": {
+      "description": "Minimal geometric linework inspired by data visualization; includes thin lines and circular nodes.",
+      "tone": "Analytical, clean, modern, slightly Art Deco."
+    },
+    "colors": {
+      "white_50": "Use on dark backgrounds",
+      "teal_50": "Use on white backgrounds only"
+    },
+    "rules": [
+      "Must be minimal and airy.",
+      "All variations must keep identical stroke width and node size."
+    ]
+  },
+
+  "patterns": {
+    "chart_pattern": {
+      "style": "Delicate line graph aesthetic with nodes.",
+      "colors": ["white", "teal"],
+      "use_cases": ["background decoration", "imagery overlays"],
+      "rules": ["Keep light, minimal, and elegant."]
+    },
+    "gradients": {
+      "backgrounds": ["Teal", "Navy", "White (2% Navy tint)"],
+      "photo_glows": ["Teal", "Apple", "Ocean"],
+      "rules": "Use gradients extensively in photos, illustrations, and backgrounds."
+    }
+  },
+
+  "illustration": {
+    "style": {
+      "traits": [
+        "Unique",
+        "Professional",
+        "Engaging",
+        "Geometric",
+        "Colorful",
+        "Uses gradients + solid colors"
+      ],
+      "animal_rules": [
+        "Use geometry-based shapes with interior strokes.",
+        "Avoid 'cute' or overly cartoonish styles.",
+        "Should visually relate to the logo's animal style."
+      ],
+      "lodestar_usage": {
+        "allowed_only_when_meaningful": true,
+        "meaning": ["unity", "guidance", "purpose"],
+        "max_per_composition": 1
+      }
+    }
+  },
+
+  "iconography": {
+    "small_icons": {
+      "style": "Derived from logo animal style.",
+      "sizes": {
+        "min_px": 20,
+        "max_px": 50
+      },
+      "use_cases": ["charity categories", "simple UI markers"],
+      "notes": "Category colors may use expanded palette."
+    },
+    "large_icons": {
+      "style": "Follow full illustration guidelines.",
+      "backgrounds": "Optional"
+    }
+  },
+
+  "photography": {
+    "selection_rules": {
+      "high_resolution": true,
+      "neutral_lighting": true,
+      "full_color": true,
+      "avoid_grayscale": true,
+      "prioritize_faces_eyes": true,
+      "seek_species_diversity": true,
+      "background_preference": "dark, blurred, empty space for text"
+    },
+    "editing_steps": [
+      "Cut out foreground subject.",
+      "Blur or darken background and shift hue toward blue.",
+      "Add 1–3 glowing radial gradients (Teal/Apple/Ocean).",
+      "Optionally include chart or border pattern.",
+      "Ensure animal faces toward content when possible."
+    ]
+  },
+
+  "social_media": {
+    "tone": "Professional yet approachable; visually consistent.",
+    "rules": {
+      "variety": "Rotate between photography, gradients, typography-as-art, and illustrations.",
+      "color_proportion": "Maintain primary color dominance.",
+      "contrast_balance": "Mix light and dark posts.",
+      "white_backgrounds": "Use gradient or 2–5% navy tint; never pure white."
+    },
+    "templates": {
+      "quote": ["Navy", "Teal", "White versions"],
+      "blog": { "max_title_lines": 3 },
+      "typography_art": ["Navy", "Teal", "White versions"],
+      "edited_photo": {
+        "fixed_logo_position": true,
+        "fixed_pattern_position": true,
+        "rotate_glow_colors": true
+      }
+    }
+  },
+
+  "badges": {
+    "purpose": "High-impact brand exposure and recognizability.",
+    "rules": [
+      "Must appear premium and special.",
+      "Must work on light, dark, and photographic backgrounds.",
+      "No single-color versions allowed."
+    ],
+    "types": [
+      "Top Charity",
+      "Standout Charity",
+      "Evaluated Charity",
+      "Movement Grant Recipient"
+    ]
+  },
+
+  "sub_brands": {
+    "movement_grants": {
+      "associated_color": "Apple",
+      "logo_types": ["main", "alternate"],
+      "notes": "Uses lodestar as positive space."
+    },
+    "recommended_charity_fund": {
+      "associated_color": "Ocean",
+      "logo_types": ["main", "alternate"]
+    },
+    "charity_evaluations": {
+      "associated_color": "Berry",
+      "logo_types": ["main", "alternate"]
+    },
+    "logo_usage_rules": {
+      "use_main_when_ace_logo_present": true,
+      "use_alt_when_ace_logo_absent": true
+    }
+  },
+
+  "website": {
+    "visual_rules": [
+      "Follow brand color proportions.",
+      "Include abundant animal photography, illustrations, icons.",
+      "Keep core pages simple, readable, and engaging.",
+      "Use internal linking for guided navigation.",
+      "Maintain consistency to avoid trust erosion."
+    ]
+  }
+}

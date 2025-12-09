@@ -65,35 +65,44 @@ const UserManagement = () => {
   const getRoleBadge = (role) => {
     if (role === 'Admin') {
       return (
-        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-900/70 text-light-mint">
-          <span className="w-2 h-2 mr-2 bg-neon-green rounded-full"></span>
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: 'var(--primary-10)', color: 'var(--ace-teal)', fontFamily: "'Inter', sans-serif" }}>
+          <span className="w-2 h-2 mr-2 rounded-full" style={{ backgroundColor: 'var(--ace-teal)' }}></span>
           Admin
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-700 text-slate-300">
+      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: 'var(--ace-navy-10)', color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
         {role}
       </span>
     );
   };
 
   return (
-    <main className="flex-grow w-full px-4 sm:px-6 lg:px-14 py-8">
+    <main className="flex-grow w-full px-4 sm:px-6 lg:px-14 py-8" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
       <div className="mx-auto max-w-[1360px]">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-white">User Management</h2>
-            <p className="text-slate-400 mt-1">Manage roles and permissions for all users in your workspace.</p>
+            <h2 style={{
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: '1.875rem',
+              fontWeight: 600,
+              letterSpacing: '-0.01em',
+              color: 'var(--ace-navy)',
+              marginBottom: '4px'
+            }}>
+              User Management
+            </h2>
+            <p style={{ color: 'var(--ace-navy-60)', marginTop: '4px', fontFamily: "'Inter', sans-serif" }}>Manage roles and permissions for all users in your workspace.</p>
           </div>
-          <button className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white font-semibold hover:bg-emerald-500 transition-colors shadow-sm">
+          <button className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-colors shadow-sm" style={{ backgroundColor: 'var(--ace-teal)', color: 'var(--ace-white)', fontFamily: "'Inter', sans-serif" }}>
             <span className="material-symbols-outlined text-base">add</span>
             <span className="truncate text-sm">Add New User</span>
           </button>
         </div>
 
-        <div className="bg-card-dark rounded-xl border border-slate-800">
-          <div className="p-6 border-b border-slate-800">
+        <div className="rounded-xl border" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
+          <div className="p-6 border-b" style={{ borderBottomColor: 'var(--ace-navy-10)' }}>
             <div className="flex items-center gap-4">
               <div className="relative flex-grow">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">search</span>
@@ -123,30 +132,30 @@ const UserManagement = () => {
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-slate-400 uppercase bg-slate-900/30">
+              <thead className="text-xs uppercase" style={{ backgroundColor: 'var(--ace-navy-5)' }}>
                 <tr>
-                  <th className="px-6 py-4 font-medium" scope="col">User</th>
-                  <th className="px-6 py-4 font-medium" scope="col">Role</th>
-                  <th className="px-6 py-4 font-medium" scope="col">Last Login</th>
-                  <th className="px-6 py-4 font-medium text-right" scope="col">Actions</th>
+                  <th className="px-6 py-4 font-medium" scope="col" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontWeight: 600 }}>User</th>
+                  <th className="px-6 py-4 font-medium" scope="col" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontWeight: 600 }}>Role</th>
+                  <th className="px-6 py-4 font-medium" scope="col" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontWeight: 600 }}>Last Login</th>
+                  <th className="px-6 py-4 font-medium text-right" scope="col" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontWeight: 600 }}>Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y" style={{ borderColor: 'var(--ace-navy-10)' }}>
                 {filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-slate-800/40 transition-colors">
+                  <tr key={user.id} className="transition-colors" onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--ace-navy-5)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <img alt={`${user.name} avatar`} className="h-10 w-10 rounded-full" src={user.avatar} />
                         <div>
-                          <div className="font-semibold text-white">{user.name}</div>
-                          <div className="text-slate-400">{user.email}</div>
+                          <div className="font-semibold" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{user.name}</div>
+                          <div style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>{user.email}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       {getRoleBadge(user.role)}
                     </td>
-                    <td className="px-6 py-4 text-slate-400">{user.lastLogin}</td>
+                    <td className="px-6 py-4" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>{user.lastLogin}</td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
                         <button className="p-2 rounded-md hover:bg-slate-700 transition-colors">
@@ -163,13 +172,13 @@ const UserManagement = () => {
             </table>
           </div>
 
-          <div className="p-4 border-t border-slate-800 flex justify-between items-center text-sm text-slate-400">
+          <div className="p-4 border-t flex justify-between items-center text-sm" style={{ borderTopColor: 'var(--ace-navy-10)', color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
             <div>
               <p>Page 1 of 10</p>
             </div>
             <div className="flex gap-2">
-              <button className="px-3 py-1.5 rounded-md border border-slate-700 bg-slate-800 hover:bg-slate-700/50 transition-colors">Previous</button>
-              <button className="px-3 py-1.5 rounded-md border border-slate-700 bg-slate-800 hover:bg-slate-700/50 transition-colors">Next</button>
+              <button className="px-3 py-1.5 rounded-md border transition-colors" style={{ borderColor: 'var(--ace-navy-10)', backgroundColor: 'var(--ace-navy-5)', color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>Previous</button>
+              <button className="px-3 py-1.5 rounded-md border transition-colors" style={{ borderColor: 'var(--ace-navy-10)', backgroundColor: 'var(--ace-navy-5)', color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>Next</button>
             </div>
           </div>
         </div>

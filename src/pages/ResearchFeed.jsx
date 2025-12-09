@@ -197,14 +197,20 @@ const ResearchFeed = () => {
   };
 
   const getStatusBadge = (status) => {
-    const styles = {
-      Approved: 'bg-green-100 text-green-800',
-      Rejected: 'bg-red-100 text-red-800',
-      Pending: 'bg-yellow-100 text-yellow-800'
+    const styleMap = {
+      Approved: { bg: 'rgba(0, 166, 161, 0.1)', text: 'var(--ace-teal)', border: 'rgba(0, 166, 161, 0.3)' },
+      Rejected: { bg: 'rgba(132, 52, 104, 0.1)', text: 'var(--ace-berry)', border: 'rgba(132, 52, 104, 0.3)' },
+      Pending: { bg: 'rgba(165, 175, 27, 0.1)', text: 'var(--ace-apple)', border: 'rgba(165, 175, 27, 0.3)' }
     };
+    const style = styleMap[status] || styleMap.Pending;
     
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status] || styles.Pending}`}>
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border" style={{ 
+        backgroundColor: style.bg,
+        color: style.text,
+        borderColor: style.border,
+        fontFamily: "'Inter', sans-serif"
+      }}>
         {status}
       </span>
     );
@@ -231,11 +237,35 @@ const ResearchFeed = () => {
   };
 
   return (
-    <main className="flex-1 w-full px-4 sm:px-6 lg:px-14 py-8">
+    <main className="flex-1 w-full px-4 sm:px-6 lg:px-14 py-8" style={{ minHeight: '100vh', background: 'transparent' }}>
       <div className="mx-auto max-w-[1360px]">
-        <div className="mb-6">
-          <h1 className="text-4xl font-bold text-white">Research Papers</h1>
-          <p className="text-gray-400 mt-1 text-base">Review and approve research papers before they are added to the library.</p>
+        <div className="mb-10 animate-fade-in-up">
+          <div className="relative inline-block">
+            <h1 style={{
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: '3.5rem',
+              fontWeight: 800,
+              letterSpacing: '-0.02em',
+              color: 'var(--ace-navy)',
+              marginBottom: '12px',
+              lineHeight: '1.1',
+              position: 'relative',
+              zIndex: 1
+            }}>
+              Research Papers
+            </h1>
+            <div className="absolute -bottom-2 -right-4 w-32 h-32 bg-primary/10 rounded-full blur-2xl -z-10 animate-pulse"></div>
+          </div>
+          <p style={{ 
+            color: 'var(--ace-navy-60)',
+            marginTop: '8px',
+            fontSize: '1.25rem',
+            fontFamily: "'Inter', sans-serif",
+            lineHeight: '1.6',
+            maxWidth: '600px'
+          }}>
+            Review and approve research papers before they are added to the library.
+          </p>
         </div>
 
         {error && (
@@ -245,17 +275,34 @@ const ResearchFeed = () => {
         )}
 
         {/* Papers Table Container */}
-        <div className="bg-gray-900/50 rounded-xl border border-gray-800">
+        <div className="glass-panel rounded-2xl overflow-hidden animate-fade-in-up">
           {/* Search and Filter Bar */}
-          <div className="p-4 border-b border-gray-800">
-            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-4">
-              <div className="relative w-full sm:w-80">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">search</span>
+          <div className="p-6 border-b border-white/50">
+            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-6">
+              <div className="relative w-full sm:w-96 group">
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-primary transition-colors">search</span>
                 <input 
-                  className="form-input w-full rounded-lg border-gray-700 bg-background-dark focus:ring-primary focus:border-primary pl-10 text-sm" 
+                  className="w-full rounded-xl border pl-12 py-3 text-sm transition-all duration-300" 
                   placeholder="Search papers, authors, keywords..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{
+                    borderColor: 'rgba(4, 28, 48, 0.1)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                    color: 'var(--ace-navy)',
+                    fontFamily: "'Inter', sans-serif",
+                    boxShadow: 'inner 0 2px 4px rgba(0,0,0,0.02)'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.backgroundColor = 'white';
+                    e.target.style.borderColor = 'var(--ace-teal)';
+                    e.target.style.boxShadow = '0 0 0 4px rgba(0, 166, 161, 0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+                    e.target.style.borderColor = 'rgba(4, 28, 48, 0.1)';
+                    e.target.style.boxShadow = 'inner 0 2px 4px rgba(0,0,0,0.02)';
+                  }}
                 />
               </div>
               <div className="flex items-center gap-3">
@@ -343,19 +390,19 @@ const ResearchFeed = () => {
           {/* Papers Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-base text-left">
-              <thead className="text-sm text-gray-400 uppercase bg-gray-900">
+              <thead className="text-sm uppercase" style={{ backgroundColor: 'rgba(4, 28, 48, 0.03)' }}>
                 <tr>
-                  <th className="px-6 py-3 font-medium" scope="col">Title</th>
-                  <th className="px-6 py-3 font-medium" scope="col">Authors</th>
-                  <th className="px-6 py-3 font-medium" scope="col">Year</th>
-                  <th className="px-6 py-3 font-medium" scope="col">Status</th>
-                  <th className="px-6 py-3 font-medium text-right" scope="col">Actions</th>
+                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Title</th>
+                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Authors</th>
+                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Year</th>
+                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Status</th>
+                  <th className="px-6 py-4 font-bold tracking-wider text-right" scope="col" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-white/50">
                 {isLoading ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-white/70">
+                    <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
                       <div className="flex flex-col items-center justify-center gap-4">
                         <div className="relative">
                           <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin"></div>
@@ -367,57 +414,90 @@ const ResearchFeed = () => {
                   </tr>
                 ) : filteredPapers.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-white/70">
+                    <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
                       <div className="flex flex-col items-center gap-4">
-                        <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center">
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
                           <span className="material-symbols-outlined text-2xl">article</span>
                         </div>
                         <p className="text-base font-medium">No papers found</p>
-                        <p className="text-sm text-white/50">
+                        <p className="text-sm text-gray-400">
                           {searchTerm ? 'Try adjusting your search terms' : 'No papers available at the moment'}
                         </p>
                       </div>
                     </td>
                   </tr>
                 ) : (
-                  filteredPapers.map((paper) => (
-                    <tr key={paper['Paper ID']} className="border-b border-gray-800 hover:bg-gray-800/50 transition-colors">
-                      <td className="px-6 py-4 font-medium text-white">
-                        <div className="max-w-xs truncate">
+                  filteredPapers.map((paper, index) => (
+                    <tr 
+                      key={paper['Paper ID']} 
+                      className="transition-all duration-300 animate-fade-in-up hover:bg-white/60 group" 
+                      style={{ 
+                        animationDelay: `${index * 0.03}s`
+                      }} 
+                    >
+                      <td className="px-6 py-5 font-semibold" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif", fontSize: '0.9375rem' }}>
+                        <div className="max-w-xs truncate group-hover:text-primary transition-colors">
                           {paper.Title || 'Untitled'}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-300">
+                      <td className="px-6 py-5" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontSize: '0.9375rem' }}>
                         <div className="max-w-xs truncate">
                           {paper.Authors || 'Unknown'}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-300">
+                      <td className="px-6 py-5" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontSize: '0.9375rem' }}>
                         {paper['Publication Year'] || 'N/A'}
                       </td>
                       <td className="px-6 py-4">
                         {getStatusBadge(paper.Status)}
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-6 py-5 text-right">
                         <div className="flex gap-2 justify-end">
                           <button 
                             onClick={() => handleApprovalClick(paper, 'Approved')}
-                            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-700 hover:text-primary transition-colors"
+                            className="p-2 rounded-lg transition-all duration-300 hover:scale-110"
+                            style={{ color: 'var(--ace-navy-60)' }}
                             title="Approve Paper"
+                            onMouseEnter={(e) => {
+                              e.target.style.backgroundColor = 'var(--primary-10)';
+                              e.target.style.color = 'var(--ace-teal)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.backgroundColor = 'transparent';
+                              e.target.style.color = 'var(--ace-navy-60)';
+                            }}
                           >
                             <span className="material-symbols-outlined text-lg">check_circle</span>
                           </button>
                           <button 
                             onClick={() => handleApprovalClick(paper, 'Rejected')}
-                            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-700 hover:text-red-500 transition-colors"
+                            className="p-2 rounded-lg transition-all duration-300 hover:scale-110"
+                            style={{ color: 'var(--ace-navy-60)' }}
                             title="Reject Paper"
+                            onMouseEnter={(e) => {
+                              e.target.style.backgroundColor = 'rgba(132, 52, 104, 0.1)';
+                              e.target.style.color = 'var(--ace-berry)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.backgroundColor = 'transparent';
+                              e.target.style.color = 'var(--ace-navy-60)';
+                            }}
                           >
                             <span className="material-symbols-outlined text-lg">cancel</span>
                           </button>
                           <button 
                             onClick={() => handleViewDetails(paper)}
-                            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-700 hover:text-primary transition-colors"
+                            className="p-2 rounded-lg transition-all duration-300 hover:scale-110"
+                            style={{ color: 'var(--ace-navy-60)' }}
                             title="View Details"
+                            onMouseEnter={(e) => {
+                              e.target.style.backgroundColor = 'var(--primary-10)';
+                              e.target.style.color = 'var(--ace-teal)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.backgroundColor = 'transparent';
+                              e.target.style.color = 'var(--ace-navy-60)';
+                            }}
                           >
                             <span className="material-symbols-outlined text-lg">open_in_new</span>
                           </button>
@@ -432,7 +512,7 @@ const ResearchFeed = () => {
 
           {/* Summary Bar */}
           {!isLoading && (
-            <div className="p-4 border-t border-gray-800 text-center text-gray-400 text-sm">
+            <div className="p-4 border-t text-center text-sm" style={{ borderTopColor: 'var(--ace-navy-10)', color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
               Showing {filteredPapers.length} of {papers.length} papers
             </div>
           )}
@@ -450,12 +530,21 @@ const ResearchFeed = () => {
           ></div>
           
           {/* Modal Container */}
-          <div className="flex min-h-full items-center justify-center p-4">
-            <div className="relative bg-gray-900 rounded-xl border border-gray-700 shadow-2xl max-w-lg w-full p-6 transform transition-all">
+          <div className="flex min-h-full items-center justify-center p-4 animate-fade-in">
+            <div className="relative rounded-xl border shadow-2xl max-w-lg w-full p-8 transform transition-all animate-scale-in" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 20px 60px rgba(4, 28, 48, 0.2)' }}>
               {/* Header */}
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary">
+              <div className="flex items-center justify-between mb-8">
+                <h3 style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: '1.5rem',
+                  fontWeight: 700,
+                  letterSpacing: '-0.01em',
+                  color: 'var(--ace-navy)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}>
+                  <span className="material-symbols-outlined" style={{ color: 'var(--ace-teal)', fontSize: '28px' }}>
                     {approvalData.status === 'Approved' ? 'check_circle' : 'cancel'}
                   </span>
                   {approvalData.status} Paper
@@ -469,15 +558,15 @@ const ResearchFeed = () => {
               </div>
 
               {/* Paper Info */}
-              <div className="mb-6 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
-                <p className="text-white font-medium text-base line-clamp-2 mb-2">
+              <div className="mb-6 p-4 rounded-lg border" style={{ backgroundColor: 'var(--ace-navy-5)', borderColor: 'var(--ace-navy-10)' }}>
+                <p className="font-medium text-base line-clamp-2 mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                   {selectedPaper.Title}
                 </p>
-                <p className="text-gray-400 text-sm mb-3">
+                <p className="text-sm mb-3" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                   {selectedPaper.Authors}
                 </p>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Year: {selectedPaper['Publication Year']}</span>
+                <div className="flex items-center justify-between text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  <span style={{ color: 'var(--ace-navy-60)' }}>Year: {selectedPaper['Publication Year']}</span>
                   {selectedPaper['AI Filtering Score'] && (
                     <div className="flex items-center gap-2">
                       <span className="text-gray-500">Score:</span>
@@ -490,13 +579,19 @@ const ResearchFeed = () => {
               {/* Form */}
               <form onSubmit={handleApprovalSubmit} className="space-y-5">
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Decision *
                   </label>
                   <select
                     value={approvalData.status}
                     onChange={(e) => setApprovalData(prev => ({ ...prev, status: e.target.value }))}
-                    className="w-full bg-gray-800 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                    className="w-full border rounded-lg p-3 transition-colors"
+                    style={{
+                      backgroundColor: 'var(--ace-white)',
+                      borderColor: 'var(--ace-navy-10)',
+                      color: 'var(--ace-navy)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
                   >
                     {PAPER_CONSTANTS.STATUSES.map(status => (
                       <option key={status} value={status}>{status}</option>
@@ -505,7 +600,7 @@ const ResearchFeed = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Review Comments *
                   </label>
                   <textarea
@@ -514,13 +609,19 @@ const ResearchFeed = () => {
                     placeholder="Enter your detailed review comments..."
                     rows={4}
                     required
-                    className="w-full bg-gray-800 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-primary focus:border-primary resize-none transition-colors"
+                    className="w-full border rounded-lg p-3 resize-none transition-colors"
+                    style={{
+                      backgroundColor: 'var(--ace-white)',
+                      borderColor: 'var(--ace-navy-10)',
+                      color: 'var(--ace-navy)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
                   />
-                  <p className="text-gray-500 text-xs mt-1">Required field</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Required field</p>
                 </div>
                 
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Additional Notes
                   </label>
                   <textarea
@@ -528,16 +629,36 @@ const ResearchFeed = () => {
                     onChange={(e) => setApprovalData(prev => ({ ...prev, notes: e.target.value }))}
                     placeholder="Optional additional notes or context..."
                     rows={2}
-                    className="w-full bg-gray-800 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-primary focus:border-primary resize-none transition-colors"
+                    className="w-full border rounded-lg p-3 resize-none transition-colors"
+                    style={{
+                      backgroundColor: 'var(--ace-white)',
+                      borderColor: 'var(--ace-navy-10)',
+                      color: 'var(--ace-navy)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
                   />
                 </div>
                 
                 {/* Actions */}
-                <div className="flex gap-3 pt-4 border-t border-gray-700">
+                <div className="flex gap-3 pt-4 border-t" style={{ borderTopColor: 'var(--ace-navy-10)' }}>
                   <button
                     type="submit"
                     disabled={isSubmittingApproval || !approvalData.comments.trim()}
-                    className="flex-1 bg-primary text-black font-bold py-3 px-4 rounded-lg hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 font-semibold py-3.5 px-6 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:scale-105"
+                    style={{
+                      backgroundColor: 'var(--ace-teal)',
+                      color: 'var(--ace-white)',
+                      fontFamily: "'Inter', sans-serif",
+                      boxShadow: '0 4px 12px rgba(0, 166, 161, 0.3)'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSubmittingApproval && approvalData.comments.trim()) {
+                        e.target.style.boxShadow = '0 6px 20px rgba(0, 166, 161, 0.4)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.boxShadow = '0 4px 12px rgba(0, 166, 161, 0.3)';
+                    }}
                   >
                     {isSubmittingApproval ? (
                       <>
@@ -555,7 +676,12 @@ const ResearchFeed = () => {
                     type="button"
                     onClick={() => setShowApprovalDialog(false)}
                     disabled={isSubmittingApproval}
-                    className="px-6 bg-gray-700 text-white font-bold py-3 rounded-lg hover:bg-gray-600 transition-colors disabled:opacity-50"
+                    className="px-6 font-bold py-3 rounded-lg transition-colors disabled:opacity-50"
+                    style={{
+                      backgroundColor: 'var(--ace-navy-60)',
+                      color: 'var(--ace-white)',
+                      fontFamily: "'Inter', sans-serif"
+                    }}
                   >
                     Cancel
                   </button>

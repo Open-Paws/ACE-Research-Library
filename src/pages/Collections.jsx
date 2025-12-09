@@ -74,11 +74,35 @@ const Collections = () => {
   ];
 
   return (
-    <main className="flex-grow w-full px-4 sm:px-6 lg:px-14 py-8">
+    <main className="flex-grow w-full px-4 sm:px-6 lg:px-14 py-8" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
       <div className="mx-auto max-w-[1360px]">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-3xl font-bold tracking-tight text-white">Collections</h1>
-          <button className="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-black transition-opacity hover:opacity-90">
+          <h1 className="animate-fade-in-up" style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '3rem',
+            fontWeight: 800,
+            letterSpacing: '-0.02em',
+            color: 'var(--ace-navy)',
+            lineHeight: '1.1'
+          }}>
+            Collections
+          </h1>
+          <button 
+            className="flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:scale-105 animate-fade-in-up" 
+            style={{ 
+              backgroundColor: 'var(--ace-teal)', 
+              color: 'var(--ace-white)', 
+              fontFamily: "'Inter', sans-serif",
+              boxShadow: '0 4px 12px rgba(0, 166, 161, 0.3)',
+              animationDelay: '0.1s'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.boxShadow = '0 6px 20px rgba(0, 166, 161, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.boxShadow = '0 4px 12px rgba(0, 166, 161, 0.3)';
+            }}
+          >
             <span className="material-symbols-outlined">add</span>
             <span>New Collection</span>
           </button>
@@ -112,18 +136,49 @@ const Collections = () => {
         </div>
 
         <section className="mt-8">
-          <h2 className="text-2xl font-bold tracking-tight text-white">My Collections</h2>
-          <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {collections.map((collection) => (
-              <div key={collection.id} className="group relative flex flex-col overflow-hidden rounded-lg bg-panel border border-white/10 shadow-sm transition-all hover:shadow-lg">
+          <h2 className="animate-fade-in-up" style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '2rem',
+            fontWeight: 700,
+            letterSpacing: '-0.01em',
+            color: 'var(--ace-navy)',
+            marginBottom: '8px'
+          }}>
+            My Collections
+          </h2>
+          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {collections.map((collection, index) => (
+              <div 
+                key={collection.id} 
+                className="group relative flex flex-col overflow-hidden rounded-xl border shadow-sm transition-all duration-300 animate-scale-in hover:shadow-xl" 
+                style={{ 
+                  backgroundColor: 'var(--ace-white)', 
+                  borderColor: 'var(--ace-navy-10)',
+                  boxShadow: '0 2px 8px rgba(4, 28, 48, 0.08)',
+                  animationDelay: `${index * 0.1}s`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-6px)';
+                  e.currentTarget.style.borderColor = 'var(--ace-teal)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(4, 28, 48, 0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'var(--ace-navy-10)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(4, 28, 48, 0.08)';
+                }}
+              >
                 <img 
                   alt={collection.name} 
-                  className="h-48 w-full object-cover" 
+                  className="h-48 w-full object-cover transition-transform duration-300" 
                   src={collection.image}
+                  style={{ filter: 'brightness(0.95)' }}
+                  onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                  onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                 />
-                <div className="flex-1 p-4">
-                  <h3 className="font-semibold text-white">{collection.name}</h3>
-                  <p className="text-sm text-white/60">{collection.paperCount} papers</p>
+                <div className="flex-1 p-5">
+                  <h3 className="font-semibold mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif", fontSize: '1.125rem' }}>{collection.name}</h3>
+                  <p className="text-sm" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>{collection.paperCount} papers</p>
                 </div>
               </div>
             ))}
@@ -131,7 +186,16 @@ const Collections = () => {
         </section>
 
         <section className="mt-12">
-          <h2 className="text-2xl font-bold tracking-tight text-white">Project Alpha</h2>
+          <h2 className="animate-fade-in-up" style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '2rem',
+            fontWeight: 700,
+            letterSpacing: '-0.01em',
+            color: 'var(--ace-navy)',
+            marginBottom: '8px'
+          }}>
+            Project Alpha
+          </h2>
           <div className="mt-4 flex flex-col gap-4">
             <div className="relative">
               <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60">search</span>
@@ -147,11 +211,11 @@ const Collections = () => {
               <button className="rounded bg-primary/20 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary/30">Outcome</button>
               <button className="rounded bg-primary/20 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary/30">Industry Segment</button>
             </div>
-            <div className="overflow-x-auto rounded-lg border border-white/10 bg-panel">
-              <table className="min-w-full divide-y divide-white/10">
-                <thead className="bg-white/5">
+            <div className="overflow-x-auto rounded-lg border" style={{ borderColor: 'var(--ace-navy-10)', backgroundColor: 'var(--ace-white)' }}>
+              <table className="min-w-full divide-y" style={{ borderColor: 'var(--ace-navy-10)' }}>
+                <thead style={{ backgroundColor: 'var(--ace-navy-5)' }}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white/60" scope="col">Title</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" scope="col" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontWeight: 600 }}>Title</th>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white/60" scope="col">Category</th>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white/60" scope="col">Intervention</th>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-white/60" scope="col">Outcome</th>
@@ -160,10 +224,10 @@ const Collections = () => {
                 </thead>
                 <tbody className="divide-y divide-white/10">
                   {papers.map((paper) => (
-                    <tr key={paper.id} className="hover:bg-white/5">
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">{paper.title}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-white/70">
-                        <span className="inline-flex items-center rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-medium text-primary">{paper.category}</span>
+                    <tr key={paper.id} style={{ borderBottomColor: 'var(--ace-navy-10)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--ace-navy-5)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper.title}</td>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
+                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium" style={{ backgroundColor: 'var(--primary-10)', color: 'var(--ace-teal)', fontFamily: "'Inter', sans-serif" }}>{paper.category}</span>
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-sm text-white/70">
                         <span className="inline-flex items-center rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-medium text-primary">{paper.intervention}</span>

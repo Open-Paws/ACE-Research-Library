@@ -139,11 +139,29 @@ const ApprovedPapers = () => {
   };
 
   return (
-    <main className="flex-1 w-full px-4 sm:px-6 lg:px-14 py-8">
+    <main className="flex-1 w-full px-4 sm:px-6 lg:px-14 py-8" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
       <div className="mx-auto max-w-[1360px]">
-        <div className="mb-6">
-          <h1 className="text-4xl font-bold text-white">Approved Papers</h1>
-          <p className="text-gray-400 mt-1 text-base">Browse and manage approved research papers in the library.</p>
+        <div className="mb-10 animate-fade-in-up">
+          <h1 style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '3rem',
+            fontWeight: 800,
+            letterSpacing: '-0.02em',
+            color: 'var(--ace-navy)',
+            marginBottom: '12px',
+            lineHeight: '1.1'
+          }}>
+            Approved Papers
+          </h1>
+          <p style={{ 
+            color: 'var(--ace-navy-60)',
+            marginTop: '8px',
+            fontSize: '1.125rem',
+            fontFamily: "'Inter', sans-serif",
+            lineHeight: '1.6'
+          }}>
+            Browse and manage approved research papers in the library.
+          </p>
         </div>
 
         {error && (
@@ -153,7 +171,7 @@ const ApprovedPapers = () => {
         )}
 
         {/* Papers Table Container */}
-        <div className="bg-gray-900/50 rounded-xl border border-gray-800">
+        <div className="rounded-xl border animate-fade-in-up" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 2px 8px rgba(4, 28, 48, 0.08)' }}>
           {/* Search and Filter Bar */}
           <div className="p-4 border-b border-gray-800">
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-4">
