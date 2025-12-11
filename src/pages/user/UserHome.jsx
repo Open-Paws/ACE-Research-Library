@@ -223,7 +223,7 @@ const UserHome = () => {
               lineHeight: 1.1,
               margin: 0,
               fontWeight: 800,
-              letterSpacing: '0.005em',
+              letterSpacing: '-0.03em',
               marginBottom: '20px',
               color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)'
             }}>

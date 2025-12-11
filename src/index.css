@@ -324,18 +324,13 @@ html.dark {
   transform: translateX(6px);
 }
 
+/* Enhanced Gradient Text */
 .text-gradient-ace {
-    background: linear-gradient(
-            135deg,
-            #61afe6 0%,
-            var(--ace-teal) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 1px transparent; /* keeps bold font thickness */
-    background-clip: text;
+  background: linear-gradient(135deg, var(--ace-navy) 0%, var(--ace-teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
-
 
 /* Shimmer Animation for loading/skeletons */
 @keyframes shimmer-slide {
