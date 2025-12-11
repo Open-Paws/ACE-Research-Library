@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { apiService, PAPER_CONSTANTS } from '../config/api.js';
+import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 const PaperDetails = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { userRole } = useAuth();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+  
   const [paper, setPaper] = useState(null);
-  const [activeTab, setActiveTab] = useState('abstract');
   const [showApprovalDialog, setShowApprovalDialog] = useState(false);
   const [approvalData, setApprovalData] = useState({
     status: 'Approved',
@@ -23,19 +29,12 @@ const PaperDetails = () => {
         setPaper(JSON.parse(storedPaper));
       } catch (err) {
         console.error('Error parsing stored paper data:', err);
-        navigate('/research-feed');
+        navigate('/papers');
       }
     } else {
-      navigate('/research-feed');
+      navigate('/papers');
     }
-  }, [navigate]);
-
-  const tabs = [
-    { id: 'abstract', label: 'Abstract' },
-    { id: 'ai-summary', label: 'AI Summary' },
-    { id: 'ai-categorization', label: 'AI Categorization' },
-    { id: 'ai-intervention', label: 'AI Intervention' }
-  ];
+  }, [navigate, userRole]);
 
   const handleApprovalClick = (status) => {
     setApprovalData({
@@ -76,142 +75,6 @@ const PaperDetails = () => {
     }
   };
 
-  const renderTabContent = () => {
-    if (!paper) return null;
-
-    switch (activeTab) {
-      case 'abstract':
-        return (
-          <div className="space-y-4">
-            <div className="border rounded-lg p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
-              <h4 style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontSize: '1.25rem',
-                fontWeight: 600,
-                letterSpacing: '-0.01em',
-                color: 'var(--ace-navy)',
-                marginBottom: '16px'
-              }}>
-                Abstract
-              </h4>
-              <p style={{ color: 'var(--ace-navy-60)', lineHeight: '1.75', fontFamily: "'Inter', sans-serif" }}>
-                {paper.Abstract || 'No abstract available for this paper.'}
-              </p>
-            </div>
-            {paper['Source Keyword'] && (
-              <div className="border rounded-lg p-4" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
-                <h5 className="text-base font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>Source Keyword</h5>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border" style={{ backgroundColor: 'var(--primary-10)', color: 'var(--ace-teal)', borderColor: 'var(--border-teal)', fontFamily: "'Inter', sans-serif" }}>
-                  {paper['Source Keyword']}
-                </span>
-              </div>
-            )}
-          </div>
-        );
-      case 'ai-summary':
-        return (
-          <div className="border rounded-lg p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
-            <h4 style={{
-              fontFamily: "'Oswald', sans-serif",
-              fontSize: '1.125rem',
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              color: 'var(--ace-navy)',
-              marginBottom: '12px'
-            }}>
-              AI-Generated Summary
-            </h4>
-            <p style={{ color: 'var(--ace-navy-60)', lineHeight: '1.75', fontFamily: "'Inter', sans-serif" }}>
-              {paper['AI-Generated Summary'] || 'No AI summary available for this paper.'}
-            </p>
-          </div>
-        );
-      case 'ai-categorization':
-        return (
-          <div className="space-y-4">
-            <div className="border rounded-lg p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
-              <h4 style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontSize: '1.125rem',
-                fontWeight: 600,
-                letterSpacing: '-0.01em',
-                color: 'var(--ace-navy)',
-                marginBottom: '16px'
-              }}>
-                AI Categorization
-              </h4>
-              <div className="space-y-3">
-                {paper['AI-Categorization'] && (
-                  <div>
-                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Category:</span>
-                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['AI-Categorization']}</p>
-                  </div>
-                )}
-                {paper['AI Filtering Score'] && (
-                  <div>
-                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>AI Filtering Score:</span>
-                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['AI Filtering Score']}</p>
-                  </div>
-                )}
-                {paper['Date Retrieved'] && (
-                  <div>
-                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Date Retrieved:</span>
-                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['Date Retrieved']}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      case 'ai-intervention':
-        return (
-          <div className="space-y-4">
-            <div className="border rounded-lg p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
-              <h4 style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontSize: '1.125rem',
-                fontWeight: 600,
-                letterSpacing: '-0.01em',
-                color: 'var(--ace-navy)',
-                marginBottom: '16px'
-              }}>
-                AI Intervention Analysis
-              </h4>
-              <div className="space-y-4">
-                {paper['AI-Intervention'] && (
-                  <div>
-                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Intervention Type:</span>
-                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['AI-Intervention']}</p>
-                  </div>
-                )}
-                {paper['AI-Outcomes'] && (
-                  <div>
-                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Expected Outcomes:</span>
-                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['AI-Outcomes']}</p>
-                  </div>
-                )}
-                {paper['Reviewer Comments'] && (
-                  <div>
-                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Reviewer Comments:</span>
-                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['Reviewer Comments']}</p>
-                  </div>
-                )}
-                {paper['Notes (if Any)'] && (
-                  <div>
-                    <span className="text-sm font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Notes:</span>
-                    <p className="mt-1" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>{paper['Notes (if Any)']}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
   const getStatusBadge = (status) => {
     const styleMap = {
       Approved: { bg: 'rgba(0, 166, 161, 0.1)', text: 'var(--ace-teal)', border: 'rgba(0, 166, 161, 0.3)' },
@@ -232,15 +95,32 @@ const PaperDetails = () => {
     );
   };
 
+  const panelStyle = {
+    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.6)',
+    backdropFilter: 'blur(12px)',
+    border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)',
+    boxShadow: isDark ? '0 4px 20px rgba(0, 0, 0, 0.2)' : '0 2px 12px rgba(4, 28, 48, 0.05)',
+  };
+
+  const labelStyle = {
+    color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)',
+    fontFamily: "'Inter', sans-serif"
+  };
+
+  const valueStyle = {
+    color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
+    fontFamily: "'Inter', sans-serif"
+  };
+
   if (!paper) {
     return (
-      <main className="flex-grow container mx-auto px-6 py-12" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
+      <main className="flex-grow container mx-auto px-6 py-12" style={{ backgroundColor: 'transparent' }}>
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex flex-col items-center justify-center gap-4">
             <div className="relative">
-              <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: 'var(--ace-navy-10)', borderTopColor: 'var(--ace-teal)' }}></div>
+              <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'var(--ace-navy-10)', borderTopColor: 'var(--ace-teal)' }}></div>
             </div>
-            <p className="text-base font-medium" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Loading paper details...</p>
+            <p className="text-base font-medium" style={{ color: isDark ? 'rgba(255,255,255,0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Loading paper details...</p>
           </div>
         </div>
       </main>
@@ -248,13 +128,23 @@ const PaperDetails = () => {
   }
 
   return (
-    <main className="flex-grow container mx-auto px-6 py-12" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
+    <main className="flex-grow container mx-auto px-4 md:px-6 py-8 md:py-12 relative" style={{ minHeight: '100vh' }}>
+      {/* Mesh Background */}
+      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1 }}>
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{
+          background: isDark 
+            ? 'radial-gradient(circle, rgba(0, 166, 161, 0.3) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(0, 166, 161, 0.15) 0%, transparent 70%)',
+          transform: 'translate(20%, -20%)'
+        }}></div>
+      </div>
+
+      <div className="max-w-5xl mx-auto">
+        {/* Navigation */}
+        <div className="mb-6">
           <button
-            onClick={() => navigate('/research-feed')}
-            className="flex items-center gap-2 transition-colors mb-4"
+            onClick={() => navigate(userRole === 'admin' ? '/admin/research-feed' : '/')}
+            className="flex items-center gap-2 transition-colors mb-4 group"
             style={{ 
               color: 'var(--ace-teal)',
               fontFamily: "'Inter', sans-serif",
@@ -262,176 +152,251 @@ const PaperDetails = () => {
               border: 'none',
               cursor: 'pointer'
             }}
-            onMouseEnter={(e) => e.target.style.opacity = '0.8'}
-            onMouseLeave={(e) => e.target.style.opacity = '1'}
           >
-            <span className="material-symbols-outlined">arrow_back</span>
-            Back to Research Feed
+            <span className="material-symbols-outlined transition-transform group-hover:-translate-x-1">arrow_back</span>
+            {userRole === 'admin' ? 'Back to Research Feed' : 'Back to Papers'}
           </button>
-          
-          <div className="border p-8 rounded-xl" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div className="flex-1">
-                <h1 style={{
-                  fontFamily: "'Montserrat', sans-serif",
-                  fontSize: '1.875rem',
-                  fontWeight: 600,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  color: 'var(--ace-navy)',
-                  marginBottom: '12px'
-                }}>
-                  {paper.Title || 'Untitled Paper'}
-                </h1>
-                <div className="space-y-2" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
-                  <p className="text-base">
-                    <span className="font-medium">Authors:</span> {paper.Authors || 'Unknown'}
+        </div>
+
+        {/* Header Section */}
+        <div className="rounded-2xl p-6 md:p-8 mb-8" style={panelStyle}>
+          <div className="flex flex-col md:flex-row items-start justify-between gap-6">
+            <div className="flex-1">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 leading-tight" style={{
+                fontFamily: "'Montserrat', sans-serif",
+                color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
+                letterSpacing: '-0.02em'
+              }}>
+                {paper.Title || 'Untitled Paper'}
+              </h1>
+              <div className="space-y-2 text-base md:text-lg">
+                <p>
+                  <span className="font-medium" style={labelStyle}>Authors: </span>
+                  <span style={valueStyle}>{paper.Authors || 'Unknown'}</span>
+                </p>
+                <p>
+                  <span className="font-medium" style={labelStyle}>Year: </span>
+                  <span style={valueStyle}>{paper['Publication Year'] || 'N/A'}</span>
+                </p>
+                {paper['DOI / URL'] && (
+                  <p>
+                    <span className="font-medium" style={labelStyle}>Source: </span>
+                    <a 
+                      href={paper['DOI / URL']} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                      style={{ color: 'var(--ace-teal)' }}
+                    >
+                      View Paper
+                    </a>
                   </p>
-                  <p className="text-base">
-                    <span className="font-medium">Year:</span> {paper['Publication Year'] || 'N/A'}
-                  </p>
-                  {paper['DOI / URL'] && (
-                    <p className="text-base">
-                      <span className="font-medium">Source:</span>{' '}
-                      <a 
-                        href={paper['DOI / URL']} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        style={{ 
-                          color: 'var(--ace-teal)',
-                          textDecoration: 'none'
-                        }}
-                        onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
-                        onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
-                      >
-                        View Paper
-                      </a>
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col items-end gap-3">
-                {getStatusBadge(paper.Status)}
-                {paper['AI Filtering Score'] && (
-                  <div className="text-right">
-                    <span style={{ color: 'var(--ace-navy-60)', fontSize: '0.875rem', fontFamily: "'Inter', sans-serif" }}>AI Score</span>
-                    <p style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--ace-teal)', fontFamily: "'Inter', sans-serif" }}>{paper['AI Filtering Score']}</p>
-                  </div>
                 )}
               </div>
+            </div>
+            <div className="flex flex-row md:flex-col items-center md:items-end gap-4 w-full md:w-auto justify-between md:justify-start">
+              {getStatusBadge(paper.Status)}
+              {paper['AI Filtering Score'] && (
+                <div className="text-right flex items-center gap-3 md:block">
+                  <span style={{ ...labelStyle, fontSize: '0.875rem' }}>AI Score</span>
+                  <div className="flex items-center gap-1 justify-end">
+                    <span className="material-symbols-outlined" style={{ color: 'var(--ace-teal)', fontSize: '20px' }}>star</span>
+                    <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--ace-teal)', fontFamily: "'Inter', sans-serif" }}>
+                      {parseFloat(paper['AI Filtering Score']).toFixed(1)}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400">
-            {error}
+        {/* AI Summary Section - Prominent */}
+        {paper['AI-Generated Summary'] && (
+          <div className="rounded-2xl p-6 md:p-8 mb-8 relative overflow-hidden" style={{
+            ...panelStyle,
+            borderLeft: '4px solid var(--ace-teal)'
+          }}>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="material-symbols-outlined" style={{ color: 'var(--ace-teal)' }}>auto_awesome</span>
+              <h2 className="text-xl font-bold uppercase tracking-wide" style={{
+                fontFamily: "'Montserrat', sans-serif",
+                color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)'
+              }}>
+                AI-Generated Summary
+              </h2>
+            </div>
+            <p className="text-lg leading-relaxed" style={{
+              fontFamily: "'Inter', sans-serif",
+              color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'var(--ace-navy)'
+            }}>
+              {paper['AI-Generated Summary']}
+            </p>
           </div>
         )}
 
-        {/* Tab Navigation */}
-        <div className="mb-8">
-          <div className="border-b" style={{ borderBottomColor: 'var(--ace-navy-10)' }}>
-            <nav aria-label="Tabs" className="-mb-px flex space-x-8">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className="whitespace-nowrap py-3 px-4 border-b-2 font-medium text-base transition-colors bg-transparent border-0 rounded-lg shadow-none focus:outline-none"
-                  style={{
-                    borderBottomColor: activeTab === tab.id ? 'var(--ace-teal)' : 'transparent',
-                    color: activeTab === tab.id ? 'var(--ace-teal)' : 'var(--ace-navy-60)',
-                    fontFamily: "'Inter', sans-serif"
-                  }}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== tab.id) {
-                      e.target.style.color = 'var(--ace-navy)';
-                      e.target.style.borderBottomColor = 'var(--ace-navy-30)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== tab.id) {
-                      e.target.style.color = 'var(--ace-navy-60)';
-                      e.target.style.borderBottomColor = 'transparent';
-                    }
-                  }}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </nav>
+        {/* Abstract Section */}
+        {paper.Abstract && (
+          <div className="rounded-2xl p-6 md:p-8 mb-8" style={panelStyle}>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="material-symbols-outlined" style={{ color: isDark ? 'rgba(255,255,255,0.7)' : 'var(--ace-navy-60)' }}>description</span>
+              <h2 className="text-xl font-bold" style={{
+                fontFamily: "'Montserrat', sans-serif",
+                color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)'
+              }}>
+                Abstract
+              </h2>
+            </div>
+            <p className="leading-relaxed whitespace-pre-line" style={{
+              fontFamily: "'Inter', sans-serif",
+              color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'var(--ace-navy-80)'
+            }}>
+              {paper.Abstract}
+            </p>
           </div>
-          <div className="pt-6">
-            {renderTabContent()}
-          </div>
+        )}
+
+        {/* Details Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {/* Categorization */}
+          {(paper['AI-Categorization'] || paper['Date Retrieved']) && (
+            <div className="rounded-2xl p-6" style={panelStyle}>
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>
+                <span className="material-symbols-outlined text-sm">category</span>
+                Categorization
+              </h3>
+              <div className="space-y-4">
+                {paper['AI-Categorization'] && (
+                  <div>
+                    <p className="text-sm font-medium mb-1" style={labelStyle}>Category</p>
+                    <p style={valueStyle}>{paper['AI-Categorization']}</p>
+                  </div>
+                )}
+                {paper['Source Keyword'] && (
+                  <div>
+                    <p className="text-sm font-medium mb-1" style={labelStyle}>Source Keyword</p>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded text-sm font-medium" style={{ 
+                      backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                      color: 'var(--ace-teal)',
+                      border: '1px solid rgba(0, 166, 161, 0.3)'
+                    }}>
+                      {paper['Source Keyword']}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Intervention */}
+          {(paper['AI-Intervention'] || paper['AI-Outcomes']) && (
+            <div className="rounded-2xl p-6" style={panelStyle}>
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>
+                <span className="material-symbols-outlined text-sm">science</span>
+                Intervention & Outcomes
+              </h3>
+              <div className="space-y-4">
+                {paper['AI-Intervention'] && (
+                  <div>
+                    <p className="text-sm font-medium mb-1" style={labelStyle}>Intervention Type</p>
+                    <p style={valueStyle}>{paper['AI-Intervention']}</p>
+                  </div>
+                )}
+                {paper['AI-Outcomes'] && (
+                  <div>
+                    <p className="text-sm font-medium mb-1" style={labelStyle}>Expected Outcomes</p>
+                    <p style={valueStyle}>{paper['AI-Outcomes']}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Actions */}
-        <div className="border rounded-xl p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 1px 3px rgba(4, 28, 48, 0.1)' }}>
-          <h3 style={{
-            fontFamily: "'Oswald', sans-serif",
-            fontSize: '1.25rem',
-            fontWeight: 600,
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
-            color: 'var(--ace-navy)',
-            marginBottom: '16px'
-          }}>
-            Actions
-          </h3>
-          <div className="flex flex-wrap gap-4">
-            <button 
-              onClick={() => handleApprovalClick('Approved')}
-              className="flex items-center justify-center rounded-lg px-6 py-3 text-base font-bold transition-colors"
-              style={{
-                backgroundColor: 'var(--ace-teal)',
-                color: 'var(--ace-white)',
-                fontFamily: "'Inter', sans-serif"
-              }}
-            >
-              Approve Paper
-            </button>
-            <button 
-              onClick={() => handleApprovalClick('Rejected')}
-              className="flex items-center justify-center rounded-lg border px-6 py-3 text-base font-semibold transition-colors"
-              style={{
-                backgroundColor: 'rgba(132, 52, 104, 0.1)',
-                borderColor: 'rgba(132, 52, 104, 0.3)',
-                color: 'var(--ace-berry)',
-                fontFamily: "'Inter', sans-serif"
-              }}
-            >
-              Reject Paper
-            </button>
+        {/* Notes Section - Full Width */}
+        {(paper['Reviewer Comments'] || paper['Notes (if Any)']) && (
+          <div className="rounded-2xl p-6 mb-8" style={panelStyle}>
+             <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>
+                <span className="material-symbols-outlined text-sm">rate_review</span>
+                Reviewer Notes
+              </h3>
+              <div className="space-y-4">
+                {paper['Reviewer Comments'] && (
+                  <div>
+                    <p className="text-sm font-medium mb-1" style={labelStyle}>Comments</p>
+                    <p style={valueStyle}>{paper['Reviewer Comments']}</p>
+                  </div>
+                )}
+                {paper['Notes (if Any)'] && (
+                   <div>
+                    <p className="text-sm font-medium mb-1" style={labelStyle}>Additional Notes</p>
+                    <p style={valueStyle}>{paper['Notes (if Any)']}</p>
+                  </div>
+                )}
+              </div>
           </div>
-        </div>
+        )}
+
+        {/* Admin Actions */}
+        {userRole === 'admin' && (
+          <div className="rounded-2xl p-6" style={panelStyle}>
+            <h3 className="text-lg font-bold mb-4" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>
+              Admin Actions
+            </h3>
+            <div className="flex flex-wrap gap-4">
+              <button 
+                onClick={() => handleApprovalClick('Approved')}
+                  className="flex items-center justify-center rounded-lg px-6 py-3 text-base font-bold transition-transform hover:scale-105"
+                  style={{
+                    backgroundColor: 'var(--ace-teal)',
+                    color: 'var(--ace-white)',
+                    fontFamily: "'Inter', sans-serif",
+                    boxShadow: '0 4px 12px rgba(0, 166, 161, 0.3)'
+                  }}
+              >
+                Approve Paper
+              </button>
+              <button 
+                onClick={() => handleApprovalClick('Rejected')}
+                  className="flex items-center justify-center rounded-lg border px-6 py-3 text-base font-semibold transition-transform hover:scale-105"
+                  style={{
+                    backgroundColor: 'rgba(132, 52, 104, 0.1)',
+                    borderColor: 'rgba(132, 52, 104, 0.3)',
+                    color: 'var(--ace-berry)',
+                    fontFamily: "'Inter', sans-serif"
+                  }}
+              >
+                Reject Paper
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Approval Dialog */}
         {showApprovalDialog && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(4, 28, 48, 0.5)' }}>
-            <div className="rounded-xl border max-w-md w-full p-6" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)' }}>
+          <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(4px)' }}>
+            <div className="rounded-xl border max-w-md w-full p-6 animate-scale-in" style={{ 
+              backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'var(--ace-white)', 
+              borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'var(--ace-navy-10)' 
+            }}>
               <h3 style={{
                 fontFamily: "'Montserrat', sans-serif",
                 fontSize: '1.25rem',
                 fontWeight: 600,
-                letterSpacing: '-0.01em',
-                color: 'var(--ace-navy)',
+                color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                 marginBottom: '16px'
               }}>
                 {approvalData.status} Paper
               </h3>
               <div className="mb-4">
-                <p className="text-sm font-medium truncate" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
+                <p className="text-sm font-medium truncate" style={{ color: isDark ? 'rgba(255,255,255,0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                   {paper.Title}
-                </p>
-                <p className="text-xs mt-1" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
-                  {paper.Authors}
                 </p>
               </div>
               
               <form onSubmit={handleApprovalSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Status
                   </label>
                   <select
@@ -439,9 +404,9 @@ const PaperDetails = () => {
                     onChange={(e) => setApprovalData(prev => ({ ...prev, status: e.target.value }))}
                     className="w-full border rounded-lg p-3"
                     style={{
-                      backgroundColor: 'var(--ace-white)',
-                      borderColor: 'var(--ace-navy-10)',
-                      color: 'var(--ace-navy)',
+                      backgroundColor: isDark ? 'rgba(0,0,0,0.2)' : 'var(--ace-white)',
+                      borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'var(--ace-navy-10)',
+                      color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                       fontFamily: "'Inter', sans-serif"
                     }}
                   >
@@ -452,7 +417,7 @@ const PaperDetails = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Comments *
                   </label>
                   <textarea
@@ -463,28 +428,9 @@ const PaperDetails = () => {
                     required
                     className="w-full border rounded-lg p-3 resize-none"
                     style={{
-                      backgroundColor: 'var(--ace-white)',
-                      borderColor: 'var(--ace-navy-10)',
-                      color: 'var(--ace-navy)',
-                      fontFamily: "'Inter', sans-serif"
-                    }}
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
-                    Notes (Optional)
-                  </label>
-                  <textarea
-                    value={approvalData.notes}
-                    onChange={(e) => setApprovalData(prev => ({ ...prev, notes: e.target.value }))}
-                    placeholder="Additional notes..."
-                    rows={2}
-                    className="w-full border rounded-lg p-3 resize-none"
-                    style={{
-                      backgroundColor: 'var(--ace-white)',
-                      borderColor: 'var(--ace-navy-10)',
-                      color: 'var(--ace-navy)',
+                      backgroundColor: isDark ? 'rgba(0,0,0,0.2)' : 'var(--ace-white)',
+                      borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'var(--ace-navy-10)',
+                      color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                       fontFamily: "'Inter', sans-serif"
                     }}
                   />
@@ -508,8 +454,8 @@ const PaperDetails = () => {
                     onClick={() => setShowApprovalDialog(false)}
                     className="flex-1 font-bold py-3 px-4 rounded-lg transition-colors"
                     style={{
-                      backgroundColor: 'var(--ace-navy-60)',
-                      color: 'var(--ace-white)',
+                      backgroundColor: 'rgba(255,255,255,0.1)',
+                      color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                       fontFamily: "'Inter', sans-serif"
                     }}
                   >

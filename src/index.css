@@ -10,7 +10,7 @@ body {
     'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* ACE-style Mesh Gradient Background */
+  /* ACE-style Mesh Gradient Background - Light Mode */
   background: 
     radial-gradient(at 0% 0%, rgba(0, 166, 161, 0.15) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(12, 109, 171, 0.1) 0px, transparent 50%),
@@ -23,6 +23,18 @@ body {
   scroll-behavior: smooth;
   position: relative;
   min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.dark {
+  /* Dark Mode Mesh Gradient Background */
+  background: 
+    radial-gradient(at 0% 0%, rgba(0, 166, 161, 0.2) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(12, 109, 171, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(165, 175, 27, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(132, 52, 104, 0.08) 0px, transparent 50%),
+    linear-gradient(180deg, #041C30 0%, #0a2a42 100%);
+  color: #FFFFFF;
 }
 
 body::before {
@@ -181,6 +193,26 @@ h3 {
   animation: scaleIn 0.5s ease-out forwards;
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
 /* Smooth transitions for all interactive elements */
 button, a, input, select, textarea {
   transition-property: color, background-color, border-color, transform, box-shadow, opacity;
@@ -292,13 +324,18 @@ html.dark {
   transform: translateX(6px);
 }
 
-/* Enhanced Gradient Text */
 .text-gradient-ace {
-  background: linear-gradient(135deg, var(--ace-navy) 0%, var(--ace-teal) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+    background: linear-gradient(
+            135deg,
+            #61afe6 0%,
+            var(--ace-teal) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px transparent; /* keeps bold font thickness */
+    background-clip: text;
 }
+
 
 /* Shimmer Animation for loading/skeletons */
 @keyframes shimmer-slide {

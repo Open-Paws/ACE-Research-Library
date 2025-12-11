@@ -161,39 +161,68 @@ const Dashboard = () => {
   // Chart components
   const StatCard = ({ title, value, subtitle, icon, color = "primary" }) => (
     <div 
-      className="glass-panel rounded-2xl p-6 transition-all duration-500 animate-scale-in hover-lift group relative overflow-hidden" 
+      className="glass-panel rounded-2xl p-8 transition-all duration-500 animate-scale-in hover-lift group relative overflow-hidden" 
       style={{
-        animationDelay: '0.1s'
+        animationDelay: '0.1s',
+        minHeight: '160px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
       }}
     >
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/20 to-transparent rounded-full -mr-16 -mt-16 transition-transform duration-700 group-hover:scale-150"></div>
+      <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-white/20 to-transparent rounded-full -mr-20 -mt-20 transition-transform duration-700 group-hover:scale-150"></div>
       
-      <div className="flex items-center justify-between relative z-10">
-        <div>
+      <div className="relative z-10">
+        <div className="flex items-start justify-between mb-4">
           <p style={{ 
             color: 'var(--ace-navy-60)',
             fontSize: '0.875rem',
             fontWeight: 600,
             fontFamily: "'Inter', sans-serif",
-            letterSpacing: '0.02em',
+            letterSpacing: '0.05em',
             textTransform: 'uppercase',
-            marginBottom: '8px'
+            margin: 0
           }}>
             {title}
           </p>
-          <p className="text-gradient-ace" style={{ 
-            fontSize: '2.5rem',
+          {icon && (
+            <div className="transition-transform duration-500 group-hover:rotate-12" style={{
+              width: '56px',
+              height: '56px',
+              background: 'linear-gradient(135deg, rgba(0, 166, 161, 0.1), rgba(0, 166, 161, 0.2))',
+              borderRadius: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+              flexShrink: 0
+            }}>
+              <span className="material-symbols-outlined" style={{ 
+                color: 'var(--ace-teal)',
+                fontSize: '28px'
+              }}>
+                {icon}
+              </span>
+            </div>
+          )}
+        </div>
+        
+        <div style={{ marginTop: '16px' }}>
+          <p style={{ 
+            fontSize: '3.5rem',
             fontWeight: 800,
-            marginTop: '4px',
             fontFamily: "'Montserrat', sans-serif",
-            lineHeight: 1
+            lineHeight: 1,
+            margin: 0,
+            color: 'var(--ace-navy)',
+            letterSpacing: '-0.02em'
           }}>
             {value}
           </p>
           {subtitle && (
             <p style={{ 
               color: 'var(--ace-navy-60)',
-              fontSize: '0.8rem',
+              fontSize: '0.875rem',
               marginTop: '8px',
               fontFamily: "'Inter', sans-serif",
               fontWeight: 500
@@ -201,26 +230,7 @@ const Dashboard = () => {
               {subtitle}
             </p>
           )}
-        </div>
-        {icon && (
-          <div className="transition-transform duration-500 group-hover:rotate-12" style={{
-            width: '64px',
-            height: '64px',
-            background: 'linear-gradient(135deg, var(--ace-navy-5) 0%, var(--ace-white) 100%)',
-            borderRadius: '16px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
-          }}>
-            <span className="material-symbols-outlined" style={{ 
-              color: 'var(--ace-teal)',
-              fontSize: '32px'
-            }}>
-              {icon}
-            </span>
           </div>
-        )}
       </div>
     </div>
   );
@@ -235,12 +245,17 @@ const Dashboard = () => {
     }, []);
     
     return (
-      <div className="glass-panel rounded-2xl p-8 hover-lift">
-        <h3 className="text-xl font-bold mb-8 flex items-center gap-3" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>
-          <span className="material-symbols-outlined text-primary">bar_chart</span>
+      <div className="glass-panel rounded-2xl p-8 hover-lift" style={{ minHeight: '400px' }}>
+        <h3 className="text-xl font-bold mb-8 flex items-center gap-3" style={{ 
+          color: 'var(--ace-navy)', 
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: '1.5rem',
+          fontWeight: 700
+        }}>
+          <span className="material-symbols-outlined text-primary" style={{ fontSize: '28px' }}>bar_chart</span>
           {title}
         </h3>
-        <div className="space-y-6">
+        <div className="space-y-5">
           {data.map((item, index) => (
             <div 
               key={index} 
@@ -336,22 +351,23 @@ const Dashboard = () => {
     return (
       <div 
         className="glass-panel rounded-2xl p-8 hover-lift"
+        style={{ minHeight: '400px' }}
       >
         <h3 style={{
           fontFamily: "'Montserrat', sans-serif",
-          fontSize: '1.25rem',
+          fontSize: '1.5rem',
           fontWeight: 700,
           letterSpacing: '-0.01em',
           color: 'var(--ace-navy)',
-          marginBottom: '24px',
+          marginBottom: '32px',
           display: 'flex',
           alignItems: 'center',
           gap: '12px'
         }}>
-          <span className="material-symbols-outlined text-primary">show_chart</span>
+          <span className="material-symbols-outlined text-primary" style={{ fontSize: '28px' }}>show_chart</span>
           {title}
         </h3>
-        <div className="h-64 relative rounded-xl p-4 overflow-hidden" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 100%)' }}>
+        <div className="h-72 relative rounded-xl p-6 overflow-hidden" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 100%)' }}>
           <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             <defs>
               <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -480,9 +496,14 @@ const Dashboard = () => {
     const colors = customColors || ['#00A6A1', '#0C6DAB', '#A5AF1B', '#843468'];
 
     return (
-      <div className="glass-panel rounded-2xl p-8 hover-lift">
-        <h3 className="text-xl font-bold mb-8 flex items-center gap-3" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>
-          <span className="material-symbols-outlined text-primary">pie_chart</span>
+      <div className="glass-panel rounded-2xl p-8 hover-lift" style={{ minHeight: '400px' }}>
+        <h3 className="text-xl font-bold mb-8 flex items-center gap-3" style={{ 
+          color: 'var(--ace-navy)', 
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: '1.5rem',
+          fontWeight: 700
+        }}>
+          <span className="material-symbols-outlined text-primary" style={{ fontSize: '28px' }}>pie_chart</span>
           {title}
         </h3>
         <div className="flex items-center justify-center">
@@ -516,16 +537,29 @@ const Dashboard = () => {
               })}
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span style={{ color: 'var(--ace-navy-60)', fontSize: '0.75rem', fontFamily: "'Inter', sans-serif" }}>Total</span>
+              <span style={{ 
+                color: 'var(--ace-navy-60)', 
+                fontSize: '0.875rem', 
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 600,
+                marginBottom: '4px'
+              }}>
+                Total
+              </span>
               <span 
-                className={`font-bold text-2xl transition-all duration-1000 ${animated ? 'scale-100' : 'scale-0'}`}
-                style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}
+                className={`font-bold transition-all duration-1000 ${animated ? 'scale-100' : 'scale-0'}`}
+                style={{ 
+                  color: 'var(--ace-navy)', 
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: '2rem',
+                  fontWeight: 800
+                }}
               >
                 {animated ? total : 0}
               </span>
             </div>
           </div>
-          <div className="ml-8 space-y-3">
+          <div className="ml-10 space-y-4">
             {data.map((item, index) => (
               <div 
                 key={index} 
@@ -543,11 +577,34 @@ const Dashboard = () => {
                     boxShadow: `0 0 8px ${item.color || colors[index % colors.length]}40`
                   }}
                 ></div>
-                <span style={{ color: 'var(--ace-navy-60)', fontSize: '0.875rem', fontWeight: 500, minWidth: '64px', fontFamily: "'Inter', sans-serif" }}>{item.name}</span>
-                <span style={{ color: 'var(--ace-navy)', fontSize: '0.875rem', fontWeight: 700, backgroundColor: 'var(--ace-navy-5)', padding: '4px 8px', borderRadius: '4px', fontFamily: "'Inter', sans-serif" }}>
+                <span style={{ 
+                  color: 'var(--ace-navy)', 
+                  fontSize: '0.9375rem', 
+                  fontWeight: 600, 
+                  minWidth: '80px', 
+                  fontFamily: "'Inter', sans-serif" 
+                }}>
+                  {item.name}
+                </span>
+                <span style={{ 
+                  color: 'var(--ace-navy)', 
+                  fontSize: '1.125rem', 
+                  fontWeight: 800, 
+                  backgroundColor: 'rgba(255,255,255,0.5)', 
+                  padding: '6px 12px', 
+                  borderRadius: '8px', 
+                  fontFamily: "'Montserrat', sans-serif",
+                  minWidth: '50px',
+                  textAlign: 'center'
+                }}>
                   {item.count}
                 </span>
-                <span style={{ color: 'var(--ace-navy-60)', fontSize: '0.75rem', fontFamily: "'Inter', sans-serif" }}>
+                <span style={{ 
+                  color: 'var(--ace-navy-60)', 
+                  fontSize: '0.875rem', 
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 500
+                }}>
                   ({total > 0 ? Math.round((item.count / total) * 100) : 0}%)
                 </span>
               </div>
@@ -561,19 +618,20 @@ const Dashboard = () => {
   const ActivityFeed = ({ activities }) => (
     <div 
       className="glass-panel rounded-2xl p-8 hover-lift"
+      style={{ minHeight: '400px' }}
     >
       <h3 style={{
         fontFamily: "'Montserrat', sans-serif",
-        fontSize: '1.25rem',
+        fontSize: '1.5rem',
         fontWeight: 700,
         letterSpacing: '-0.01em',
         color: 'var(--ace-navy)',
-        marginBottom: '24px',
+        marginBottom: '32px',
         display: 'flex',
         alignItems: 'center',
         gap: '12px'
       }}>
-        <span className="material-symbols-outlined text-primary">history</span>
+        <span className="material-symbols-outlined text-primary" style={{ fontSize: '28px' }}>history</span>
         Recent Activity
       </h3>
       <div className="space-y-4">
@@ -732,18 +790,18 @@ const Dashboard = () => {
         )}
 
         {/* Key Metrics */}
-        <section className="mb-12">
-          <h2 className="animate-fade-in-up" style={{
+        <section className="mb-16">
+          <h2 className="animate-fade-in-up mb-10" style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: '2rem',
-            fontWeight: 700,
-            letterSpacing: '-0.01em',
+            fontSize: '2.5rem',
+            fontWeight: 800,
+            letterSpacing: '-0.02em',
             color: 'var(--ace-navy)',
-            marginBottom: '32px'
+            marginBottom: '40px'
           }}>
             Key Metrics
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <StatCard
               title="Total Papers"
               value={dashboardData.stats.totalPapers}
@@ -788,30 +846,25 @@ const Dashboard = () => {
             Analytics & Insights
           </h2>
 
-          {/* Main Charts Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* Charts Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             <DonutChart
               data={getStatusData()}
-              title="Paper Review Status Distribution"
+              title="Paper Review Status"
               customColors={['#00A6A1', '#A5AF1B', '#843468']}
+            />
+            <DonutChart
+              data={getKeywordPriorityData()}
+              title="Keywords by Priority"
             />
           </div>
           
-          {/* Secondary Charts Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <DonutChart
-              data={getKeywordPriorityData()}
-              title="Keywords by Priority Level"
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <BarChart
               data={getInterventionData()}
               title="Research Intervention Types"
               color="#0C6DAB"
             />
-          </div>
-          
-          {/* Bottom Chart Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
             <BarChart
               data={getOutcomeData()}
               title="Expected Research Outcomes"
@@ -821,14 +874,14 @@ const Dashboard = () => {
         </section>
 
         {/* Recent Activity */}
-        <section className="mb-12">
-          <h2 className="animate-fade-in-up" style={{
+        <section className="mb-16">
+          <h2 className="animate-fade-in-up mb-10" style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: '2rem',
-            fontWeight: 700,
-            letterSpacing: '-0.01em',
+            fontSize: '2.5rem',
+            fontWeight: 800,
+            letterSpacing: '-0.02em',
             color: 'var(--ace-navy)',
-            marginBottom: '32px'
+            marginBottom: '40px'
           }}>
             Recent Activity
           </h2>
@@ -838,31 +891,44 @@ const Dashboard = () => {
             {/* Quick Stats */}
             <div 
               className="glass-panel rounded-2xl p-8 hover-lift"
+              style={{ minHeight: '400px' }}
             >
               <h3 style={{
                 fontFamily: "'Montserrat', sans-serif",
-                fontSize: '1.25rem',
+                fontSize: '1.5rem',
                 fontWeight: 700,
                 letterSpacing: '-0.01em',
                 color: 'var(--ace-navy)',
-                marginBottom: '24px',
+                marginBottom: '32px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px'
               }}>
-                <span className="material-symbols-outlined text-primary">bolt</span>
+                <span className="material-symbols-outlined text-primary" style={{ fontSize: '28px' }}>bolt</span>
                 Quick Statistics
               </h3>
               <div className="space-y-4">
                 <div 
-                  className="flex justify-between items-center p-5 rounded-xl transition-all duration-300 hover:bg-white/60 hover:shadow-sm"
+                  className="flex justify-between items-center p-6 rounded-xl transition-all duration-300 hover:bg-white/60 hover:shadow-sm"
                   style={{ 
                     backgroundColor: 'rgba(255,255,255,0.4)',
                     border: '1px solid rgba(255,255,255,0.6)'
                   }}
                 >
-                  <span style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontSize: '0.9375rem' }}>Approval Rate</span>
-                  <span style={{ color: 'var(--ace-teal)', fontWeight: 700, fontFamily: "'Inter', sans-serif", fontSize: '1.125rem' }}>
+                  <span style={{ 
+                    color: 'var(--ace-navy)', 
+                    fontFamily: "'Inter', sans-serif", 
+                    fontSize: '1rem',
+                    fontWeight: 600
+                  }}>
+                    Approval Rate
+                  </span>
+                  <span style={{ 
+                    color: 'var(--ace-teal)', 
+                    fontWeight: 800, 
+                    fontFamily: "'Montserrat', sans-serif", 
+                    fontSize: '1.5rem'
+                  }}>
                     {dashboardData.stats.totalPapers > 0 
                       ? Math.round((dashboardData.stats.approvedPapers / dashboardData.stats.totalPapers) * 100)
                       : 0}%
@@ -875,18 +941,30 @@ const Dashboard = () => {
                 ].map((stat, idx) => (
                   <div 
                     key={stat.label}
-                    className="flex justify-between items-center p-5 rounded-xl transition-all duration-300 hover:bg-white/60 hover:shadow-sm"
+                    className="flex justify-between items-center p-6 rounded-xl transition-all duration-300 hover:bg-white/60 hover:shadow-sm"
                     style={{ 
                       backgroundColor: 'rgba(255,255,255,0.4)',
                       border: '1px solid rgba(255,255,255,0.6)',
                       animationDelay: `${(idx + 1) * 0.1}s`
                     }}
                   >
-                    <span style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontSize: '0.9375rem' }}>{stat.label}</span>
-                    <span style={{ color: stat.color, fontWeight: 700, fontFamily: "'Inter', sans-serif", fontSize: '1.125rem' }}>
+                    <span style={{ 
+                      color: 'var(--ace-navy)', 
+                      fontFamily: "'Inter', sans-serif", 
+                      fontSize: '1rem',
+                      fontWeight: 600
+                    }}>
+                      {stat.label}
+                  </span>
+                    <span style={{ 
+                      color: stat.color, 
+                      fontWeight: 800, 
+                      fontFamily: "'Montserrat', sans-serif", 
+                      fontSize: '1.5rem'
+                    }}>
                       {stat.value}{stat.suffix}
-                    </span>
-                  </div>
+                  </span>
+                </div>
                 ))}
               </div>
             </div>

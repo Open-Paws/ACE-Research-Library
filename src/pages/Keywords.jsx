@@ -173,7 +173,7 @@ const Keywords = () => {
               >
                 <p style={{ fontSize: '0.9375rem', fontWeight: 500, color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", marginBottom: '12px' }}>{stat.label}</p>
                 <p style={{ fontSize: '2.25rem', fontWeight: 800, color: 'var(--ace-teal)', fontFamily: "'Montserrat', sans-serif", lineHeight: '1' }}>{isLoading ? '...' : stat.value}</p>
-              </div>
+            </div>
             ))}
           </div>
 

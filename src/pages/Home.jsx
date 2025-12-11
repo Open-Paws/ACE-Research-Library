@@ -275,37 +275,37 @@ const Home = () => {
         <div style={{ width: '100%', maxWidth: 720, textAlign: 'center' }}>
           <div className="animate-fade-in-up relative">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 animate-pulse"></div>
-            <h1
+          <h1
               className="text-gradient-ace"
-              style={{
+            style={{
                 fontFamily: "'Montserrat', sans-serif",
                 fontSize: '4.5rem',
-                lineHeight: 1.1,
-                margin: 0,
-                fontWeight: 800,
+              lineHeight: 1.1,
+              margin: 0,
+              fontWeight: 800,
                 letterSpacing: '-0.03em',
                 marginBottom: '24px',
                 textAlign: 'center'
-              }}
-            >
+            }}
+          >
               Animal Charity Evaluators
-            </h1>
-            <p
-              style={{
+          </h1>
+          <p
+            style={{
                 marginTop: 0,
-                marginBottom: 0,
+              marginBottom: 0,
                 color: 'var(--ace-navy-60)',
                 fontSize: '1.5rem',
-                lineHeight: 1.6,
+              lineHeight: 1.6,
                 fontFamily: "'Inter', sans-serif",
                 maxWidth: '700px',
                 margin: '0 auto',
                 textAlign: 'center',
                 fontWeight: 500
-              }}
-            >
+            }}
+          >
               Finding and promoting the most effective ways to help animals.
-            </p>
+          </p>
           </div>
 
           <form
