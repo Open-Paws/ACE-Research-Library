@@ -73,7 +73,6 @@ const Dashboard = () => {
     return Object.entries(interventions)
       .map(([name, count]) => ({ name, count }))
       .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
   };
 
   const getOutcomeData = () => {
