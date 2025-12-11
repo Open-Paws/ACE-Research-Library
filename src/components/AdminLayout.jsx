@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 const AdminLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout, userRole } = useAuth();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
 
   const isActive = (path) => location.pathname === path;
 
@@ -118,8 +121,31 @@ const AdminLayout = ({ children }) => {
           </button>
         </div>
       </header>
-      <main className="flex-1" style={{ position: 'relative', zIndex: 1 }}>
-        {children}
+      <main className="flex-1 relative" style={{ position: 'relative', zIndex: 1, minHeight: 'calc(100vh - 80px)' }}>
+        {/* Mesh Background Elements */}
+        <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1 }}>
+          <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{
+            background: isDark 
+              ? 'radial-gradient(circle, rgba(0, 166, 161, 0.3) 0%, transparent 70%)'
+              : 'radial-gradient(circle, rgba(0, 166, 161, 0.15) 0%, transparent 70%)',
+            transform: 'translate(-20%, -20%)'
+          }}></div>
+          <div className="absolute top-1/2 right-0 w-96 h-96 rounded-full blur-3xl opacity-15" style={{
+            background: isDark
+              ? 'radial-gradient(circle, rgba(12, 109, 171, 0.3) 0%, transparent 70%)'
+              : 'radial-gradient(circle, rgba(12, 109, 171, 0.1) 0%, transparent 70%)',
+            transform: 'translate(20%, -50%)'
+          }}></div>
+          <div className="absolute bottom-0 left-1/3 w-96 h-96 rounded-full blur-3xl opacity-10" style={{
+            background: isDark
+              ? 'radial-gradient(circle, rgba(165, 175, 27, 0.2) 0%, transparent 70%)'
+              : 'radial-gradient(circle, rgba(165, 175, 27, 0.1) 0%, transparent 70%)',
+            transform: 'translate(-30%, 30%)'
+          }}></div>
+        </div>
+        <div className="relative z-1">
+          {children}
+        </div>
       </main>
     </div>
   );

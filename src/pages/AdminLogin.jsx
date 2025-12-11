@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 const AdminLogin = () => {
   const [username, setUsername] = useState('');
@@ -8,6 +9,8 @@ const AdminLogin = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -27,15 +30,43 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ 
-      background: 'transparent',
-      position: 'relative'
-    }}>
-      {/* Background decorative elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10"></div>
+    <div 
+      className="min-h-screen flex items-center justify-center relative" 
+      style={{ 
+        background: 'transparent',
+        padding: '24px',
+        position: 'relative',
+        zIndex: 0
+      }}
+    >
+      {/* Mesh Background Elements */}
+      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1 }}>
+        <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{
+          background: isDark 
+            ? 'radial-gradient(circle, rgba(0, 166, 161, 0.3) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(0, 166, 161, 0.15) 0%, transparent 70%)',
+          transform: 'translate(-20%, -20%)'
+        }}></div>
+        <div className="absolute top-1/2 right-0 w-96 h-96 rounded-full blur-3xl opacity-15" style={{
+          background: isDark
+            ? 'radial-gradient(circle, rgba(12, 109, 171, 0.3) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(12, 109, 171, 0.1) 0%, transparent 70%)',
+          transform: 'translate(20%, -50%)'
+        }}></div>
+        <div className="absolute bottom-0 left-1/3 w-96 h-96 rounded-full blur-3xl opacity-10" style={{
+          background: isDark
+            ? 'radial-gradient(circle, rgba(165, 175, 27, 0.2) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(165, 175, 27, 0.1) 0%, transparent 70%)',
+          transform: 'translate(-30%, 30%)'
+        }}></div>
+      </div>
 
-      <div className="glass-panel rounded-3xl p-12 w-full max-w-md animate-scale-in shadow-2xl">
+      <div 
+        className={`glass-panel ${isDark ? 'glass-panel-dark' : ''} rounded-3xl p-8 md:p-12 w-full max-w-md animate-scale-in shadow-2xl relative z-10`}
+        style={{
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)'
+        }}
+      >
         <div className="text-center mb-8">
           <img 
             src="https://animalcharityevaluators.org/wp-content/uploads/2023/11/ACE_Logo_Crest_FullColorDark.png"
@@ -48,13 +79,13 @@ const AdminLogin = () => {
             fontSize: '2rem',
             fontWeight: 800,
             letterSpacing: '-0.02em',
-            color: 'var(--ace-navy)',
+            color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
             marginBottom: '8px'
           }}>
             Admin Login
           </h1>
           <p style={{
-            color: 'var(--ace-navy-60)',
+            color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)',
             fontSize: '1rem',
             fontFamily: "'Inter', sans-serif"
           }}>
@@ -64,7 +95,14 @@ const AdminLogin = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="p-4 rounded-xl bg-red-50 border border-red-200" style={{ color: '#dc2626' }}>
+            <div 
+              className="p-4 rounded-xl border animate-fade-in" 
+              style={{ 
+                backgroundColor: isDark ? 'rgba(220, 38, 38, 0.1)' : 'rgba(220, 38, 38, 0.05)',
+                borderColor: isDark ? 'rgba(220, 38, 38, 0.3)' : 'rgba(220, 38, 38, 0.2)',
+                color: isDark ? '#fca5a5' : '#dc2626'
+              }}
+            >
               <p className="text-sm font-medium">{error}</p>
             </div>
           )}
@@ -73,7 +111,7 @@ const AdminLogin = () => {
             <label style={{
               display: 'block',
               marginBottom: '8px',
-              color: 'var(--ace-navy)',
+              color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'var(--ace-navy)',
               fontSize: '0.875rem',
               fontWeight: 600,
               fontFamily: "'Inter', sans-serif"
@@ -87,18 +125,20 @@ const AdminLogin = () => {
               required
               className="w-full px-4 py-3 rounded-xl border transition-all duration-300"
               style={{
-                borderColor: 'rgba(4, 28, 48, 0.2)',
-                backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                color: 'var(--ace-navy)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.2)',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.8)',
+                color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                 fontFamily: "'Inter', sans-serif"
               }}
               onFocus={(e) => {
                 e.target.style.borderColor = 'var(--ace-teal)';
                 e.target.style.boxShadow = '0 0 0 4px rgba(0, 166, 161, 0.1)';
+                e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'white';
               }}
               onBlur={(e) => {
-                e.target.style.borderColor = 'rgba(4, 28, 48, 0.2)';
+                e.target.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.2)';
                 e.target.style.boxShadow = 'none';
+                e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.8)';
               }}
               placeholder="Enter username"
             />
@@ -108,7 +148,7 @@ const AdminLogin = () => {
             <label style={{
               display: 'block',
               marginBottom: '8px',
-              color: 'var(--ace-navy)',
+              color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'var(--ace-navy)',
               fontSize: '0.875rem',
               fontWeight: 600,
               fontFamily: "'Inter', sans-serif"
@@ -122,18 +162,20 @@ const AdminLogin = () => {
               required
               className="w-full px-4 py-3 rounded-xl border transition-all duration-300"
               style={{
-                borderColor: 'rgba(4, 28, 48, 0.2)',
-                backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                color: 'var(--ace-navy)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.2)',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.8)',
+                color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                 fontFamily: "'Inter', sans-serif"
               }}
               onFocus={(e) => {
                 e.target.style.borderColor = 'var(--ace-teal)';
                 e.target.style.boxShadow = '0 0 0 4px rgba(0, 166, 161, 0.1)';
+                e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'white';
               }}
               onBlur={(e) => {
-                e.target.style.borderColor = 'rgba(4, 28, 48, 0.2)';
+                e.target.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.2)';
                 e.target.style.boxShadow = 'none';
+                e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.8)';
               }}
               placeholder="Enter password"
             />
@@ -159,21 +201,19 @@ const AdminLogin = () => {
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
-        </form>
 
-        <div className="mt-6 text-center">
-          <p style={{
-            color: 'var(--ace-navy-60)',
-            fontSize: '0.75rem',
-            fontFamily: "'Inter', sans-serif"
-          }}>
-            Default credentials: admin / admin123
-          </p>
-        </div>
+          <div className="pt-4 border-t" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)' }}>
+            <p className="text-xs text-center" style={{ 
+              color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)',
+              fontFamily: "'Inter', sans-serif"
+            }}>
+              Default credentials: <strong style={{ color: isDark ? 'var(--ace-teal)' : 'var(--ace-teal)' }}>admin</strong> / <strong style={{ color: isDark ? 'var(--ace-teal)' : 'var(--ace-teal)' }}>admin123</strong>
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   );
 };
 
 export default AdminLogin;
-

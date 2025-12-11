@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../config/api.js';
+import { useTheme } from '../context/ThemeContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dashboardData, setDashboardData] = useState({
@@ -159,15 +162,20 @@ const Dashboard = () => {
   };
 
   // Chart components
-  const StatCard = ({ title, value, subtitle, icon, color = "primary" }) => (
+  const StatCard = ({ title, value, subtitle, icon, color = "primary" }) => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === 'dark';
+    
+    return (
     <div 
-      className="glass-panel rounded-2xl p-8 transition-all duration-500 animate-scale-in hover-lift group relative overflow-hidden" 
+      className={`glass-panel ${isDark ? 'glass-panel-dark' : ''} rounded-2xl p-8 transition-all duration-500 animate-scale-in hover-lift group relative overflow-hidden`}
       style={{
         animationDelay: '0.1s',
         minHeight: '160px',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)'
       }}
     >
       <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-white/20 to-transparent rounded-full -mr-20 -mt-20 transition-transform duration-700 group-hover:scale-150"></div>
@@ -175,7 +183,7 @@ const Dashboard = () => {
       <div className="relative z-10">
         <div className="flex items-start justify-between mb-4">
           <p style={{ 
-            color: 'var(--ace-navy-60)',
+            color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)',
             fontSize: '0.875rem',
             fontWeight: 600,
             fontFamily: "'Inter', sans-serif",
@@ -214,14 +222,14 @@ const Dashboard = () => {
             fontFamily: "'Montserrat', sans-serif",
             lineHeight: 1,
             margin: 0,
-            color: 'var(--ace-navy)',
+            color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
             letterSpacing: '-0.02em'
           }}>
             {value}
           </p>
           {subtitle && (
             <p style={{ 
-              color: 'var(--ace-navy-60)',
+              color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)',
               fontSize: '0.875rem',
               marginTop: '8px',
               fontFamily: "'Inter', sans-serif",
@@ -233,9 +241,12 @@ const Dashboard = () => {
           </div>
       </div>
     </div>
-  );
+    );
+  };
 
   const BarChart = ({ data, title, color = "#00A6A1" }) => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === 'dark';
     const [animated, setAnimated] = useState(false);
     const maxValue = Math.max(...data.map(d => d.count), 1);
     
@@ -245,9 +256,15 @@ const Dashboard = () => {
     }, []);
     
     return (
-      <div className="glass-panel rounded-2xl p-8 hover-lift" style={{ minHeight: '400px' }}>
+      <div 
+        className={`glass-panel ${isDark ? 'glass-panel-dark' : ''} rounded-2xl p-8 hover-lift`}
+        style={{ 
+          minHeight: '400px',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)'
+        }}
+      >
         <h3 className="text-xl font-bold mb-8 flex items-center gap-3" style={{ 
-          color: 'var(--ace-navy)', 
+          color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', 
           fontFamily: "'Montserrat', sans-serif",
           fontSize: '1.5rem',
           fontWeight: 700
@@ -268,7 +285,7 @@ const Dashboard = () => {
             >
               <div style={{
                 width: '128px',
-                color: 'var(--ace-navy-60)',
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)',
                 fontSize: '0.875rem',
                 fontWeight: 500,
                 fontFamily: "'Inter', sans-serif",
@@ -278,7 +295,7 @@ const Dashboard = () => {
               }} title={item.name}>
                 {item.name.length > 18 ? item.name.substring(0, 18) + '...' : item.name}
               </div>
-              <div className="flex-1 rounded-full h-4 relative overflow-hidden" style={{ backgroundColor: 'var(--ace-navy-10)' }}>
+              <div className="flex-1 rounded-full h-4 relative overflow-hidden" style={{ backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'var(--ace-navy-10)' }}>
                 <div 
                   className="h-full rounded-full relative overflow-hidden"
                   style={{ 
@@ -301,11 +318,11 @@ const Dashboard = () => {
               </div>
               <div style={{
                 width: '48px',
-                color: 'var(--ace-navy)',
+                color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                 fontSize: '0.875rem',
                 fontWeight: 700,
                 textAlign: 'right',
-                backgroundColor: 'var(--ace-navy-5)',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'var(--ace-navy-5)',
                 padding: '4px 8px',
                 borderRadius: '4px',
                 fontFamily: "'Inter', sans-serif"
@@ -314,7 +331,7 @@ const Dashboard = () => {
               </div>
               <div style={{
                 width: '48px',
-                color: 'var(--ace-navy-60)',
+                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)',
                 fontSize: '0.75rem',
                 textAlign: 'right',
                 fontFamily: "'Inter', sans-serif"
@@ -329,6 +346,8 @@ const Dashboard = () => {
   };
 
   const LineChart = ({ data, title }) => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === 'dark';
     const [animated, setAnimated] = useState(false);
     const maxValue = Math.max(...data.map(d => d.count), 1);
     
@@ -350,15 +369,18 @@ const Dashboard = () => {
 
     return (
       <div 
-        className="glass-panel rounded-2xl p-8 hover-lift"
-        style={{ minHeight: '400px' }}
+        className={`glass-panel ${isDark ? 'glass-panel-dark' : ''} rounded-2xl p-8 hover-lift`}
+        style={{ 
+          minHeight: '400px',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)'
+        }}
       >
         <h3 style={{
           fontFamily: "'Montserrat', sans-serif",
           fontSize: '1.5rem',
           fontWeight: 700,
           letterSpacing: '-0.01em',
-          color: 'var(--ace-navy)',
+          color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
           marginBottom: '32px',
           display: 'flex',
           alignItems: 'center',
@@ -466,7 +488,7 @@ const Dashboard = () => {
             );
           })}
         </div>
-        <div className="flex justify-between mt-6 text-sm font-semibold" style={{ color: 'var(--ace-navy-60)' }}>
+        <div className="flex justify-between mt-6 text-sm font-semibold" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}>
           {data.map((item, index) => (
             <span 
               key={index} 
@@ -484,6 +506,8 @@ const Dashboard = () => {
   };
 
   const DonutChart = ({ data, title, customColors }) => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === 'dark';
     const [animated, setAnimated] = useState(false);
     const total = data.reduce((sum, item) => sum + item.count, 0);
     let cumulativePercentage = 0;
@@ -496,9 +520,15 @@ const Dashboard = () => {
     const colors = customColors || ['#00A6A1', '#0C6DAB', '#A5AF1B', '#843468'];
 
     return (
-      <div className="glass-panel rounded-2xl p-8 hover-lift" style={{ minHeight: '400px' }}>
+      <div 
+        className={`glass-panel ${isDark ? 'glass-panel-dark' : ''} rounded-2xl p-8 hover-lift`}
+        style={{ 
+          minHeight: '400px',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)'
+        }}
+      >
         <h3 className="text-xl font-bold mb-8 flex items-center gap-3" style={{ 
-          color: 'var(--ace-navy)', 
+          color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', 
           fontFamily: "'Montserrat', sans-serif",
           fontSize: '1.5rem',
           fontWeight: 700
@@ -538,7 +568,7 @@ const Dashboard = () => {
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span style={{ 
-                color: 'var(--ace-navy-60)', 
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)', 
                 fontSize: '0.875rem', 
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 600,
@@ -549,7 +579,7 @@ const Dashboard = () => {
               <span 
                 className={`font-bold transition-all duration-1000 ${animated ? 'scale-100' : 'scale-0'}`}
                 style={{ 
-                  color: 'var(--ace-navy)', 
+                  color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', 
                   fontFamily: "'Montserrat', sans-serif",
                   fontSize: '2rem',
                   fontWeight: 800
@@ -578,7 +608,7 @@ const Dashboard = () => {
                   }}
                 ></div>
                 <span style={{ 
-                  color: 'var(--ace-navy)', 
+                  color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', 
                   fontSize: '0.9375rem', 
                   fontWeight: 600, 
                   minWidth: '80px', 
@@ -587,10 +617,10 @@ const Dashboard = () => {
                   {item.name}
                 </span>
                 <span style={{ 
-                  color: 'var(--ace-navy)', 
+                  color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', 
                   fontSize: '1.125rem', 
                   fontWeight: 800, 
-                  backgroundColor: 'rgba(255,255,255,0.5)', 
+                  backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.5)', 
                   padding: '6px 12px', 
                   borderRadius: '8px', 
                   fontFamily: "'Montserrat', sans-serif",
@@ -615,17 +645,24 @@ const Dashboard = () => {
     );
   };
 
-  const ActivityFeed = ({ activities }) => (
+  const ActivityFeed = ({ activities }) => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === 'dark';
+    
+    return (
     <div 
-      className="glass-panel rounded-2xl p-8 hover-lift"
-      style={{ minHeight: '400px' }}
+      className={`glass-panel ${isDark ? 'glass-panel-dark' : ''} rounded-2xl p-8 hover-lift`}
+      style={{ 
+        minHeight: '400px',
+        border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)'
+      }}
     >
       <h3 style={{
         fontFamily: "'Montserrat', sans-serif",
         fontSize: '1.5rem',
         fontWeight: 700,
         letterSpacing: '-0.01em',
-        color: 'var(--ace-navy)',
+        color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
         marginBottom: '32px',
         display: 'flex',
         alignItems: 'center',
@@ -660,7 +697,7 @@ const Dashboard = () => {
             </div>
             <div className="flex-1 min-w-0">
               <p style={{ 
-                color: 'var(--ace-navy)',
+                color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                 fontSize: '0.875rem',
                 fontWeight: 500,
                 fontFamily: "'Inter', sans-serif",
@@ -671,25 +708,36 @@ const Dashboard = () => {
                 {activity.title}
               </p>
               <p style={{ 
-                color: 'var(--ace-navy-60)',
+                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)',
                 fontSize: '0.75rem',
                 fontFamily: "'Inter', sans-serif"
               }}>
                 {activity.type === 'paper' ? 'Paper' : 'Keyword'} • {activity.status}
               </p>
             </div>
-            <div style={{ color: 'var(--ace-navy-60)', fontSize: '0.75rem', fontFamily: "'Inter', sans-serif" }}>
+            <div style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)', fontSize: '0.75rem', fontFamily: "'Inter', sans-serif" }}>
               {activity.date.toLocaleDateString()}
             </div>
           </div>
         ))}
       </div>
     </div>
-  );
+    );
+  };
 
   if (isLoading) {
     return (
-      <main className="flex-1 p-4 sm:p-6 lg:p-10" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
+      <main className="flex-1 p-4 sm:p-6 lg:p-10 relative" style={{ minHeight: '100vh', background: 'transparent', position: 'relative', zIndex: 0 }}>
+        {/* Mesh Background Elements */}
+        <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1 }}>
+          <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{
+            background: isDark 
+              ? 'radial-gradient(circle, rgba(0, 166, 161, 0.3) 0%, transparent 70%)'
+              : 'radial-gradient(circle, rgba(0, 166, 161, 0.15) 0%, transparent 70%)',
+            transform: 'translate(-20%, -20%)'
+          }}></div>
+        </div>
+        
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center min-h-screen">
             <div className="relative flex flex-col items-center gap-8">
@@ -700,7 +748,7 @@ const Dashboard = () => {
                   <div 
                     className="w-16 h-16 border-4 rounded-full animate-spin"
                     style={{
-                      borderColor: 'var(--ace-navy-10)',
+                      borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'var(--ace-navy-10)',
                       borderTopColor: 'var(--ace-teal)',
                       animationDuration: '1s'
                     }}
@@ -725,12 +773,12 @@ const Dashboard = () => {
                   fontSize: '1.75rem',
                   fontWeight: 700,
                   letterSpacing: '-0.01em',
-                  color: 'var(--ace-navy)'
+                  color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)'
                 }}>
                   Loading Dashboard
                 </h2>
                 <p style={{
-                  color: 'var(--ace-navy-60)',
+                  color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)',
                   fontSize: '1rem',
                   fontFamily: "'Inter', sans-serif"
                 }}>
@@ -745,8 +793,30 @@ const Dashboard = () => {
   }
 
   return (
-    <main className="flex-1 p-4 sm:p-6 lg:p-10" style={{ minHeight: '100vh', background: 'transparent' }}>
-      <div className="max-w-7xl mx-auto">
+    <main className="flex-1 p-4 sm:p-6 lg:p-10 relative" style={{ minHeight: '100vh', background: 'transparent', position: 'relative', zIndex: 0 }}>
+      {/* Mesh Background Elements */}
+      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1 }}>
+        <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{
+          background: isDark 
+            ? 'radial-gradient(circle, rgba(0, 166, 161, 0.3) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(0, 166, 161, 0.15) 0%, transparent 70%)',
+          transform: 'translate(-20%, -20%)'
+        }}></div>
+        <div className="absolute top-1/2 right-0 w-96 h-96 rounded-full blur-3xl opacity-15" style={{
+          background: isDark
+            ? 'radial-gradient(circle, rgba(12, 109, 171, 0.3) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(12, 109, 171, 0.1) 0%, transparent 70%)',
+          transform: 'translate(20%, -50%)'
+        }}></div>
+        <div className="absolute bottom-0 left-1/3 w-96 h-96 rounded-full blur-3xl opacity-10" style={{
+          background: isDark
+            ? 'radial-gradient(circle, rgba(165, 175, 27, 0.2) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(165, 175, 27, 0.1) 0%, transparent 70%)',
+          transform: 'translate(-30%, 30%)'
+        }}></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-1">
         <div className="mb-12 animate-fade-in-up">
           <div className="relative inline-block">
             <h1 style={{ 
@@ -754,7 +824,7 @@ const Dashboard = () => {
               fontSize: '3.5rem',
               fontWeight: 800,
               letterSpacing: '-0.02em',
-              color: 'var(--ace-navy)',
+              color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
               marginBottom: '12px',
               lineHeight: '1.1',
               position: 'relative',
@@ -765,7 +835,7 @@ const Dashboard = () => {
             <div className="absolute -bottom-2 -right-4 w-32 h-32 bg-primary/10 rounded-full blur-2xl -z-10 animate-pulse"></div>
           </div>
           <p style={{ 
-            color: 'var(--ace-navy-60)',
+            color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)',
             marginTop: '8px',
             fontSize: '1.25rem',
             fontFamily: "'Inter', sans-serif",
@@ -796,7 +866,7 @@ const Dashboard = () => {
             fontSize: '2.5rem',
             fontWeight: 800,
             letterSpacing: '-0.02em',
-            color: 'var(--ace-navy)',
+            color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
             marginBottom: '40px'
           }}>
             Key Metrics
@@ -840,7 +910,7 @@ const Dashboard = () => {
             fontSize: '2rem',
             fontWeight: 700,
             letterSpacing: '-0.01em',
-            color: 'var(--ace-navy)',
+            color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
             marginBottom: '32px'
           }}>
             Analytics & Insights
@@ -890,33 +960,44 @@ const Dashboard = () => {
             
             {/* Quick Stats */}
             <div 
-              className="glass-panel rounded-2xl p-8 hover-lift"
-              style={{ minHeight: '400px' }}
+              className={`glass-panel ${isDark ? 'glass-panel-dark' : ''} rounded-2xl p-8 hover-lift`}
+              style={{ 
+                minHeight: '400px',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)'
+              }}
             >
               <h3 style={{
                 fontFamily: "'Montserrat', sans-serif",
                 fontSize: '1.5rem',
                 fontWeight: 700,
                 letterSpacing: '-0.01em',
-                color: 'var(--ace-navy)',
+                color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                 marginBottom: '32px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px'
               }}>
-                <span className="material-symbols-outlined text-primary" style={{ fontSize: '28px' }}>bolt</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '28px', color: 'var(--ace-teal)' }}>bolt</span>
                 Quick Statistics
               </h3>
               <div className="space-y-4">
                 <div 
-                  className="flex justify-between items-center p-6 rounded-xl transition-all duration-300 hover:bg-white/60 hover:shadow-sm"
+                  className="flex justify-between items-center p-6 rounded-xl transition-all duration-300"
                   style={{ 
-                    backgroundColor: 'rgba(255,255,255,0.4)',
-                    border: '1px solid rgba(255,255,255,0.6)'
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.4)',
+                    border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.6)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.6)';
+                    e.currentTarget.style.boxShadow = isDark ? '0 4px 12px rgba(0, 0, 0, 0.2)' : '0 2px 8px rgba(4, 28, 48, 0.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.4)';
+                    e.currentTarget.style.boxShadow = 'none';
                   }}
                 >
                   <span style={{ 
-                    color: 'var(--ace-navy)', 
+                    color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', 
                     fontFamily: "'Inter', sans-serif", 
                     fontSize: '1rem',
                     fontWeight: 600
@@ -941,15 +1022,22 @@ const Dashboard = () => {
                 ].map((stat, idx) => (
                   <div 
                     key={stat.label}
-                    className="flex justify-between items-center p-6 rounded-xl transition-all duration-300 hover:bg-white/60 hover:shadow-sm"
+                    className="flex justify-between items-center p-6 rounded-xl transition-all duration-300"
                     style={{ 
-                      backgroundColor: 'rgba(255,255,255,0.4)',
-                      border: '1px solid rgba(255,255,255,0.6)',
-                      animationDelay: `${(idx + 1) * 0.1}s`
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.4)',
+                      border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.6)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.6)';
+                      e.currentTarget.style.boxShadow = isDark ? '0 4px 12px rgba(0, 0, 0, 0.2)' : '0 2px 8px rgba(4, 28, 48, 0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.4)';
+                      e.currentTarget.style.boxShadow = 'none';
                     }}
                   >
                     <span style={{ 
-                      color: 'var(--ace-navy)', 
+                      color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', 
                       fontFamily: "'Inter', sans-serif", 
                       fontSize: '1rem',
                       fontWeight: 600

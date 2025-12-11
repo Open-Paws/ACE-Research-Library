@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { apiService, PAPER_CONSTANTS } from '../config/api.js';
+import { useTheme } from '../context/ThemeContext';
 
 const ResearchFeed = () => {
   const navigate = useNavigate();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
   const [papers, setPapers] = useState([]);
   const [filteredPapers, setFilteredPapers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -237,8 +240,24 @@ const ResearchFeed = () => {
   };
 
   return (
-    <main className="flex-1 w-full px-4 sm:px-6 lg:px-14 py-8" style={{ minHeight: '100vh', background: 'transparent' }}>
-      <div className="mx-auto max-w-[1360px]">
+    <main className="flex-1 w-full px-4 sm:px-6 lg:px-14 py-8 relative" style={{ minHeight: '100vh', background: 'transparent', position: 'relative', zIndex: 0 }}>
+      {/* Mesh Background Elements */}
+      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1 }}>
+        <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{
+          background: isDark 
+            ? 'radial-gradient(circle, rgba(0, 166, 161, 0.3) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(0, 166, 161, 0.15) 0%, transparent 70%)',
+          transform: 'translate(-20%, -20%)'
+        }}></div>
+        <div className="absolute top-1/2 right-0 w-96 h-96 rounded-full blur-3xl opacity-15" style={{
+          background: isDark
+            ? 'radial-gradient(circle, rgba(12, 109, 171, 0.3) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(12, 109, 171, 0.1) 0%, transparent 70%)',
+          transform: 'translate(20%, -50%)'
+        }}></div>
+      </div>
+
+      <div className="mx-auto max-w-[1360px] relative z-1">
         <div className="mb-10 animate-fade-in-up">
           <div className="relative inline-block">
             <h1 style={{
@@ -246,7 +265,7 @@ const ResearchFeed = () => {
               fontSize: '3.5rem',
               fontWeight: 800,
               letterSpacing: '-0.02em',
-              color: 'var(--ace-navy)',
+              color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
               marginBottom: '12px',
               lineHeight: '1.1',
               position: 'relative',
@@ -257,7 +276,7 @@ const ResearchFeed = () => {
             <div className="absolute -bottom-2 -right-4 w-32 h-32 bg-primary/10 rounded-full blur-2xl -z-10 animate-pulse"></div>
           </div>
           <p style={{ 
-            color: 'var(--ace-navy-60)',
+            color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)',
             marginTop: '8px',
             fontSize: '1.25rem',
             fontFamily: "'Inter', sans-serif",
@@ -275,45 +294,51 @@ const ResearchFeed = () => {
         )}
 
         {/* Papers Table Container */}
-        <div className="glass-panel rounded-2xl overflow-hidden animate-fade-in-up">
+        <div className={`glass-panel ${isDark ? 'glass-panel-dark' : ''} rounded-2xl overflow-hidden animate-fade-in-up`} style={{ border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)' }}>
           {/* Search and Filter Bar */}
-          <div className="p-6 border-b border-white/50">
+          <div className="p-6 border-b" style={{ borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.5)' }}>
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-6">
               <div className="relative w-full sm:w-96 group">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-primary transition-colors">search</span>
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 transition-colors" style={{ color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(4, 28, 48, 0.4)' }}>search</span>
                 <input 
                   className="w-full rounded-xl border pl-12 py-3 text-sm transition-all duration-300" 
                   placeholder="Search papers, authors, keywords..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   style={{
-                    borderColor: 'rgba(4, 28, 48, 0.1)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                    color: 'var(--ace-navy)',
-                    fontFamily: "'Inter', sans-serif",
-                    boxShadow: 'inner 0 2px 4px rgba(0,0,0,0.02)'
+                    borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)',
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                    color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
+                    fontFamily: "'Inter', sans-serif"
                   }}
                   onFocus={(e) => {
-                    e.target.style.backgroundColor = 'white';
+                    e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'white';
                     e.target.style.borderColor = 'var(--ace-teal)';
                     e.target.style.boxShadow = '0 0 0 4px rgba(0, 166, 161, 0.1)';
                   }}
                   onBlur={(e) => {
-                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
-                    e.target.style.borderColor = 'rgba(4, 28, 48, 0.1)';
-                    e.target.style.boxShadow = 'inner 0 2px 4px rgba(0,0,0,0.02)';
+                    e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)';
+                    e.target.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)';
+                    e.target.style.boxShadow = 'none';
                   }}
                 />
               </div>
               <div className="flex items-center gap-3">
                 {getActiveFiltersCount() > 0 && (
-                  <span className="text-white/70 text-sm">
+                  <span className="text-sm" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}>
                     {getActiveFiltersCount()} filter{getActiveFiltersCount() !== 1 ? 's' : ''} applied
                   </span>
                 )}
                 <button
                   onClick={resetFilters}
-                  className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-colors"
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                  style={{
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)',
+                    color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
+                    fontFamily: "'Inter', sans-serif"
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(4, 28, 48, 0.15)'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)'}
                 >
                   <span className="material-symbols-outlined text-base">refresh</span>
                   Reset
@@ -325,16 +350,23 @@ const ResearchFeed = () => {
             {getActiveFilters().length > 0 && (
               <div className="mb-4">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-white/60 text-sm font-medium">Active filters:</span>
+                  <span className="text-sm font-medium" style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)' }}>Active filters:</span>
                   {getActiveFilters().map((filter) => (
                     <span
                       key={filter.key}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary border border-primary/30"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border transition-colors"
+                      style={{
+                        backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                        color: 'var(--ace-teal)',
+                        borderColor: 'rgba(0, 166, 161, 0.3)',
+                        fontFamily: "'Inter', sans-serif"
+                      }}
                     >
                       <span>{filter.type}: {filter.value}</span>
                       <button
                         onClick={() => removeFilter(filter.key)}
-                        className="hover:text-primary/80 transition-colors"
+                        className="hover:opacity-80 transition-opacity"
+                        style={{ color: 'var(--ace-teal)' }}
                       >
                         <span className="material-symbols-outlined text-sm">close</span>
                       </button>
@@ -349,37 +381,75 @@ const ResearchFeed = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-1.5 text-sm font-medium rounded-lg bg-primary/20 text-primary border border-primary/30 focus:ring-primary focus:border-primary"
+                className="px-3 py-1.5 text-sm font-medium rounded-lg border focus:ring-primary focus:border-primary transition-colors"
+                style={{
+                  backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                  color: 'var(--ace-teal)',
+                  borderColor: 'rgba(0, 166, 161, 0.3)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
               >
-                <option value="all">All Status</option>
+                <option value="all" style={{ backgroundColor: isDark ? '#1e293b' : 'white', color: isDark ? 'white' : 'var(--ace-navy)' }}>All Status</option>
                 {PAPER_CONSTANTS.STATUSES.map(status => (
-                  <option key={status} value={status}>{status}</option>
+                  <option key={status} value={status} style={{ backgroundColor: isDark ? '#1e293b' : 'white', color: isDark ? 'white' : 'var(--ace-navy)' }}>{status}</option>
                 ))}
               </select>
               <button 
                 onClick={() => handleSort('title')}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                style={{
+                  backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                  color: 'var(--ace-teal)',
+                  borderColor: 'rgba(0, 166, 161, 0.3)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.3)' : 'rgba(0, 166, 161, 0.15)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)'}
               >
                 <span>Title</span>
                 <span className="material-symbols-outlined text-base">{getSortIcon('title')}</span>
               </button>
               <button 
                 onClick={() => handleSort('authors')}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                style={{
+                  backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                  color: 'var(--ace-teal)',
+                  borderColor: 'rgba(0, 166, 161, 0.3)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.3)' : 'rgba(0, 166, 161, 0.15)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)'}
               >
                 <span>Authors</span>
                 <span className="material-symbols-outlined text-base">{getSortIcon('authors')}</span>
               </button>
               <button 
                 onClick={() => handleSort('year')}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                style={{
+                  backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                  color: 'var(--ace-teal)',
+                  borderColor: 'rgba(0, 166, 161, 0.3)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.3)' : 'rgba(0, 166, 161, 0.15)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)'}
               >
                 <span>Year</span>
                 <span className="material-symbols-outlined text-base">{getSortIcon('year')}</span>
               </button>
               <button 
                 onClick={() => handleSort('score')}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                style={{
+                  backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                  color: 'var(--ace-teal)',
+                  borderColor: 'rgba(0, 166, 161, 0.3)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.3)' : 'rgba(0, 166, 161, 0.15)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)'}
               >
                 <span>Score</span>
                 <span className="material-symbols-outlined text-base">{getSortIcon('score')}</span>
@@ -390,37 +460,37 @@ const ResearchFeed = () => {
           {/* Papers Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-base text-left">
-              <thead className="text-sm uppercase" style={{ backgroundColor: 'rgba(4, 28, 48, 0.03)' }}>
+              <thead className="text-sm uppercase" style={{ backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(4, 28, 48, 0.03)' }}>
                 <tr>
-                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Title</th>
-                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Authors</th>
-                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Year</th>
-                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Status</th>
-                  <th className="px-6 py-4 font-bold tracking-wider text-right" scope="col" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Actions</th>
+                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Title</th>
+                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Authors</th>
+                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Year</th>
+                  <th className="px-6 py-4 font-bold tracking-wider" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Status</th>
+                  <th className="px-6 py-4 font-bold tracking-wider text-right" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/50">
+              <tbody className="divide-y" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.5)' }}>
                 {isLoading ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan="6" className="px-6 py-12 text-center" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}>
                       <div className="flex flex-col items-center justify-center gap-4">
                         <div className="relative">
-                          <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-                          <div className="absolute inset-0 w-8 h-8 border-3 border-transparent border-t-primary/60 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
+                          <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 166, 161, 0.3)', borderTopColor: 'var(--ace-teal)' }}></div>
+                          <div className="absolute inset-0 w-8 h-8 border-3 border-transparent rounded-full animate-spin" style={{ borderTopColor: 'rgba(0, 166, 161, 0.6)', animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
                         </div>
-                        <p className="text-base font-medium">Loading papers...</p>
+                        <p className="text-base font-medium" style={{ fontFamily: "'Inter', sans-serif" }}>Loading papers...</p>
                       </div>
                     </td>
                   </tr>
                 ) : filteredPapers.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan="6" className="px-6 py-12 text-center" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}>
                       <div className="flex flex-col items-center gap-4">
-                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                          <span className="material-symbols-outlined text-2xl">article</span>
+                        <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(4, 28, 48, 0.05)' }}>
+                          <span className="material-symbols-outlined text-2xl" style={{ color: 'var(--ace-teal)' }}>article</span>
                         </div>
-                        <p className="text-base font-medium">No papers found</p>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-base font-medium" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>No papers found</p>
+                        <p className="text-sm" style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                           {searchTerm ? 'Try adjusting your search terms' : 'No papers available at the moment'}
                         </p>
                       </div>
@@ -430,22 +500,25 @@ const ResearchFeed = () => {
                   filteredPapers.map((paper, index) => (
                     <tr 
                       key={paper['Paper ID']} 
-                      className="transition-all duration-300 animate-fade-in-up hover:bg-white/60 group" 
+                      className="transition-all duration-300 animate-fade-in-up group" 
                       style={{ 
-                        animationDelay: `${index * 0.03}s`
-                      }} 
+                        animationDelay: `${index * 0.03}s`,
+                        borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.5)'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.6)'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                     >
-                      <td className="px-6 py-5 font-semibold" style={{ color: 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif", fontSize: '0.9375rem' }}>
-                        <div className="max-w-xs truncate group-hover:text-primary transition-colors">
+                      <td className="px-6 py-5 font-semibold" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif", fontSize: '0.9375rem' }}>
+                        <div className="max-w-xs truncate transition-colors" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)' }} onMouseEnter={(e) => e.target.style.color = 'var(--ace-teal)'} onMouseLeave={(e) => e.target.style.color = isDark ? 'var(--ace-white)' : 'var(--ace-navy)'}>
                           {paper.Title || 'Untitled'}
                         </div>
                       </td>
-                      <td className="px-6 py-5" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontSize: '0.9375rem' }}>
+                      <td className="px-6 py-5" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontSize: '0.9375rem' }}>
                         <div className="max-w-xs truncate">
                           {paper.Authors || 'Unknown'}
                         </div>
                       </td>
-                      <td className="px-6 py-5" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontSize: '0.9375rem' }}>
+                      <td className="px-6 py-5" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif", fontSize: '0.9375rem' }}>
                         {paper['Publication Year'] || 'N/A'}
                       </td>
                       <td className="px-6 py-4">
@@ -456,15 +529,15 @@ const ResearchFeed = () => {
                           <button 
                             onClick={() => handleApprovalClick(paper, 'Approved')}
                             className="p-2 rounded-lg transition-all duration-300 hover:scale-110"
-                            style={{ color: 'var(--ace-navy-60)' }}
+                            style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}
                             title="Approve Paper"
                             onMouseEnter={(e) => {
-                              e.target.style.backgroundColor = 'var(--primary-10)';
+                              e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)';
                               e.target.style.color = 'var(--ace-teal)';
                             }}
                             onMouseLeave={(e) => {
                               e.target.style.backgroundColor = 'transparent';
-                              e.target.style.color = 'var(--ace-navy-60)';
+                              e.target.style.color = isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)';
                             }}
                           >
                             <span className="material-symbols-outlined text-lg">check_circle</span>
@@ -472,15 +545,15 @@ const ResearchFeed = () => {
                           <button 
                             onClick={() => handleApprovalClick(paper, 'Rejected')}
                             className="p-2 rounded-lg transition-all duration-300 hover:scale-110"
-                            style={{ color: 'var(--ace-navy-60)' }}
+                            style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}
                             title="Reject Paper"
                             onMouseEnter={(e) => {
-                              e.target.style.backgroundColor = 'rgba(132, 52, 104, 0.1)';
+                              e.target.style.backgroundColor = 'rgba(132, 52, 104, 0.2)';
                               e.target.style.color = 'var(--ace-berry)';
                             }}
                             onMouseLeave={(e) => {
                               e.target.style.backgroundColor = 'transparent';
-                              e.target.style.color = 'var(--ace-navy-60)';
+                              e.target.style.color = isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)';
                             }}
                           >
                             <span className="material-symbols-outlined text-lg">cancel</span>
@@ -488,15 +561,15 @@ const ResearchFeed = () => {
                           <button 
                             onClick={() => handleViewDetails(paper)}
                             className="p-2 rounded-lg transition-all duration-300 hover:scale-110"
-                            style={{ color: 'var(--ace-navy-60)' }}
+                            style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}
                             title="View Details"
                             onMouseEnter={(e) => {
-                              e.target.style.backgroundColor = 'var(--primary-10)';
+                              e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)';
                               e.target.style.color = 'var(--ace-teal)';
                             }}
                             onMouseLeave={(e) => {
                               e.target.style.backgroundColor = 'transparent';
-                              e.target.style.color = 'var(--ace-navy-60)';
+                              e.target.style.color = isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)';
                             }}
                           >
                             <span className="material-symbols-outlined text-lg">open_in_new</span>
@@ -512,7 +585,7 @@ const ResearchFeed = () => {
 
           {/* Summary Bar */}
           {!isLoading && (
-            <div className="p-4 border-t text-center text-sm" style={{ borderTopColor: 'var(--ace-navy-10)', color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
+            <div className="p-4 border-t text-center text-sm" style={{ borderTopColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'var(--ace-navy-10)', color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
               Showing {filteredPapers.length} of {papers.length} papers
             </div>
           )}
@@ -525,13 +598,17 @@ const ResearchFeed = () => {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 backdrop-blur-sm transition-opacity"
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
             onClick={() => setShowApprovalDialog(false)}
           ></div>
           
           {/* Modal Container */}
           <div className="flex min-h-full items-center justify-center p-4 animate-fade-in">
-            <div className="relative rounded-xl border shadow-2xl max-w-lg w-full p-8 transform transition-all animate-scale-in" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 20px 60px rgba(4, 28, 48, 0.2)' }}>
+            <div className={`relative rounded-xl border shadow-2xl max-w-lg w-full p-8 transform transition-all animate-scale-in ${isDark ? 'glass-panel-dark' : ''}`} style={{ 
+              border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)',
+              boxShadow: isDark ? '0 20px 60px rgba(0, 0, 0, 0.4)' : '0 20px 60px rgba(4, 28, 48, 0.2)'
+            }}>
               {/* Header */}
               <div className="flex items-center justify-between mb-8">
                 <h3 style={{
@@ -539,7 +616,7 @@ const ResearchFeed = () => {
                   fontSize: '1.5rem',
                   fontWeight: 700,
                   letterSpacing: '-0.01em',
-                  color: 'var(--ace-navy)',
+                  color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px'
@@ -551,25 +628,28 @@ const ResearchFeed = () => {
                 </h3>
                 <button
                   onClick={() => setShowApprovalDialog(false)}
-                  className="text-gray-400 hover:text-white transition-colors p-1"
+                  className="transition-colors p-1"
+                  style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(4, 28, 48, 0.6)' }}
+                  onMouseEnter={(e) => e.target.style.color = isDark ? 'var(--ace-white)' : 'var(--ace-navy)'}
+                  onMouseLeave={(e) => e.target.style.color = isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(4, 28, 48, 0.6)'}
                 >
                   <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
 
               {/* Paper Info */}
-              <div className="mb-6 p-4 rounded-lg border" style={{ backgroundColor: 'var(--ace-navy-5)', borderColor: 'var(--ace-navy-10)' }}>
-                <p className="font-medium text-base line-clamp-2 mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
+              <div className="mb-6 p-4 rounded-lg border" style={{ backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'var(--ace-navy-5)', borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'var(--ace-navy-10)' }}>
+                <p className="font-medium text-base line-clamp-2 mb-2" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                   {selectedPaper.Title}
                 </p>
-                <p className="text-sm mb-3" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
+                <p className="text-sm mb-3" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                   {selectedPaper.Authors}
                 </p>
                 <div className="flex items-center justify-between text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
-                  <span style={{ color: 'var(--ace-navy-60)' }}>Year: {selectedPaper['Publication Year']}</span>
+                  <span style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}>Year: {selectedPaper['Publication Year']}</span>
                   {selectedPaper['AI Filtering Score'] && (
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-500">Score:</span>
+                      <span style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)' }}>Score:</span>
                       {getScoreBadge(selectedPaper['AI Filtering Score'])}
                     </div>
                   )}
@@ -579,7 +659,7 @@ const ResearchFeed = () => {
               {/* Form */}
               <form onSubmit={handleApprovalSubmit} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Decision *
                   </label>
                   <select
@@ -587,20 +667,20 @@ const ResearchFeed = () => {
                     onChange={(e) => setApprovalData(prev => ({ ...prev, status: e.target.value }))}
                     className="w-full border rounded-lg p-3 transition-colors"
                     style={{
-                      backgroundColor: 'var(--ace-white)',
-                      borderColor: 'var(--ace-navy-10)',
-                      color: 'var(--ace-navy)',
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'var(--ace-white)',
+                      borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'var(--ace-navy-10)',
+                      color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                       fontFamily: "'Inter', sans-serif"
                     }}
                   >
                     {PAPER_CONSTANTS.STATUSES.map(status => (
-                      <option key={status} value={status}>{status}</option>
+                      <option key={status} value={status} style={{ backgroundColor: isDark ? '#1e293b' : 'white', color: isDark ? 'white' : 'var(--ace-navy)' }}>{status}</option>
                     ))}
                   </select>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Review Comments *
                   </label>
                   <textarea
@@ -611,17 +691,17 @@ const ResearchFeed = () => {
                     required
                     className="w-full border rounded-lg p-3 resize-none transition-colors"
                     style={{
-                      backgroundColor: 'var(--ace-white)',
-                      borderColor: 'var(--ace-navy-10)',
-                      color: 'var(--ace-navy)',
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'var(--ace-white)',
+                      borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'var(--ace-navy-10)',
+                      color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                       fontFamily: "'Inter', sans-serif"
                     }}
                   />
-                  <p className="text-xs mt-1" style={{ color: 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Required field</p>
+                  <p className="text-xs mt-1" style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>Required field</p>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>
                     Additional Notes
                   </label>
                   <textarea
@@ -631,16 +711,16 @@ const ResearchFeed = () => {
                     rows={2}
                     className="w-full border rounded-lg p-3 resize-none transition-colors"
                     style={{
-                      backgroundColor: 'var(--ace-white)',
-                      borderColor: 'var(--ace-navy-10)',
-                      color: 'var(--ace-navy)',
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'var(--ace-white)',
+                      borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'var(--ace-navy-10)',
+                      color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
                       fontFamily: "'Inter', sans-serif"
                     }}
                   />
                 </div>
                 
                 {/* Actions */}
-                <div className="flex gap-3 pt-4 border-t" style={{ borderTopColor: 'var(--ace-navy-10)' }}>
+                <div className="flex gap-3 pt-4 border-t" style={{ borderTopColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'var(--ace-navy-10)' }}>
                   <button
                     type="submit"
                     disabled={isSubmittingApproval || !approvalData.comments.trim()}
@@ -662,7 +742,7 @@ const ResearchFeed = () => {
                   >
                     {isSubmittingApproval ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 rounded-full animate-spin" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)', borderTopColor: 'var(--ace-white)' }}></div>
                         Submitting...
                       </>
                     ) : (
@@ -678,7 +758,7 @@ const ResearchFeed = () => {
                     disabled={isSubmittingApproval}
                     className="px-6 font-bold py-3 rounded-lg transition-colors disabled:opacity-50"
                     style={{
-                      backgroundColor: 'var(--ace-navy-60)',
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'var(--ace-navy-60)',
                       color: 'var(--ace-white)',
                       fontFamily: "'Inter', sans-serif"
                     }}

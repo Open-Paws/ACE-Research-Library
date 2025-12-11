@@ -74,7 +74,7 @@ body::before {
 :root {
   /* ACE Primary Colors */
   --ace-teal: #00A6A1;
-  --ace-navy: #041C30;
+  --ace-navy: #8bb3e1;
   --ace-white: #FFFFFF;
   
   /* ACE Secondary Colors (used sparingly) */

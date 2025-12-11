@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../config/api.js';
+import { useTheme } from '../context/ThemeContext';
 
 const ApprovedPapers = () => {
   const navigate = useNavigate();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
   const [papers, setPapers] = useState([]);
   const [filteredPapers, setFilteredPapers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -139,22 +142,38 @@ const ApprovedPapers = () => {
   };
 
   return (
-    <main className="flex-1 w-full px-4 sm:px-6 lg:px-14 py-8" style={{ backgroundColor: 'var(--ace-navy-2)' }}>
-      <div className="mx-auto max-w-[1360px]">
+    <main className="flex-1 w-full px-4 sm:px-6 lg:px-14 py-8 relative" style={{ background: 'transparent', position: 'relative', zIndex: 0 }}>
+      {/* Mesh Background Elements */}
+      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1 }}>
+        <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-20" style={{
+          background: isDark 
+            ? 'radial-gradient(circle, rgba(0, 166, 161, 0.3) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(0, 166, 161, 0.15) 0%, transparent 70%)',
+          transform: 'translate(-20%, -20%)'
+        }}></div>
+        <div className="absolute top-1/2 right-0 w-96 h-96 rounded-full blur-3xl opacity-15" style={{
+          background: isDark
+            ? 'radial-gradient(circle, rgba(12, 109, 171, 0.3) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(12, 109, 171, 0.1) 0%, transparent 70%)',
+          transform: 'translate(20%, -50%)'
+        }}></div>
+      </div>
+
+      <div className="mx-auto max-w-[1360px] relative z-1">
         <div className="mb-10 animate-fade-in-up">
           <h1 style={{
             fontFamily: "'Montserrat', sans-serif",
             fontSize: '3rem',
             fontWeight: 800,
             letterSpacing: '-0.02em',
-            color: 'var(--ace-navy)',
+            color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
             marginBottom: '12px',
             lineHeight: '1.1'
           }}>
             Approved Papers
           </h1>
           <p style={{ 
-            color: 'var(--ace-navy-60)',
+            color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)',
             marginTop: '8px',
             fontSize: '1.125rem',
             fontFamily: "'Inter', sans-serif",
@@ -171,28 +190,51 @@ const ApprovedPapers = () => {
         )}
 
         {/* Papers Table Container */}
-        <div className="rounded-xl border animate-fade-in-up" style={{ backgroundColor: 'var(--ace-white)', borderColor: 'var(--ace-navy-10)', boxShadow: '0 2px 8px rgba(4, 28, 48, 0.08)' }}>
+        <div className={`glass-panel ${isDark ? 'glass-panel-dark' : ''} rounded-xl border animate-fade-in-up`} style={{ border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)', boxShadow: isDark ? '0 4px 20px rgba(0, 0, 0, 0.2)' : '0 2px 8px rgba(4, 28, 48, 0.08)' }}>
           {/* Search and Filter Bar */}
-          <div className="p-4 border-b border-gray-800">
+          <div className="p-4 border-b" style={{ borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.5)' }}>
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-center mb-4">
               <div className="relative w-full sm:w-80">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">search</span>
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2" style={{ color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(4, 28, 48, 0.4)' }}>search</span>
                 <input 
-                  className="form-input w-full rounded-lg border-gray-700 bg-background-dark focus:ring-primary focus:border-primary pl-10 text-sm" 
+                  className="w-full rounded-lg border pl-10 text-sm transition-all duration-300" 
                   placeholder="Search papers, authors, keywords..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{
+                    borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)',
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                    color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
+                    fontFamily: "'Inter', sans-serif"
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'white';
+                    e.target.style.borderColor = 'var(--ace-teal)';
+                    e.target.style.boxShadow = '0 0 0 4px rgba(0, 166, 161, 0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.5)';
+                    e.target.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)';
+                    e.target.style.boxShadow = 'none';
+                  }}
                 />
               </div>
               <div className="flex items-center gap-3">
                 {getActiveFiltersCount() > 0 && (
-                  <span className="text-white/70 text-sm">
+                  <span className="text-sm" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}>
                     {getActiveFiltersCount()} filter{getActiveFiltersCount() !== 1 ? 's' : ''} applied
                   </span>
                 )}
                 <button
                   onClick={resetFilters}
-                  className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-colors"
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                  style={{
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)',
+                    color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
+                    fontFamily: "'Inter', sans-serif"
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(4, 28, 48, 0.15)'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)'}
                 >
                   <span className="material-symbols-outlined text-base">refresh</span>
                   Reset
@@ -204,16 +246,23 @@ const ApprovedPapers = () => {
             {getActiveFilters().length > 0 && (
               <div className="mb-4">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-white/60 text-sm font-medium">Active filters:</span>
+                  <span className="text-sm font-medium" style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)' }}>Active filters:</span>
                   {getActiveFilters().map((filter) => (
                     <span
                       key={filter.key}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary border border-primary/30"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border transition-colors"
+                      style={{
+                        backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                        color: 'var(--ace-teal)',
+                        borderColor: 'rgba(0, 166, 161, 0.3)',
+                        fontFamily: "'Inter', sans-serif"
+                      }}
                     >
                       <span>{filter.type}: {filter.value}</span>
                       <button
                         onClick={() => removeFilter(filter.key)}
-                        className="hover:text-primary/80 transition-colors"
+                        className="hover:opacity-80 transition-opacity"
+                        style={{ color: 'var(--ace-teal)' }}
                       >
                         <span className="material-symbols-outlined text-sm">close</span>
                       </button>
@@ -227,28 +276,60 @@ const ApprovedPapers = () => {
             <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
               <button 
                 onClick={() => handleSort('title')}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                style={{
+                  backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                  color: 'var(--ace-teal)',
+                  borderColor: 'rgba(0, 166, 161, 0.3)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.3)' : 'rgba(0, 166, 161, 0.15)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)'}
               >
                 <span>Title</span>
                 <span className="material-symbols-outlined text-base">{getSortIcon('title')}</span>
               </button>
               <button 
                 onClick={() => handleSort('authors')}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                style={{
+                  backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                  color: 'var(--ace-teal)',
+                  borderColor: 'rgba(0, 166, 161, 0.3)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.3)' : 'rgba(0, 166, 161, 0.15)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)'}
               >
                 <span>Authors</span>
                 <span className="material-symbols-outlined text-base">{getSortIcon('authors')}</span>
               </button>
               <button 
                 onClick={() => handleSort('year')}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                style={{
+                  backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                  color: 'var(--ace-teal)',
+                  borderColor: 'rgba(0, 166, 161, 0.3)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.3)' : 'rgba(0, 166, 161, 0.15)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)'}
               >
                 <span>Year</span>
                 <span className="material-symbols-outlined text-base">{getSortIcon('year')}</span>
               </button>
               <button 
                 onClick={() => handleSort('date')}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+                style={{
+                  backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                  color: 'var(--ace-teal)',
+                  borderColor: 'rgba(0, 166, 161, 0.3)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.3)' : 'rgba(0, 166, 161, 0.15)'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)'}
               >
                 <span>Date Added</span>
                 <span className="material-symbols-outlined text-base">{getSortIcon('date')}</span>
@@ -259,38 +340,38 @@ const ApprovedPapers = () => {
           {/* Papers Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-base text-left">
-              <thead className="text-sm text-gray-400 uppercase bg-gray-900">
+              <thead className="text-sm uppercase" style={{ backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(4, 28, 48, 0.03)' }}>
                 <tr>
-                  <th className="px-6 py-3 font-medium" scope="col">Title</th>
-                  <th className="px-6 py-3 font-medium" scope="col">Authors</th>
-                  <th className="px-6 py-3 font-medium" scope="col">Year</th>
-                  <th className="px-6 py-3 font-medium" scope="col">Outcome</th>
-                  <th className="px-6 py-3 font-medium" scope="col">Date Added</th>
-                  <th className="px-6 py-3 font-medium text-right" scope="col">Actions</th>
+                  <th className="px-6 py-3 font-medium" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Title</th>
+                  <th className="px-6 py-3 font-medium" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Authors</th>
+                  <th className="px-6 py-3 font-medium" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Year</th>
+                  <th className="px-6 py-3 font-medium" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Outcome</th>
+                  <th className="px-6 py-3 font-medium" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Date Added</th>
+                  <th className="px-6 py-3 font-medium text-right" scope="col" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.5)' }}>
                 {isLoading ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-white/70">
+                    <td colSpan="6" className="px-6 py-12 text-center" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}>
                       <div className="flex flex-col items-center justify-center gap-4">
                         <div className="relative">
-                          <div className="w-8 h-8 border-3 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-                          <div className="absolute inset-0 w-8 h-8 border-3 border-transparent border-t-primary/60 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
+                          <div className="w-8 h-8 border-3 rounded-full animate-spin" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 166, 161, 0.3)', borderTopColor: 'var(--ace-teal)' }}></div>
+                          <div className="absolute inset-0 w-8 h-8 border-3 border-transparent rounded-full animate-spin" style={{ borderTopColor: 'rgba(0, 166, 161, 0.6)', animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
                         </div>
-                        <p className="text-base font-medium">Loading approved papers...</p>
+                        <p className="text-base font-medium" style={{ fontFamily: "'Inter', sans-serif" }}>Loading approved papers...</p>
                       </div>
                     </td>
                   </tr>
                 ) : filteredPapers.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-white/70">
+                    <td colSpan="6" className="px-6 py-12 text-center" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}>
                       <div className="flex flex-col items-center gap-4">
-                        <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center">
-                          <span className="material-symbols-outlined text-2xl">article</span>
+                        <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(4, 28, 48, 0.05)' }}>
+                          <span className="material-symbols-outlined text-2xl" style={{ color: 'var(--ace-teal)' }}>article</span>
                         </div>
-                        <p className="text-base font-medium">No approved papers found</p>
-                        <p className="text-sm text-white/50">
+                        <p className="text-base font-medium" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Inter', sans-serif" }}>No approved papers found</p>
+                        <p className="text-sm" style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                           {searchTerm ? 'Try adjusting your search terms' : 'No approved papers available at the moment'}
                         </p>
                       </div>
@@ -298,34 +379,49 @@ const ApprovedPapers = () => {
                   </tr>
                 ) : (
                   filteredPapers.map((paper) => (
-                    <tr key={paper['Paper ID']} className="border-b border-gray-800 hover:bg-gray-800/50 transition-colors">
-                      <td className="px-6 py-4 font-medium text-white">
+                    <tr 
+                      key={paper['Paper ID']} 
+                      className="transition-colors"
+                      style={{ borderBottomColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.5)' }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.6)'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                    >
+                      <td className="px-6 py-4 font-medium" style={{ color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)', fontFamily: "'Montserrat', sans-serif" }}>
                         <div className="max-w-xs truncate">
                           {paper.Title || 'Untitled'}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-300">
+                      <td className="px-6 py-4" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                         <div className="max-w-xs truncate">
                           {paper.Authors || 'Unknown'}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-300">
+                      <td className="px-6 py-4" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                         {paper['Publication Year'] || 'N/A'}
                       </td>
-                      <td className="px-6 py-4 text-gray-300">
+                      <td className="px-6 py-4" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                         <div className="max-w-xs truncate">
                           {paper['AI-Outcomes'] || 'N/A'}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-300">
+                      <td className="px-6 py-4" style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
                         {formatDate(paper['Date Retrieved'])}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex gap-2 justify-end">
                           <button 
                             onClick={() => handleViewDetails(paper)}
-                            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-700 hover:text-primary transition-colors"
+                            className="p-1.5 rounded-lg transition-colors"
+                            style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}
                             title="View Details"
+                            onMouseEnter={(e) => {
+                              e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)';
+                              e.target.style.color = 'var(--ace-teal)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.backgroundColor = 'transparent';
+                              e.target.style.color = isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)';
+                            }}
                           >
                             <span className="material-symbols-outlined text-lg">open_in_new</span>
                           </button>
@@ -334,8 +430,17 @@ const ApprovedPapers = () => {
                               href={paper['DOI / URL']}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-700 hover:text-primary transition-colors"
+                              className="p-1.5 rounded-lg transition-colors"
+                              style={{ color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)' }}
                               title="View Original Paper"
+                              onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)';
+                                e.target.style.color = 'var(--ace-teal)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = 'transparent';
+                                e.target.style.color = isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)';
+                              }}
                             >
                               <span className="material-symbols-outlined text-lg">link</span>
                             </a>
@@ -351,7 +456,7 @@ const ApprovedPapers = () => {
 
           {/* Summary Bar */}
           {!isLoading && (
-            <div className="p-4 border-t border-gray-800 text-center text-gray-400 text-sm">
+            <div className="p-4 border-t text-center text-sm" style={{ borderTopColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.5)', color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)', fontFamily: "'Inter', sans-serif" }}>
               Showing {filteredPapers.length} of {papers.length} approved papers
             </div>
           )}
