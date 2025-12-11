@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
   const login = (username, password, role = 'user') => {
     // Hardcoded admin credentials
     if (role === 'admin') {
-      if (username === 'admin' && password === 'admin123') {
+      if (username === 'test-0-impact' && password === 'test-0-impact-password-1234567890') {
         setIsAuthenticated(true);
         setUserRole('admin');
         localStorage.setItem('ace_auth', JSON.stringify({ isAuthenticated: true, role: 'admin' }));

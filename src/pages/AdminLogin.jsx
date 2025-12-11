@@ -201,15 +201,6 @@ const AdminLogin = () => {
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
-
-          <div className="pt-4 border-t" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)' }}>
-            <p className="text-xs text-center" style={{ 
-              color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)',
-              fontFamily: "'Inter', sans-serif"
-            }}>
-              Default credentials: <strong style={{ color: isDark ? 'var(--ace-teal)' : 'var(--ace-teal)' }}>admin</strong> / <strong style={{ color: isDark ? 'var(--ace-teal)' : 'var(--ace-teal)' }}>admin123</strong>
-            </p>
-          </div>
         </form>
       </div>
     </div>
