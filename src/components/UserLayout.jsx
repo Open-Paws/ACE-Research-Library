@@ -71,6 +71,30 @@ const UserLayout = ({ children }) => {
               )}
               Research Papers
             </Link>
+            <Link 
+              className="text-sm font-medium transition-all duration-300 relative"
+              style={{
+                color: location.pathname === '/chat' ? 'var(--ace-teal)' : 'rgba(255, 255, 255, 0.9)',
+                textDecoration: 'none',
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 500,
+                paddingBottom: '4px'
+              }}
+              to="/chat"
+            >
+              {location.pathname === '/chat' && (
+                <span style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '2px',
+                  backgroundColor: 'var(--ace-teal)',
+                  animation: 'slideInRight 0.3s ease-out'
+                }}></span>
+              )}
+              Chat
+            </Link>
           </nav>
         </div>
         <div className="flex items-center gap-4">
@@ -113,7 +137,7 @@ const UserLayout = ({ children }) => {
       <main className="flex-1" style={{ position: 'relative', zIndex: 1 }}>
         {children}
       </main>
-      <Footer />
+      {location.pathname !== '/chat' && <Footer />}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminLogin from './pages/AdminLogin';
 import UserHome from './pages/user/UserHome';
 import UserPapers from './pages/user/UserPapers';
+import UserChat from './pages/user/UserChat';
 import PaperDetails from './pages/PaperDetails';
 import Dashboard from './pages/Dashboard';
 import Keywords from './pages/Keywords';
@@ -34,6 +35,7 @@ const AppRoutes = () => {
       {/* User Routes */}
       <Route path="/" element={<UserLayout><UserHome /></UserLayout>} />
       <Route path="/papers" element={<UserLayout><UserHome /></UserLayout>} />
+      <Route path="/chat" element={<UserLayout><UserChat /></UserLayout>} />
       <Route path="/paper-details" element={<UserLayout><PaperDetails /></UserLayout>} />
 
       {/* Admin Login */}

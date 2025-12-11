@@ -17,7 +17,11 @@ const UserHome = () => {
   const [selectedYear, setSelectedYear] = useState('all');
   const [selectedKeyword, setSelectedKeyword] = useState('all');
   const [expandedPaperId, setExpandedPaperId] = useState(null);
+  const [aiSearchResult, setAiSearchResult] = useState(null);
+  const [isAiSearching, setIsAiSearching] = useState(false);
+  const [showAiResult, setShowAiResult] = useState(false);
   const searchInputRef = useRef(null);
+  const aiSearchTimeoutRef = useRef(null);
 
   useEffect(() => {
     loadAllPapers();
@@ -26,6 +30,58 @@ const UserHome = () => {
   useEffect(() => {
     filterAndSortPapers();
   }, [papers, searchTerm, sortBy, sortOrder, selectedYear, selectedKeyword]);
+
+  // AI Search integration - trigger when user types
+  useEffect(() => {
+    // Clear previous timeout
+    if (aiSearchTimeoutRef.current) {
+      clearTimeout(aiSearchTimeoutRef.current);
+    }
+
+    // Reset AI result when search term is cleared
+    if (!searchTerm.trim()) {
+      setAiSearchResult(null);
+      setShowAiResult(false);
+      setIsAiSearching(false);
+      return;
+    }
+
+    // Only trigger AI search if search term is meaningful (at least 3 characters)
+    if (searchTerm.trim().length >= 3) {
+      // Debounce AI search - wait 1 second after user stops typing
+      aiSearchTimeoutRef.current = setTimeout(async () => {
+        setIsAiSearching(true);
+        setShowAiResult(true);
+        try {
+          const response = await apiService.sendChatMessage(searchTerm.trim(), 5);
+          if (response && response.length > 0) {
+            const aiContent = response[0].message?.content;
+            setAiSearchResult({
+              answer: aiContent?.answer || 'I found some information related to your search.',
+              confidence: aiContent?.confidence || 'unknown',
+              followup: aiContent?.followup || [],
+              citations: aiContent?.citations || [],
+              evidenceGaps: aiContent?.evidence_gaps || null
+            });
+          }
+        } catch (err) {
+          console.error('AI search error:', err);
+          setAiSearchResult(null);
+        } finally {
+          setIsAiSearching(false);
+        }
+      }, 1000);
+    } else {
+      setAiSearchResult(null);
+      setShowAiResult(false);
+    }
+
+    return () => {
+      if (aiSearchTimeoutRef.current) {
+        clearTimeout(aiSearchTimeoutRef.current);
+      }
+    };
+  }, [searchTerm]);
 
   const loadAllPapers = async () => {
     try {
@@ -339,6 +395,182 @@ const UserHome = () => {
               </select>
             </div>
           </div>
+
+          {/* AI Search Result - Beautifully integrated */}
+          {showAiResult && searchTerm.trim().length >= 3 && (
+            <div className="mt-4 pt-4 border-t" style={{ 
+              borderTopColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)',
+            }}>
+              <div className={`glass-panel ${isDark ? 'glass-panel-dark' : ''} rounded-xl p-5 relative overflow-hidden`} style={{
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.5)',
+                background: isDark 
+                  ? 'linear-gradient(135deg, rgba(0, 166, 161, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)'
+                  : 'linear-gradient(135deg, rgba(0, 166, 161, 0.05) 0%, rgba(255, 255, 255, 0.4) 100%)'
+              }}>
+                {/* Decorative gradient orb */}
+                <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-ace-teal/20 to-transparent rounded-full blur-2xl -mr-24 -mt-24"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4" style={{ padding: '0 4px' }}>
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{
+                      background: 'linear-gradient(135deg, rgba(0, 166, 161, 0.2), rgba(0, 166, 161, 0.1))',
+                      boxShadow: '0 2px 8px rgba(0, 166, 161, 0.2)'
+                    }}>
+                      <span className="material-symbols-outlined" style={{ 
+                        color: 'var(--ace-teal)',
+                        fontSize: '20px'
+                      }}>
+                        auto_awesome
+                      </span>
+                    </div>
+                    <div>
+                      <h3 style={{
+                        fontFamily: "'Montserrat', sans-serif",
+                        fontSize: '1.125rem',
+                        fontWeight: 700,
+                        letterSpacing: '-0.01em',
+                        color: isDark ? 'var(--ace-white)' : 'var(--ace-navy)',
+                        margin: 0
+                      }}>
+                        AI Search Result
+                      </h3>
+                      <p style={{
+                        fontFamily: "'Inter', sans-serif",
+                        fontSize: '0.8125rem',
+                        color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)',
+                        margin: 0
+                      }}>
+                        {isAiSearching ? 'Searching...' : aiSearchResult?.confidence ? `Confidence: ${aiSearchResult.confidence}` : 'AI-powered answer'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {isAiSearching ? (
+                    <div className="flex items-center gap-3 py-4" style={{ padding: '16px 4px' }}>
+                      <div className="flex gap-2">
+                        <div className="w-2 h-2 rounded-full animate-pulse" style={{ 
+                          backgroundColor: 'var(--ace-teal)',
+                          animationDelay: '0s'
+                        }}></div>
+                        <div className="w-2 h-2 rounded-full animate-pulse" style={{ 
+                          backgroundColor: 'var(--ace-teal)',
+                          animationDelay: '0.2s'
+                        }}></div>
+                        <div className="w-2 h-2 rounded-full animate-pulse" style={{ 
+                          backgroundColor: 'var(--ace-teal)',
+                          animationDelay: '0.4s'
+                        }}></div>
+                      </div>
+                      <p style={{
+                        fontFamily: "'Inter', sans-serif",
+                        fontSize: '0.9375rem',
+                        color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)',
+                        margin: 0
+                      }}>
+                        Analyzing your search query...
+                      </p>
+                    </div>
+                  ) : aiSearchResult ? (
+                    <div style={{ padding: '0 4px' }}>
+                      <p style={{
+                        fontFamily: "'Inter', sans-serif",
+                        fontSize: '0.9375rem',
+                        lineHeight: 1.7,
+                        color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'var(--ace-navy)',
+                        marginBottom: aiSearchResult.followup && aiSearchResult.followup.length > 0 ? '16px' : '0',
+                        padding: '0 4px'
+                      }}>
+                        {aiSearchResult.answer}
+                      </p>
+
+                      {/* Follow-up questions */}
+                      {aiSearchResult.followup && aiSearchResult.followup.length > 0 && (
+                        <div className="mt-4 pt-4 border-t" style={{ borderTopColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)' }}>
+                          <p style={{
+                            fontFamily: "'Inter', sans-serif",
+                            fontSize: '0.8125rem',
+                            fontWeight: 600,
+                            color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--ace-navy-60)',
+                            marginBottom: '10px'
+                          }}>
+                            Related questions:
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {aiSearchResult.followup.map((followup, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => {
+                                  setSearchTerm(followup);
+                                  searchInputRef.current?.focus();
+                                }}
+                                className="px-3 py-1.5 rounded-lg text-xs transition-all duration-300 hover:scale-105"
+                                style={{
+                                  backgroundColor: isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)',
+                                  color: 'var(--ace-teal)',
+                                  fontFamily: "'Inter', sans-serif",
+                                  fontWeight: 500,
+                                  border: '1px solid rgba(0, 166, 161, 0.3)',
+                                  cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.3)' : 'rgba(0, 166, 161, 0.15)';
+                                  e.target.style.transform = 'translateY(-2px)';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.target.style.backgroundColor = isDark ? 'rgba(0, 166, 161, 0.2)' : 'rgba(0, 166, 161, 0.1)';
+                                  e.target.style.transform = 'translateY(0)';
+                                }}
+                              >
+                                {followup}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Link to chat */}
+                      <div className="mt-4 pt-4 border-t flex items-center justify-between" style={{ 
+                        borderTopColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)',
+                        padding: '16px 4px 0'
+                      }}>
+                        <p style={{
+                          fontFamily: "'Inter', sans-serif",
+                          fontSize: '0.8125rem',
+                          color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'var(--ace-navy-60)',
+                          margin: 0
+                        }}>
+                          Want more details?
+                        </p>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate('/chat');
+                          }}
+                          className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 hover:scale-105"
+                          style={{
+                            backgroundColor: 'var(--ace-teal)',
+                            color: 'var(--ace-white)',
+                            fontFamily: "'Inter', sans-serif",
+                            boxShadow: '0 2px 8px rgba(0, 166, 161, 0.3)',
+                            border: 'none',
+                            cursor: 'pointer'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.boxShadow = '0 4px 12px rgba(0, 166, 161, 0.4)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.boxShadow = '0 2px 8px rgba(0, 166, 161, 0.3)';
+                          }}
+                        >
+                          Open Chat →
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="mt-4 pt-4" style={{ borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(4, 28, 48, 0.1)'}` }}>
             <p style={{
